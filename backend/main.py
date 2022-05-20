@@ -4,6 +4,7 @@ import serveMacroAPI
 
 app = Flask(__name__)
 
+serveMacroAPI.init()
 serveMacroAPI.setUpRoutes(app)
 servePublic.setUpRoutes(app)
 
