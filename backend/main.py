@@ -1,9 +1,8 @@
 from flask import Flask
+import servePublic
 
 app = Flask(__name__)
 
-@app.route("/")
-def index():
-    return "<h1>Hello, World!</h1>"
+servePublic.setUpRoutes(app)
 
 app.run("localhost", 5000, True, True)
