@@ -15,36 +15,25 @@ export class CodeareaComponent implements OnInit {
   previousCharPos: number = 0
 
   specialKeyStatus = {
-    "ctrl": false,
-    "shift": false,
-    "alt": false
+    "Control": false,
+    "Shift": false,
+    "Alt": false
   }
 
   constructor() { }
 
   ngOnInit(): void {
-    this.cursorLine = this.code.length-1;
+    this.cursorLine = this.code.length - 1;
     this.cursorChar = this.code[this.cursorLine].length
     this.previousCharPos = this.cursorChar
   }
 
-  onPress(event: any) {
-    let kbEvent: KeyboardEvent = (event as KeyboardEvent);
-    if(kbEvent.key.length == 1) {
-      let line:String = this.code[this.cursorLine]
-      this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
-      this.cursorChar++
-    } else if(kbEvent.key == "Backspace") {
-      if(this.cursorChar > 0) {
-        let line:String = this.code[this.cursorLine]
-        this.code[this.cursorLine] = line.substring(0, this.cursorChar-1) + line.substring(this.cursorChar)
-        this.cursorChar--
-      }
-    } else if(kbEvent.key == "ArrowLeft") {
+  handleArrowKeys(kbEvent: KeyboardEvent): boolean {
+    if (kbEvent.key == "ArrowLeft") {
       console.log(this.previousCharPos)
       this.cursorChar--
-      if(this.cursorChar < 0) {
-        if(this.cursorLine > 0) {
+      if (this.cursorChar < 0) {
+        if (this.cursorLine > 0) {
           this.cursorLine--;
           this.cursorChar = this.code[this.cursorLine].length
         }
@@ -53,10 +42,12 @@ export class CodeareaComponent implements OnInit {
         }
       }
       this.previousCharPos = this.cursorChar
-    } else if(kbEvent.key == "ArrowRight") {
+      return true
+    }
+    if (kbEvent.key == "ArrowRight") {
       this.cursorChar++
-      if(this.cursorChar > this.code[this.cursorLine].length) {
-        if(this.cursorLine < this.code.length-1) {
+      if (this.cursorChar > this.code[this.cursorLine].length) {
+        if (this.cursorLine < this.code.length - 1) {
           this.cursorChar = 0;
           this.cursorLine++;
         } else {
@@ -64,29 +55,80 @@ export class CodeareaComponent implements OnInit {
         }
       }
       this.previousCharPos = this.cursorChar
-    } else if(kbEvent.key == "ArrowUp") {
+      return true
+    }
+    if (kbEvent.key == "ArrowUp") {
       this.cursorLine--
-      if(this.cursorLine < 0) {
+      if (this.cursorLine < 0) {
         this.cursorLine = 0
         this.cursorChar = 0
       } else {
         this.cursorChar = this.previousCharPos
-        if(this.cursorChar > this.code[this.cursorLine].length) {
+        if (this.cursorChar > this.code[this.cursorLine].length) {
           this.cursorChar = this.code[this.cursorLine].length
         }
       }
-    } else if(kbEvent.key == "ArrowDown") {
+      return true;
+    }
+    if (kbEvent.key == "ArrowDown") {
       this.cursorLine++
-      if(this.cursorLine >= this.code.length) {
-        this.cursorLine = this.code.length-1
+      if (this.cursorLine >= this.code.length) {
+        this.cursorLine = this.code.length - 1
         this.cursorChar = this.code[this.cursorLine].length
       } else {
         this.cursorChar = this.previousCharPos
-        if(this.cursorChar > this.code[this.cursorLine].length) {
+        if (this.cursorChar > this.code[this.cursorLine].length) {
           this.cursorChar = this.code[this.cursorLine].length
         }
       }
+      return true;
+    }
+    return false;
+  }
+
+  handleSpecialKeys(kbEvent: KeyboardEvent, isDown: boolean): boolean {
+    if (
+      kbEvent.key == "Control" ||
+      kbEvent.key == "Shift" ||
+      kbEvent.key == "Alt"
+    ) {
+      this.specialKeyStatus[kbEvent.key] = isDown;
+      return true;
+    }
+    return false;
+  }
+
+  handleHotkey(kbEvent: KeyboardEvent): boolean {
+
+    return false
+  }
+
+  onRelease(event: any) {
+    let kbEvent: KeyboardEvent = (event as KeyboardEvent);
+    if(this.handleSpecialKeys(kbEvent, false)) {
     } else {
+      return true
+    }
+    return false
+  }
+
+  onPress(event: any) {
+    let kbEvent: KeyboardEvent = (event as KeyboardEvent);
+    if(this.handleHotkey(kbEvent)) {}
+    else if (kbEvent.key.length == 1) {
+      let line: String = this.code[this.cursorLine]
+      this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
+      this.cursorChar++
+    } else if (kbEvent.key == "Backspace") {
+      if (this.cursorChar > 0) {
+        let line: String = this.code[this.cursorLine]
+        this.code[this.cursorLine] = line.substring(0, this.cursorChar - 1) + line.substring(this.cursorChar)
+        this.cursorChar--
+      }
+    }
+    else if (this.handleArrowKeys(kbEvent)) { }
+    else if (this.handleSpecialKeys(kbEvent, true)) { }
+    else {
       console.log(kbEvent.key)
       return true;
     }
