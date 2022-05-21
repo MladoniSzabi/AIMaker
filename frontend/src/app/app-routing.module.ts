@@ -1,7 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [];
+//TODO:Debug
+import { CodeareaComponent } from "./codearea/codearea.component"
+
+const routes: Routes = [
+  {path: "debug", component: CodeareaComponent}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,0 +1,19 @@
+div {
+    width: 90vw;
+    height: 90vh;
+    margin: 1em;
+}
+
+p {
+    line-height: 1.1em;
+    margin: 0;
+    font-family: "Source Code Pro", monospace;
+}
+
+#cursor {
+    transform: translateX(-0.5ch);
+    width: 0;
+    position: relative;
+    display: inline-block;
+    font-family: "Source Code Pro", monospace;
+}

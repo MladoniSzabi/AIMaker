@@ -1,0 +1,3 @@
+<div (keydown)="onPress($event)" tabIndex="0">
+    <p *ngFor="let line of code; index as i"><span id="cursor" style="left: {{cursorChar}}ch" *ngIf="i==cursorLine">|</span>{{line}}</p>
+</div>
