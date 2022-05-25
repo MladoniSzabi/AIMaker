@@ -14,12 +14,6 @@ export class CodeareaComponent implements OnInit {
 
   previousCharPos: number = 0
 
-  specialKeyStatus = {
-    "Control": false,
-    "Shift": false,
-    "Alt": false
-  }
-
   constructor() { }
 
   ngOnInit(): void {
@@ -86,19 +80,14 @@ export class CodeareaComponent implements OnInit {
     return false;
   }
 
-  handleSpecialKeys(kbEvent: KeyboardEvent, isDown: boolean): boolean {
-    if (
-      kbEvent.key == "Control" ||
-      kbEvent.key == "Shift" ||
-      kbEvent.key == "Alt"
-    ) {
-      this.specialKeyStatus[kbEvent.key] = isDown;
-      return true;
-    }
-    return false;
-  }
-
   handleHotkey(kbEvent: KeyboardEvent): boolean {
+    if (kbEvent.ctrlKey && kbEvent.key == "c" && !kbEvent.shiftKey && !kbEvent.altKey) {
+      let sel = window.getSelection()
+      if (sel) {
+        navigator.clipboard.writeText(sel.toString())
+      }
+      return true
+    }
     return false
   }
 
@@ -122,28 +111,30 @@ export class CodeareaComponent implements OnInit {
     return false;
   }
 
-  onRelease(event: any) {
-    let kbEvent: KeyboardEvent = (event as KeyboardEvent);
-    if (this.handleSpecialKeys(kbEvent, false)) {
-    } else {
-      return true
+  onPaste(event: any) {
+    let pasteEvent: ClipboardEvent = (event as ClipboardEvent)
+    if(pasteEvent != null && pasteEvent.clipboardData) {
+      let paste = pasteEvent.clipboardData.getData('text');
+      let line: String = this.code[this.cursorLine]
+      this.code[this.cursorLine] = line.substring(0, this.cursorChar) + paste + line.substring(this.cursorChar)
+      this.cursorChar += paste.length
     }
-    return false
   }
 
   onPress(event: any) {
     let kbEvent: KeyboardEvent = (event as KeyboardEvent);
     if (this.handleHotkey(kbEvent)) { }
     else if (kbEvent.key.length == 1) {
+      if (kbEvent.key == "v" && kbEvent.ctrlKey) {
+        return true
+      }
       let line: String = this.code[this.cursorLine]
       this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
       this.cursorChar++
     } else if (this.handleBackspace(kbEvent)) { }
     else if (this.handleArrowKeys(kbEvent)) { }
-    else if (this.handleSpecialKeys(kbEvent, true)) { }
     else {
       console.log(kbEvent.key)
-      return true;
     }
 
     return false;
