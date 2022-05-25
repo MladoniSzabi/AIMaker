@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CodeareaComponent implements OnInit {
 
-  code: String[] = ["asdkjashdkfjakshkjaskjdfh", "dsa"]
+  code: string[] = ["asdkjashdkfjakshkjaskjdfh", "dsa"]
 
   cursorLine: number = 0
   cursorChar: number = 0
@@ -99,13 +99,32 @@ export class CodeareaComponent implements OnInit {
   }
 
   handleHotkey(kbEvent: KeyboardEvent): boolean {
-
     return false
+  }
+
+  handleBackspace(kbEvent: KeyboardEvent): boolean {
+    if (kbEvent.key == "Backspace") {
+      if (this.cursorChar > 0) {
+        let line: string = this.code[this.cursorLine]
+        this.code[this.cursorLine] = line.substring(0, this.cursorChar - 1) + line.substring(this.cursorChar)
+        this.cursorChar--;
+      } else {
+        if (this.cursorLine > 0) {
+          let line: string = this.code[this.cursorLine]
+          this.code[this.cursorLine - 1] = this.code[this.cursorLine - 1].concat(line);
+          this.code.splice(this.cursorLine, 1)
+          this.cursorLine -= 1;
+          this.cursorChar = this.code[this.cursorLine].length
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   onRelease(event: any) {
     let kbEvent: KeyboardEvent = (event as KeyboardEvent);
-    if(this.handleSpecialKeys(kbEvent, false)) {
+    if (this.handleSpecialKeys(kbEvent, false)) {
     } else {
       return true
     }
@@ -114,17 +133,12 @@ export class CodeareaComponent implements OnInit {
 
   onPress(event: any) {
     let kbEvent: KeyboardEvent = (event as KeyboardEvent);
-    if(this.handleHotkey(kbEvent)) {}
+    if (this.handleHotkey(kbEvent)) { }
     else if (kbEvent.key.length == 1) {
       let line: String = this.code[this.cursorLine]
       this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
       this.cursorChar++
-    } else if (kbEvent.key == "Backspace") {
-      if (this.cursorChar > 0) {
-        let line: String = this.code[this.cursorLine]
-        this.code[this.cursorLine] = line.substring(0, this.cursorChar - 1) + line.substring(this.cursorChar)
-        this.cursorChar--
-      }
+    } else if (this.handleBackspace(kbEvent)) {
     }
     else if (this.handleArrowKeys(kbEvent)) { }
     else if (this.handleSpecialKeys(kbEvent, true)) { }
