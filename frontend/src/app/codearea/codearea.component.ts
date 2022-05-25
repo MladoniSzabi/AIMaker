@@ -138,8 +138,7 @@ export class CodeareaComponent implements OnInit {
       let line: String = this.code[this.cursorLine]
       this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
       this.cursorChar++
-    } else if (this.handleBackspace(kbEvent)) {
-    }
+    } else if (this.handleBackspace(kbEvent)) { }
     else if (this.handleArrowKeys(kbEvent)) { }
     else if (this.handleSpecialKeys(kbEvent, true)) { }
     else {
