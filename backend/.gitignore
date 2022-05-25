@@ -1,3 +1,10 @@
 venv/
 *__pycache__/
 dist/
+.antlr/
+interpreter/Language.interp
+interpreter/Language.tokens
+interpreter/LanguageLexer.interp
+interpreter/LanguageLexer.tokens
+interpreter/LanguageLexer.py
+interpreter/LanguageParser.py
