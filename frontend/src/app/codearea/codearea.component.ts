@@ -81,6 +81,14 @@ export class CodeareaComponent implements OnInit {
   }
 
   handleHotkey(kbEvent: KeyboardEvent): boolean {
+    if (kbEvent.key == "End") {
+      this.cursorChar = this.code[this.cursorLine].length
+      return true
+    }
+    if(kbEvent.key == "Home") {
+      this.cursorChar = 0
+      return true
+    }
     if (kbEvent.ctrlKey && kbEvent.key == "c" && !kbEvent.shiftKey && !kbEvent.altKey) {
       let sel = window.getSelection()
       if (sel) {
