@@ -111,9 +111,21 @@ export class CodeareaComponent implements OnInit {
     return false;
   }
 
+  handleEnter(kbEvent: KeyboardEvent): boolean {
+    if (kbEvent.key == "Enter") {
+      let line: String = this.code[this.cursorLine]
+      this.code[this.cursorLine] = line.substring(this.cursorChar)
+      this.code = this.code.slice(0, this.cursorLine).concat([line.substring(0, this.cursorChar)]).concat(this.code.slice(this.cursorLine))
+      this.cursorLine++;
+      this.cursorChar = 0
+      return true
+    }
+    return false
+  }
+
   onPaste(event: any) {
     let pasteEvent: ClipboardEvent = (event as ClipboardEvent)
-    if(pasteEvent != null && pasteEvent.clipboardData) {
+    if (pasteEvent != null && pasteEvent.clipboardData) {
       let paste = pasteEvent.clipboardData.getData('text');
       let line: String = this.code[this.cursorLine]
       this.code[this.cursorLine] = line.substring(0, this.cursorChar) + paste + line.substring(this.cursorChar)
@@ -131,7 +143,8 @@ export class CodeareaComponent implements OnInit {
       let line: String = this.code[this.cursorLine]
       this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
       this.cursorChar++
-    } else if (this.handleBackspace(kbEvent)) { }
+    } else if (this.handleEnter(kbEvent)) { }
+    else if (this.handleBackspace(kbEvent)) { }
     else if (this.handleArrowKeys(kbEvent)) { }
     else {
       console.log(kbEvent.key)
