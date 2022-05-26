@@ -10,6 +10,7 @@ else:
 class LanguageVisitor(ParseTreeVisitor):
 
     variables = {}
+    functions = {}
 
     # Visit a parse tree produced by LanguageParser#Last_Expression.
     def visitLast_Expression(self, ctx:LanguageParser.Last_ExpressionContext):
@@ -43,7 +44,11 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#Function_Call.
     def visitFunction_Call(self, ctx:LanguageParser.Function_CallContext):
-        return self.visit(ctx.function).call()
+        functionName = ctx.function.text
+        if functionName in self.functions:
+            return self.functions[functionName]()
+        else:
+            raise Exception("Function " + functionName + " is not defined")
 
 
     # Visit a parse tree produced by LanguageParser#Expression_Assignment.
@@ -70,8 +75,14 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#Int_Literal.
     def visitInt_Literal(self, ctx:LanguageParser.Int_LiteralContext):
-        print(ctx.getText())
         return int(ctx.getText())
+    
+    def visitVariable(self, ctx:LanguageParser.VariableContext):
+        varName = ctx.getText()
+        if not varName in self.variables:
+            raise Exception("Variable " + varName + " is not defined")
+        else:
+            return self.variables[varName]
 
 
 
