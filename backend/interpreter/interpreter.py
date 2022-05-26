@@ -19,7 +19,7 @@ def interpret(text):
     lexer = LanguageLexer(stream)
     tokens = CommonTokenStream(lexer)
     parser = LanguageParser(tokens)
-    tree = parser.language_file()
+    tree = parser.entry_point()
     visitor = LanguageVisitor()
     visitor.functions = functions
     output = visitor.visit(tree)

@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, make_response
 from interpreter import interpreter
 from interpreter import builtin_funcs
 
@@ -9,5 +9,6 @@ def setUpRoutes(app):
     @app.route("/api/code/run", methods=["POST"])
     def runCode():
         code = request.form["code"]
-        retval = interpreter.interpret(code)
-        return str(retval)
+        response = make_response(str(interpreter.interpret(code)), 200)
+        response.mimetype = "text/plain"
+        return response

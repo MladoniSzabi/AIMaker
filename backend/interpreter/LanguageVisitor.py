@@ -12,6 +12,9 @@ class LanguageVisitor(ParseTreeVisitor):
     variables = {}
     functions = {}
 
+    def visitEntry(self, ctx:LanguageParser.EntryContext):
+        return self.visit(ctx.exps)
+
     # Visit a parse tree produced by LanguageParser#Last_Expression.
     def visitLast_Expression(self, ctx:LanguageParser.Last_ExpressionContext):
         return self.visit(ctx.exp)
