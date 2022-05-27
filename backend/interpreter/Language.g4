@@ -1,23 +1,31 @@
 grammar Language;
 
-entry_point: exps=block END_OF_FILE                    #Entry
+entry_point: exps=block END_OF_FILE                             #Entry
         ;
 
-block: exp=expression                                   #Last_Expression
-        | rest=block NEW_LINE exp=expression            #More_Expressions
+block: exp=expression                                           #Last_Expression
+        | rest=block NEW_LINE exp=expression                    #More_Expressions
         ;
 
-expression: STRING                                      #String_Literal
-        | BOOL                                          #Bool_Literal
-        | INT                                           #Int_Literal
-        | FLOAT                                         #Float_Literal
-        | VAR                                           #Variable
-        | lhs=expression '*' rhs=expression             #Multiplication
-        | lhs=expression '/' rhs=expression             #Division
-        | lhs=expression '+' rhs=expression             #Addition
-        | lhs=expression '-' rhs=expression             #Subtraction
-        | function=VAR'()'                              #Function_Call
-        | <assoc=right> lhs=VAR '=' rhs=expression      #Expression_Assignment
+simple_expression: STRING                                       #String_Literal
+        | BOOL                                                  #Bool_Literal
+        | INT                                                   #Int_Literal
+        | FLOAT                                                 #Float_Literal
+        | VAR                                                   #Variable
+        ;
+
+expression: exp=simple_expression                               #Simple_Expression
+        | lhs=expression '*' rhs=expression                     #Multiplication
+        | lhs=expression '/' rhs=expression                     #Division
+        | lhs=expression '+' rhs=expression                     #Addition
+        | lhs=expression '-' rhs=expression                     #Subtraction
+        | function=VAR'(' args=argument_list ')'                #Function_Call_With_Args
+        | function=VAR'()'                                      #Function_Call
+        | <assoc=right> lhs=VAR '=' rhs=expression              #Expression_Assignment
+        ;
+
+argument_list: arg=simple_expression                            #Last_Arg
+        | other_args=argument_list ',' arg=simple_expression    #Arg_List
         ;
 
 
