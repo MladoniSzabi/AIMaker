@@ -4,6 +4,7 @@ from .LanguageParser import LanguageParser
 from .LanguageVisitor import LanguageVisitor
 
 from . import builtin_funcs
+import time
 
 functions = {
     "moveMouse": builtin_funcs.moveMouse,
@@ -12,6 +13,7 @@ functions = {
     "tapKey": builtin_funcs.tapKey,
     "startRecording": builtin_funcs.startRecording,
     "stopRecording": builtin_funcs.stopRecording,
+    "wait": time.sleep
 }
 
 def interpret(text):
