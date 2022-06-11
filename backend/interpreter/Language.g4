@@ -4,7 +4,12 @@ entry_point: exps=block END_OF_FILE                             #Entry
         ;
 
 block: exp=expression                                           #Last_Expression
+        | declaration=function_declaration                      #Function_Declaration_Block
         | rest=block NEW_LINE exp=expression                    #More_Expressions
+        ;
+
+function_declaration: 'function' functionname=VAR NEW_LINE? ('()'|'(' NEW_LINE? ')') '{' NEW_LINE? exprs=block NEW_LINE? '}' #Function_Declaration_Without_Args
+        |'function' functionname=VAR '(' NEW_LINE? arglist=argument_list NEW_LINE? ')' NEW_LINE? '{' NEW_LINE? exprs=block NEW_LINE? '}' #Function_Declaration_With_Args 
         ;
 
 simple_expression: STRING                                       #String_Literal

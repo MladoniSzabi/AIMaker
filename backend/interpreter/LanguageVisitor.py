@@ -9,6 +9,12 @@ else:
 
 class LanguageVisitor(ParseTreeVisitor):
 
+    def __init__(self):
+        super().__init__()
+        self.custom_functions = {}
+        self.context = [{}]
+        self.functions = {}
+
     # Visit a parse tree produced by LanguageParser#Entry.
     def visitEntry(self, ctx:LanguageParser.EntryContext):
         return self.visit(ctx.exps)
@@ -22,6 +28,31 @@ class LanguageVisitor(ParseTreeVisitor):
     def visitMore_Expressions(self, ctx:LanguageParser.More_ExpressionsContext):
         self.visit(ctx.rest)
         return self.visit(ctx.exp)
+    
+
+    # Visit a parse tree produced by LanguageParser#Function_Declaration_Block.
+    def visitFunction_Declaration_Block(self, ctx:LanguageParser.Function_Declaration_BlockContext):
+        return self.visit(ctx.declaration)
+
+
+    # Visit a parse tree produced by LanguageParser#Function_Declaration_With_Args.
+    def visitFunction_Declaration_With_Args(self, ctx:LanguageParser.Function_Declaration_With_ArgsContext):
+        arguments = self.visit(ctx.arglist)
+        arguments = list(map(lambda x: x.getText(), arguments))
+        self.custom_functions[ctx.functionname.text] = {
+            "body": ctx.exprs,
+            "arguments": arguments
+        }
+        return ctx.exprs
+
+
+    # Visit a parse tree produced by LanguageParser#Function_Declaration.
+    def visitFunction_Declaration_Without_Args(self, ctx:LanguageParser.Function_Declaration_Without_ArgsContext):
+        self.custom_functions[ctx.functionname.text] = {
+            "body": ctx.exprs,
+            "arguments": []
+        }
+        return ctx.exprs
 
 
     # Visit a parse tree produced by LanguageParser#String_Literal.
@@ -47,10 +78,15 @@ class LanguageVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by LanguageParser#Variable.
     def visitVariable(self, ctx:LanguageParser.VariableContext):
         varName = ctx.getText()
-        if not varName in self.variables:
+        contextNum = None
+        for i, context in reversed(list(enumerate(self.context))):
+            if varName in context:
+                contextNum = i
+                break;
+        if contextNum is None:
             raise Exception("Variable " + varName + " is not defined")
         else:
-            return self.variables[varName]
+            return self.context[contextNum][varName]
 
 
     # Visit a parse tree produced by LanguageParser#Simple_Expression.
@@ -81,8 +117,8 @@ class LanguageVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by LanguageParser#Expression_Assignment.
     def visitExpression_Assignment(self, ctx:LanguageParser.Expression_AssignmentContext):
         variableName = ctx.lhs.text
-        self.variables[variableName] = self.visit(ctx.rhs)
-        return self.variables[variableName]
+        self.context[-1][variableName] = self.visit(ctx.rhs)
+        return self.context[-1][variableName]
 
 
     # Visit a parse tree produced by LanguageParser#Function_Call.
@@ -90,6 +126,8 @@ class LanguageVisitor(ParseTreeVisitor):
         functionName = ctx.function.text
         if functionName in self.functions:
             return self.functions[functionName]()
+        elif functionName in self.custom_functions:
+            return self.visit(self.custom_functions[functionName]["body"])
         else:
             raise Exception("Function " + functionName + " is not defined")
 
@@ -99,7 +137,17 @@ class LanguageVisitor(ParseTreeVisitor):
         args = self.visit(ctx.args)
         functionName = ctx.function.text
         if functionName in self.functions:
+            args = list(map(lambda x: self.visit(x), args))
             return self.functions[functionName](*args)
+        elif functionName in self.custom_functions:
+            newContext = {}
+            args = self.visit(ctx.args)
+            for i in range(len(args)):
+                newContext[self.custom_functions[functionName]["arguments"][i]] = self.visit(args[i])
+            self.context.append(newContext)
+            retval = self.visit(self.custom_functions[functionName]["body"])
+            self.context.pop()
+            return retval
         else:
             raise Exception("Function " + functionName + " is not defined")
 
@@ -107,13 +155,13 @@ class LanguageVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by LanguageParser#Arg_List.
     def visitArg_List(self, ctx:LanguageParser.Arg_ListContext):
         other_args = self.visit(ctx.other_args)
-        new_arg = self.visit(ctx.arg)
+        new_arg = ctx.arg
         return [*other_args, new_arg]
 
 
     # Visit a parse tree produced by LanguageParser#Last_Arg.
     def visitLast_Arg(self, ctx:LanguageParser.Last_ArgContext):
-        return [self.visit(ctx.arg)]
+        return [ctx.arg]
 
 
 
