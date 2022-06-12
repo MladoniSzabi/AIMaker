@@ -1,17 +1,31 @@
-div {
+#codearea {
     width: 90vw;
     height: 90vh;
-    margin: 1em;
+
+    display: grid;
+    grid-template-columns: minmax(max-content, 3ch) auto;
 }
 
-p {
+#codearea p,
+#codearea pre {
     line-height: 1.1em;
     margin: 0;
     height: 1em;
     font-family: "Source Code Pro", monospace;
 }
 
-#cursor {
+#linenumbers {
+    color: grey;
+    border-right: 1px solid grey;
+    margin-right: 0.5em;
+    text-align: right;
+}
+
+#linenumbers p.current {
+    color: black;
+}
+
+#codeinputarea #cursor {
     transform: translateX(-0.5ch);
     width: 0;
     position: relative;

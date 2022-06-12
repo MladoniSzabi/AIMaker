@@ -121,11 +121,25 @@ export class CodeareaComponent implements OnInit {
 
   handleEnter(kbEvent: KeyboardEvent): boolean {
     if (kbEvent.key == "Enter") {
-      let line: String = this.code[this.cursorLine]
-      this.code[this.cursorLine] = line.substring(this.cursorChar)
-      this.code = this.code.slice(0, this.cursorLine).concat([line.substring(0, this.cursorChar)]).concat(this.code.slice(this.cursorLine))
-      this.cursorLine++;
-      this.cursorChar = 0
+      let indent: string = ""
+      let line: string = this.code[this.cursorLine]
+      for(let i = 0; i < line.length; i++) {
+        if(line[i] == ' ') {
+          indent += " ";
+        } else {
+          break
+        }
+      }
+      if(this.cursorChar != 0 && this.code[this.cursorLine][this.cursorChar-1] == "{") {
+        this.code[this.cursorLine] = indent + line.substring(this.cursorChar)
+        this.code = this.code.slice(0, this.cursorLine).concat([line.substring(0, this.cursorChar), indent + "   "]).concat(this.code.slice(this.cursorLine))
+        this.cursorChar = indent.length + 3
+      } else {
+        this.code[this.cursorLine] = indent + line.substring(this.cursorChar)
+        this.code = this.code.slice(0, this.cursorLine).concat([line.substring(0, this.cursorChar)]).concat(this.code.slice(this.cursorLine))
+        this.cursorChar = indent.length
+      }
+      this.cursorLine++
       return true
     }
     return false
@@ -135,7 +149,7 @@ export class CodeareaComponent implements OnInit {
     let pasteEvent: ClipboardEvent = (event as ClipboardEvent)
     if (pasteEvent != null && pasteEvent.clipboardData) {
       let paste = pasteEvent.clipboardData.getData('text');
-      let line: String = this.code[this.cursorLine]
+      let line: string = this.code[this.cursorLine]
       this.code[this.cursorLine] = line.substring(0, this.cursorChar) + paste + line.substring(this.cursorChar)
       this.cursorChar += paste.length
     }
@@ -148,8 +162,12 @@ export class CodeareaComponent implements OnInit {
       if (kbEvent.key == "v" && kbEvent.ctrlKey) {
         return true
       }
-      let line: String = this.code[this.cursorLine]
-      this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
+      let line: string = this.code[this.cursorLine]
+      if(kbEvent.key == "{") {
+        this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + "}" + line.substring(this.cursorChar)
+      } else {
+        this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
+      }
       this.cursorChar++
     } else if (this.handleEnter(kbEvent)) { }
     else if (this.handleBackspace(kbEvent)) { }
