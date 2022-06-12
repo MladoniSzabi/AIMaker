@@ -5,16 +5,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CodeareaComponent } from './codearea/codearea.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CodeeditorComponent } from './codeeditor/codeeditor.component';
+import { MatSidenavModule } from '@angular/material/sidenav'
 
 @NgModule({
   declarations: [
     AppComponent,
-    CodeareaComponent
+    CodeareaComponent,
+    CodeeditorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]

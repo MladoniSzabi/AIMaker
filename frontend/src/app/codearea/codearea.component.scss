@@ -1,6 +1,12 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 #codearea {
-    width: 90vw;
-    height: 90vh;
+    width: 100%;
+    height: 100%;
 
     display: grid;
     grid-template-columns: minmax(max-content, 3ch) auto;

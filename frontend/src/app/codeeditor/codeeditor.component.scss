@@ -1,0 +1,16 @@
+:host,
+mat-sidenav-container,
+#codeeditor {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#codeeditor mat-sidenav {
+    min-width: 10%;
+    width: max-content;
+}
+
+#codeeditor mat-sidenav-content {
+    width: 90%;
+}

@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 //TODO:Debug
-import { CodeareaComponent } from "./codearea/codearea.component"
+import { CodeeditorComponent } from "./codeeditor/codeeditor.component"
 
 const routes: Routes = [
-  {path: "debug", component: CodeareaComponent}
+  {path: "debug", component: CodeeditorComponent}
 ];
 
 @NgModule({
