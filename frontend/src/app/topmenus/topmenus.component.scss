@@ -1,0 +1,54 @@
+#menus {
+    height: 100%;
+    width: 100%;
+    list-style: none;
+}
+
+#menus ul {
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid grey;
+    height: calc( 100% - 1px );
+}
+
+#menus li {
+    display: inline-block;
+    padding: 0 0.5em;
+    cursor: pointer;
+    user-select: none;
+    height: 100%;
+}
+
+#menus li:hover {
+    background-color: #cecece;
+}
+
+.menu-item {
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    height: 1.5em;
+    padding: 0 1em;
+    text-align: left;
+    text-decoration: none;
+    min-width: 30ch;
+    width: 100%;
+    position: relative;
+    background-color: white;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-item .kb-shortcut {
+    text-align: right;
+}
+
+.menu-item:hover {
+    background-color: #cecece;
+}
+
+::ng-deep .menuPanel {
+    min-height: max-content!important;
+}

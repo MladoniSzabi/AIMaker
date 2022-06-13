@@ -1,0 +1,77 @@
+<div id="menus">
+    <ul>
+        <li>
+            <p mat-button [matMenuTriggerFor]="fileMenu">File</p>
+            <mat-menu class="menuPanel" #fileMenu="matMenu">
+                <button class="menu-item">
+                    Open
+                    <span class="kb-shortcut">CTRL-O</span>
+                </button>
+                <button class="menu-item">
+                    Save
+                    <span class="kb-shortcut">CTRL-S</span>
+                </button>
+                <button class="menu-item">
+                    Save All
+                    <span class="kb-shortcut">CTRL-SHIFT-S</span>
+                </button>
+                <button class="menu-item">
+                    Close
+                    <span class="kb-shortcut">CTRL-W</span>
+                </button>
+            </mat-menu>
+        </li>
+        <li>
+            <p mat-button [matMenuTriggerFor]="editMenu">Edit</p>
+            <mat-menu class="menuPanel" #editMenu="matMenu">
+                <button class="menu-item">
+                    Undo
+                    <span class="kb-shortcut">CTRL-Z</span>
+                </button>
+                <button class="menu-item">
+                    Redo
+                    <span class="kb-shortcut">CTRL-SHIFT-Z</span>
+                </button>
+                <hr />
+                <button class="menu-item" >
+                    Cut
+                    <span class="kb-shortcut">CTRL-X</span>
+                </button>
+                <button class="menu-item">
+                    Copy
+                    <span class="kb-shortcut">CTRL-C</span>
+                </button>
+                <button class="menu-item">
+                    Paste
+                    <span class="kb-shortcut">CTRL-V</span>
+                </button>
+                <hr />
+                <button class="menu-item">
+                    Find
+                    <span class="kb-shortcut">CTRL-F</span>
+                </button>
+                <button class="menu-item">
+                    Replace
+                    <span class="kb-shortcut">CTRL-H</span>
+                </button>
+            </mat-menu>
+        </li>
+        <li>
+            <p mat-button [matMenuTriggerFor]="viewMenu">View</p>
+            <mat-menu class="menuPanel" #viewMenu="matMenu">
+                <button class="menu-item">
+                    Hide Output
+                </button>
+            </mat-menu>
+        </li>
+        <li>
+            <p mat-button [matMenuTriggerFor]="runMenu">Run</p>
+            <mat-menu class="menuPanel" #runMenu="matMenu">
+                <button class="menu-item">
+                    Run Code
+                    <span class="kb-shortcut">F11</span>
+                </button>
+            </mat-menu>
+        </li>
+    </ul>
+</div>

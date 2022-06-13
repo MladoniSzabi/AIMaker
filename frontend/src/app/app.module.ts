@@ -6,19 +6,24 @@ import { AppComponent } from './app.component';
 import { CodeareaComponent } from './codearea/codearea.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CodeeditorComponent } from './codeeditor/codeeditor.component';
-import { MatSidenavModule } from '@angular/material/sidenav'
+import { TopmenusComponent } from './topmenus/topmenus.component'
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     CodeareaComponent,
-    CodeeditorComponent
+    CodeeditorComponent,
+    TopmenusComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]
