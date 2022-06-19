@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { pasteCommand, KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
 
 @Component({
   selector: 'app-codearea',
   templateUrl: './codearea.component.html',
   styleUrls: ['./codearea.component.scss']
 })
-export class CodeareaComponent implements OnInit {
+export class CodeareaComponent implements OnInit, TextEditor {
 
   code: string[] = ["asdkjashdkfjakshkjaskjdfh", "dsa"]
 
@@ -15,6 +16,101 @@ export class CodeareaComponent implements OnInit {
   previousCharPos: number = 0
 
   constructor() { }
+  addLine(text: string, lineNumber: number): string[] {
+    this.code.splice(lineNumber, 0, ...[text])
+    return this.code
+  }
+
+  getText(): string[] {
+    return this.code
+  }
+
+  getLine(lineNumber: number): string {
+    return this.code[lineNumber]
+  }
+
+  doesElementContain(parentElement: Element, childElement: Node): boolean {
+    if (parentElement == childElement)
+      return true
+
+    for (let i = 0; i < parentElement.childNodes.length; i++)
+      if (parentElement.childNodes[i] == childElement)
+        return true;
+
+    return false
+  }
+
+  getSelectedText(): selectedTextDict {
+    let possiblyNullSelection = window.getSelection()
+    let possiblyNullCodeInputArea = document.getElementById("codeinputarea")
+    let retval: selectedTextDict = {
+      startPosition: { line: 0, char: 0 },
+      endPosition: { line: 0, char: 0 },
+      text: []
+    }
+    if (possiblyNullSelection && possiblyNullCodeInputArea) {
+      let selection: Selection = possiblyNullSelection
+      let codearea: HTMLElement = possiblyNullCodeInputArea
+      for (let rangeid = 0; rangeid < selection.rangeCount; rangeid++) {
+
+        let range = selection.getRangeAt(rangeid)
+        let startline: number = 0, endline: number = 0, startoffset: number = 0, endoffset: number = 0
+
+        for (let elementid = 0; elementid < codearea.children.length; elementid++) {
+
+          if (this.doesElementContain(codearea.children[elementid], range.startContainer)) {
+            if (rangeid == 0) {
+              retval.startPosition.line = elementid
+              retval.startPosition.char = range.startOffset
+            }
+            startline = elementid
+            startoffset = range.startOffset
+          }
+
+          if (this.doesElementContain(codearea.children[elementid], range.endContainer)) {
+            if (rangeid == selection.rangeCount - 1) {
+              retval.endPosition.line = elementid
+              retval.endPosition.char = range.endOffset
+            }
+            endline = elementid
+            endoffset = range.endOffset
+          }
+        }
+
+        for (let l = startline; l <= endline; l++) {
+          let textline = ""
+          if (startline == endline && startline == l) {
+            textline = this.code[l].substring(startoffset, endoffset)
+            retval.text.push()
+          } else if (startline == l) {
+            textline = this.code[l].substring(startoffset, this.code[startline].length)
+          } else if (endline == l) {
+            textline = this.code[l].substring(0, endoffset)
+          } else {
+            textline = this.code[l]
+          }
+
+          if (textline)
+            retval.text.push(textline)
+        }
+      }
+
+    }
+
+    return retval
+  }
+
+  getCursorPosition(): { line: number; char: number; } {
+    return {
+      line: this.cursorLine,
+      char: this.cursorChar
+    }
+  }
+
+  setCursorPosition(position: { line: number; char: number; }): void {
+    this.cursorLine = position.line
+    this.cursorChar = position.char
+  }
 
   ngOnInit(): void {
     this.cursorLine = this.code.length - 1;
@@ -85,15 +181,8 @@ export class CodeareaComponent implements OnInit {
       this.cursorChar = this.code[this.cursorLine].length
       return true
     }
-    if(kbEvent.key == "Home") {
+    if (kbEvent.key == "Home") {
       this.cursorChar = 0
-      return true
-    }
-    if (kbEvent.ctrlKey && kbEvent.key == "c" && !kbEvent.shiftKey && !kbEvent.altKey) {
-      let sel = window.getSelection()
-      if (sel) {
-        navigator.clipboard.writeText(sel.toString())
-      }
       return true
     }
     return false
@@ -123,14 +212,14 @@ export class CodeareaComponent implements OnInit {
     if (kbEvent.key == "Enter") {
       let indent: string = ""
       let line: string = this.code[this.cursorLine]
-      for(let i = 0; i < line.length; i++) {
-        if(line[i] == ' ') {
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] == ' ') {
           indent += " ";
         } else {
           break
         }
       }
-      if(this.cursorChar != 0 && this.code[this.cursorLine][this.cursorChar-1] == "{") {
+      if (this.cursorChar != 0 && this.code[this.cursorLine][this.cursorChar - 1] == "{") {
         this.code[this.cursorLine] = indent + line.substring(this.cursorChar)
         this.code = this.code.slice(0, this.cursorLine).concat([line.substring(0, this.cursorChar), indent + "   "]).concat(this.code.slice(this.cursorLine))
         this.cursorChar = indent.length + 3
@@ -145,35 +234,54 @@ export class CodeareaComponent implements OnInit {
     return false
   }
 
-  onPaste(event: any) {
-    let pasteEvent: ClipboardEvent = (event as ClipboardEvent)
-    if (pasteEvent != null && pasteEvent.clipboardData) {
-      let paste = pasteEvent.clipboardData.getData('text');
+  handleSingleKey(kbEvent: KeyboardEvent): boolean {
+    if (kbEvent.key.length == 1) {
       let line: string = this.code[this.cursorLine]
-      this.code[this.cursorLine] = line.substring(0, this.cursorChar) + paste + line.substring(this.cursorChar)
-      this.cursorChar += paste.length
-    }
-  }
-
-  onPress(event: any) {
-    let kbEvent: KeyboardEvent = (event as KeyboardEvent);
-    if (this.handleHotkey(kbEvent)) { }
-    else if (kbEvent.key.length == 1) {
-      if (kbEvent.key == "v" && kbEvent.ctrlKey) {
-        return true
-      }
-      let line: string = this.code[this.cursorLine]
-      if(kbEvent.key == "{") {
+      if (kbEvent.key == "{") {
         this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + "}" + line.substring(this.cursorChar)
       } else {
         this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
       }
       this.cursorChar++
-    } else if (this.handleEnter(kbEvent)) { }
+      return true
+    }
+    return false
+  }
+
+  onPaste(event: any) {
+    pasteCommand(this, event)
+  }
+
+  eventToString(kbEvent: KeyboardEvent): string {
+    let retval =
+      (kbEvent.ctrlKey ? "CTRL_" : "") +
+      (kbEvent.altKey ? "ALT_" : "") +
+      (kbEvent.shiftKey ? "SHIFT_" : "") +
+      kbEvent.key.toUpperCase()
+    return retval
+  }
+
+  onPress(event: any) {
+
+    let kbEvent: KeyboardEvent = (event as KeyboardEvent);
+
+    ///there is no API to read the clipboard from javascript
+    ///the only way to read the clipboard is through a clipboard event
+    ///this makes sure that the function returns true so that the event
+    ///is not marked as consumed but instead let the browser handle the
+    ///event and therefore create a clipboard event.
+    if (kbEvent.key == "v" && kbEvent.ctrlKey && !kbEvent.shiftKey && !kbEvent.altKey) {
+      return true
+    }
+
+    if (KeybindingHandler.handleKeybinding(this.eventToString(kbEvent), this)) { }
+    else if (this.handleSingleKey(kbEvent)) { }
+    else if (this.handleEnter(kbEvent)) { }
     else if (this.handleBackspace(kbEvent)) { }
     else if (this.handleArrowKeys(kbEvent)) { }
     else {
       console.log(kbEvent.key)
+      return true
     }
 
     return false;
