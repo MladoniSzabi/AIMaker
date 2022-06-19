@@ -3,19 +3,19 @@
         <li>
             <p mat-button [matMenuTriggerFor]="fileMenu">File</p>
             <mat-menu class="menuPanel" #fileMenu="matMenu">
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('openFileCommand')">
                     Open
                     <span class="kb-shortcut">CTRL-O</span>
                 </button>
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('saveCommand')">
                     Save
                     <span class="kb-shortcut">CTRL-S</span>
                 </button>
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('saveAllCommand')">
                     Save All
                     <span class="kb-shortcut">CTRL-SHIFT-S</span>
                 </button>
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('closeFileCommand')">
                     Close
                     <span class="kb-shortcut">CTRL-W</span>
                 </button>
@@ -24,33 +24,33 @@
         <li>
             <p mat-button [matMenuTriggerFor]="editMenu">Edit</p>
             <mat-menu class="menuPanel" #editMenu="matMenu">
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('undoCommand')">
                     Undo
                     <span class="kb-shortcut">CTRL-Z</span>
                 </button>
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('redoCommand')">
                     Redo
                     <span class="kb-shortcut">CTRL-SHIFT-Z</span>
                 </button>
                 <hr />
-                <button class="menu-item" >
+                <button class="menu-item" (click)="runCommand.emit('cutCommand')">
                     Cut
                     <span class="kb-shortcut">CTRL-X</span>
                 </button>
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('copyCommand')">
                     Copy
                     <span class="kb-shortcut">CTRL-C</span>
                 </button>
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('pasteCommand')">
                     Paste
                     <span class="kb-shortcut">CTRL-V</span>
                 </button>
                 <hr />
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('findCommand')">
                     Find
                     <span class="kb-shortcut">CTRL-F</span>
                 </button>
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('replaceCommand')">
                     Replace
                     <span class="kb-shortcut">CTRL-H</span>
                 </button>
@@ -59,15 +59,15 @@
         <li>
             <p mat-button [matMenuTriggerFor]="viewMenu">View</p>
             <mat-menu class="menuPanel" #viewMenu="matMenu">
-                <button class="menu-item">
-                    Hide Output
+                <button class="menu-item" (click)="runCommand.emit('toggleOutputCommand')">
+                    Toggle Output
                 </button>
             </mat-menu>
         </li>
         <li>
             <p mat-button [matMenuTriggerFor]="runMenu">Run</p>
             <mat-menu class="menuPanel" #runMenu="matMenu">
-                <button class="menu-item">
+                <button class="menu-item" (click)="runCommand.emit('runCodeCommand')">
                     Run Code
                     <span class="kb-shortcut">F11</span>
                 </button>

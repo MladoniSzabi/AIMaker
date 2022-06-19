@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { pasteCommand, KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
+import { KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
 
 @Component({
   selector: 'app-codearea',
@@ -249,7 +249,7 @@ export class CodeareaComponent implements OnInit, TextEditor {
   }
 
   onPaste(event: any) {
-    pasteCommand(this, event)
+    KeybindingHandler.runCommand("pasteCommand", this, event)
   }
 
   eventToString(kbEvent: KeyboardEvent): string {

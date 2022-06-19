@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-topmenus',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./topmenus.component.scss']
 })
 export class TopmenusComponent implements OnInit {
+
+  @Output() runCommand = new EventEmitter()
 
   constructor() { }
 
