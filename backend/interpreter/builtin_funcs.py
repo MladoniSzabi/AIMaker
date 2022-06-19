@@ -2,7 +2,7 @@ import json
 import mouse
 import keyboard
 
-isRecording = True
+isRecording = False
 lastEvent = None
 listOfEvents = []
 
@@ -96,3 +96,8 @@ def stopRecording():
     global isRecording
     isRecording = False
     return json.dumps(listOfEvents)
+
+def setStopRecordingButton(hotkey):
+    keyboard.clear_all_hotkeys()
+    keyboard.add_hotkey(hotkey, stopRecording)
+    return ""
