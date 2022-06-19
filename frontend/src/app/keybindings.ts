@@ -21,6 +21,7 @@ export function copyCommand(textEditor: TextEditor): void {
 }
 
 export function cutCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
     let selectedText = textEditor.getSelectedText()
     let text = textEditor.getText()
     text[selectedText.startPosition.line] = text[selectedText.startPosition.line].substring(selectedText.startPosition.char)
@@ -50,30 +51,39 @@ export function pasteCommand(textEditor: TextEditor, pasteEvent: ClipboardEvent)
 }
 
 export function openFileCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function closeFileCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function saveCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function saveAllCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function runCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function undoCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function redoCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function findCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 export function replaceCommand(textEditor: TextEditor): void {
+    throw("Function not implemented")
 }
 
 const KEYBINDING_TO_COMMAND: { [key: string]: (textEditor: TextEditor, ...others: any[]) => void } = {
