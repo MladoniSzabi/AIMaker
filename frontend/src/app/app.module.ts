@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 import { CodeareaComponent } from './codearea/codearea.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CodeeditorComponent } from './codeeditor/codeeditor.component';
@@ -25,7 +26,8 @@ import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.compone
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSidenavModule,
-    MatMenuModule
+    MatMenuModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
