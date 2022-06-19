@@ -9,6 +9,7 @@ import { CodeeditorComponent } from './codeeditor/codeeditor.component';
 import { TopmenusComponent } from './topmenus/topmenus.component'
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
+import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { MatMenuModule } from '@angular/material/menu';
     AppComponent,
     CodeareaComponent,
     CodeeditorComponent,
-    TopmenusComponent
+    TopmenusComponent,
+    CodeoutputareaComponent
   ],
   imports: [
     BrowserModule,
