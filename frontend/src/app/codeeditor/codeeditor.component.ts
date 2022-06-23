@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatSidenav } from '@angular/material/sidenav';;
 import { CodeareaComponent } from '../codearea/codearea.component';
 import { KeybindingHandler } from '../keybindings';
 
@@ -22,5 +22,5 @@ export class CodeeditorComponent implements AfterViewInit {
   runCommand(event: string): void {
     KeybindingHandler.runCommand(event, this.codearea)
   }
-  
+
 }

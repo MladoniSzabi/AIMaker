@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { BackendService } from '../backend.service'
 
 @Component({
   selector: 'app-codearea',
@@ -15,7 +18,24 @@ export class CodeareaComponent implements OnInit, TextEditor {
 
   previousCharPos: number = 0
 
-  constructor() { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private titleService: Title,
+    private backendService: BackendService
+  ) {
+    this.activatedRoute.paramMap.subscribe(params => {
+      if(params.get("fileName")) {
+        this.titleService.setTitle(params.get("projectName") + " - " + params.get("fileName"))
+        this.backendService.loadfile(params.get("fileName") || "").subscribe((retval) => {
+          this.code = retval.split("\n")
+          this.cursorChar = 0
+          this.cursorLine = 0
+        })
+      } else {
+        this.titleService.setTitle("New File")
+      }
+    })
+  }
   addLine(text: string, lineNumber: number): string[] {
     this.code.splice(lineNumber, 0, ...[text])
     return this.code
