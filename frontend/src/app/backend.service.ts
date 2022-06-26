@@ -9,12 +9,12 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
 
-  saveFile(filename: string, content: string) { this.http.post("/api/file/" + filename, content).subscribe() }
-  loadfile(filename: string): Observable<string> { return this.http.get("/api/file/" + filename, {responseType: "text"}) }
+  saveFile(project: string, filename: string, content: string) { this.http.post("/api/project/" + project + "/file/" + filename, content).subscribe() }
+  loadfile(project: string, filename: string): Observable<string> { console.log(project, filename); return this.http.get("/api/project/" + project + "/file/" + filename, {responseType: "text"}) }
 
-  runFile(filename: string, content: string): Observable<string[]> {
+  runFile(project: string, filename: string, content: string): Observable<string[]> {
     if(filename) {
-      this.http.post("/api/file/" + filename, content).subscribe()
+      this.http.post("/api/project/" + project + "/file/" + filename, content).subscribe()
     }
     let form = new FormData()
     form.append("code", content)

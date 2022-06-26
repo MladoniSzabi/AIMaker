@@ -14,6 +14,7 @@ export interface TextEditor {
     setCursorPosition(position: { line: number, char: number }): void
     addLine(text: string, lineNumber: number): string[]
     getFileName(): string
+    getProjectName(): string
 }
 
 function copyCommand(textEditor: TextEditor, backendService: BackendService): void {
@@ -66,7 +67,7 @@ function closeFileCommand(textEditor: TextEditor, backendService: BackendService
 }
 
 function saveCommand(textEditor: TextEditor, backendService: BackendService): void {
-    backendService.saveFile(textEditor.getFileName(), textEditor.getText().join("\n"))
+    backendService.saveFile(textEditor.getProjectName(), textEditor.getFileName(), textEditor.getText().join("\n"))
 }
 
 function saveAllCommand(textEditor: TextEditor, backendService: BackendService): void {
@@ -74,7 +75,7 @@ function saveAllCommand(textEditor: TextEditor, backendService: BackendService):
 }
 
 function runCodeCommand(textEditor: TextEditor, backendService: BackendService): void {
-    backendService.runFile(textEditor.getFileName(), textEditor.getText().join("\n")).subscribe()
+    backendService.runFile(textEditor.getProjectName(), textEditor.getFileName(), textEditor.getText().join("\n")).subscribe()
 }
 
 function undoCommand(textEditor: TextEditor, backendService: BackendService): void {

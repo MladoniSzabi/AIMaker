@@ -12,6 +12,7 @@ import { BackendService } from '../backend.service'
 export class CodeareaComponent implements OnInit, TextEditor {
 
   fileName: string = ""
+  projectName: string = ""
 
   code: string[] = [""]
 
@@ -26,10 +27,11 @@ export class CodeareaComponent implements OnInit, TextEditor {
     private backendService: BackendService
   ) {
     this.activatedRoute.paramMap.subscribe(params => {
-      if(params.get("fileName")) {
+      if(params.get("fileName") && params.get("projectName")) {
+        this.projectName = params.get("projectName") || ""
         this.fileName = params.get("fileName") || "New File"
         this.titleService.setTitle(params.get("projectName") + " - " + params.get("fileName"))
-        this.backendService.loadfile(params.get("fileName") || "").subscribe((retval) => {
+        this.backendService.loadfile(this.projectName, params.get("fileName") || "").subscribe((retval) => {
           this.code = retval.split("\n")
           this.cursorChar = 0
           this.cursorLine = 0
@@ -38,6 +40,9 @@ export class CodeareaComponent implements OnInit, TextEditor {
         this.titleService.setTitle("New File")
       }
     })
+  }
+  getProjectName(): string {
+    return this.projectName
   }
   getFileName(): string {
     return this.fileName

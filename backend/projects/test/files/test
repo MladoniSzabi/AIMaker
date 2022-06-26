@@ -1,0 +1,3 @@
+moveMouse(100,100)
+wait(1)
+moveMouse(1000,1000)
