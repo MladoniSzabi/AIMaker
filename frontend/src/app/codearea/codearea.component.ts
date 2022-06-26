@@ -13,7 +13,7 @@ export class CodeareaComponent implements OnInit, TextEditor {
 
   fileName: string = ""
 
-  code: string[] = ["asdkjashdkfjakshkjaskjdfh", "dsa"]
+  code: string[] = [""]
 
   cursorLine: number = 0
   cursorChar: number = 0
@@ -275,7 +275,7 @@ export class CodeareaComponent implements OnInit, TextEditor {
   }
 
   onPaste(event: any) {
-    KeybindingHandler.runCommand("pasteCommand", this, event)
+    KeybindingHandler.runCommand("pasteCommand", this, this.backendService, event)
   }
 
   eventToString(kbEvent: KeyboardEvent): string {

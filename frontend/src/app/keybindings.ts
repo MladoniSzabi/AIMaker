@@ -74,7 +74,7 @@ function saveAllCommand(textEditor: TextEditor, backendService: BackendService):
 }
 
 function runCodeCommand(textEditor: TextEditor, backendService: BackendService): void {
-    backendService.runFile(textEditor.getFileName(), textEditor.getText().join("\n"))
+    backendService.runFile(textEditor.getFileName(), textEditor.getText().join("\n")).subscribe()
 }
 
 function undoCommand(textEditor: TextEditor, backendService: BackendService): void {

@@ -13,8 +13,12 @@ export class BackendService {
   loadfile(filename: string): Observable<string> { return this.http.get("/api/file/" + filename, {responseType: "text"}) }
 
   runFile(filename: string, content: string): Observable<string[]> {
-    this.http.post("/api/file/" + filename, content).subscribe()
-    return this.http.post<string[]>("/api/code/run", content)
+    if(filename) {
+      this.http.post("/api/file/" + filename, content).subscribe()
+    }
+    let form = new FormData()
+    form.append("code", content)
+    return this.http.post<string[]>("/api/code/run", form)
   }
 
   startRecording() { this.http.post("/api/record/start", "").subscribe() }
