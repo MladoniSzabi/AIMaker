@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';;
+import { MatSidenav } from '@angular/material/sidenav';import { BackendService } from '../backend.service';
+;
 import { CodeareaComponent } from '../codearea/codearea.component';
 import { KeybindingHandler } from '../keybindings';
 
@@ -13,14 +14,14 @@ export class CodeeditorComponent implements AfterViewInit {
   @ViewChild('sidenav') sidenav: MatSidenav = {} as MatSidenav;
   @ViewChild('codearea') codearea: CodeareaComponent = {} as CodeareaComponent;
 
-  constructor() { }
+  constructor(private backendService: BackendService) { }
 
   ngAfterViewInit(): void {
     this.sidenav.open()
   }
 
   runCommand(event: string): void {
-    KeybindingHandler.runCommand(event, this.codearea)
+    KeybindingHandler.runCommand(event, this.codearea, this.backendService)
   }
 
 }

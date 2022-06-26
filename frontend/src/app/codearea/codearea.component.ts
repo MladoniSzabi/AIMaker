@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +10,8 @@ import { BackendService } from '../backend.service'
   styleUrls: ['./codearea.component.scss']
 })
 export class CodeareaComponent implements OnInit, TextEditor {
+
+  fileName: string = ""
 
   code: string[] = ["asdkjashdkfjakshkjaskjdfh", "dsa"]
 
@@ -25,6 +27,7 @@ export class CodeareaComponent implements OnInit, TextEditor {
   ) {
     this.activatedRoute.paramMap.subscribe(params => {
       if(params.get("fileName")) {
+        this.fileName = params.get("fileName") || "New File"
         this.titleService.setTitle(params.get("projectName") + " - " + params.get("fileName"))
         this.backendService.loadfile(params.get("fileName") || "").subscribe((retval) => {
           this.code = retval.split("\n")
@@ -35,6 +38,9 @@ export class CodeareaComponent implements OnInit, TextEditor {
         this.titleService.setTitle("New File")
       }
     })
+  }
+  getFileName(): string {
+    return this.fileName
   }
   addLine(text: string, lineNumber: number): string[] {
     this.code.splice(lineNumber, 0, ...[text])
@@ -294,7 +300,7 @@ export class CodeareaComponent implements OnInit, TextEditor {
       return true
     }
 
-    if (KeybindingHandler.handleKeybinding(this.eventToString(kbEvent), this)) { }
+    if (KeybindingHandler.handleKeybinding(this.eventToString(kbEvent), this, this.backendService)) { }
     else if (this.handleSingleKey(kbEvent)) { }
     else if (this.handleEnter(kbEvent)) { }
     else if (this.handleBackspace(kbEvent)) { }

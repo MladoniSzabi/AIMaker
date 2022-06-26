@@ -1,3 +1,5 @@
+import { BackendService } from "./backend.service";
+
 export type selectedTextDict = {
     startPosition: { line: number, char: number },
     endPosition: { line: number, char: number },
@@ -5,32 +7,33 @@ export type selectedTextDict = {
 }
 
 export interface TextEditor {
-    getText(): string[];
-    getLine(lineNumber: number): string;
-    getSelectedText(): selectedTextDict;
-    getCursorPosition(): { line: number, char: number };
-    setCursorPosition(position: { line: number, char: number }): void;
+    getText(): string[]
+    getLine(lineNumber: number): string
+    getSelectedText(): selectedTextDict
+    getCursorPosition(): { line: number, char: number }
+    setCursorPosition(position: { line: number, char: number }): void
     addLine(text: string, lineNumber: number): string[]
+    getFileName(): string
 }
 
-function copyCommand(textEditor: TextEditor): void {
+function copyCommand(textEditor: TextEditor, backendService: BackendService): void {
     let selectedText = textEditor.getSelectedText().text.join("\n")
     if (selectedText) {
         navigator.clipboard.writeText(selectedText)
     }
 }
 
-function cutCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function cutCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
     let selectedText = textEditor.getSelectedText()
     let text = textEditor.getText()
     text[selectedText.startPosition.line] = text[selectedText.startPosition.line].substring(selectedText.startPosition.char)
 }
 
-function pasteCommand(textEditor: TextEditor, pasteEvent: ClipboardEvent): void {
+function pasteCommand(textEditor: TextEditor, backendService: BackendService, pasteEvent: ClipboardEvent): void {
     let text = textEditor.getText()
     let cursor = textEditor.getCursorPosition()
-    if(pasteEvent == null) {
+    if (pasteEvent == null) {
         throw "Paste command must be run with a clipboard event"
     }
 
@@ -54,52 +57,52 @@ function pasteCommand(textEditor: TextEditor, pasteEvent: ClipboardEvent): void 
     }
 }
 
-function openFileCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function openFileCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
 }
 
-function closeFileCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function closeFileCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
 }
 
-function saveCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function saveCommand(textEditor: TextEditor, backendService: BackendService): void {
+    backendService.saveFile(textEditor.getFileName(), textEditor.getText().join("\n"))
 }
 
-function saveAllCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function saveAllCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
 }
 
-function runCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function runCodeCommand(textEditor: TextEditor, backendService: BackendService): void {
+    backendService.runFile(textEditor.getFileName(), textEditor.getText().join("\n"))
 }
 
-function undoCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function undoCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
 }
 
-function redoCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function redoCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
 }
 
-function findCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function findCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
 }
 
-function replaceCommand(textEditor: TextEditor): void {
-    throw("Function not implemented")
+function replaceCommand(textEditor: TextEditor, backendService: BackendService): void {
+    throw ("Function not implemented")
 }
 
-function toggleOutputCommand(textEditor: TextEditor): void {
+function toggleOutputCommand(textEditor: TextEditor, backendService: BackendService): void {
 
 }
 
-const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, ...others: any[]) => void } = {
+const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, backendService: BackendService, ...others: any[]) => void } = {
     "openFileCommand": openFileCommand,
     "closeFileCommand": closeFileCommand,
     "saveCommand": saveCommand,
     "saveAllCommand": saveAllCommand,
-    "runCommand": runCommand,
+    "runCodeCommand": runCodeCommand,
     "cutCommand": cutCommand,
     "copyCommand": copyCommand,
     "pasteCommand": pasteCommand,
@@ -116,7 +119,7 @@ const KEYBINDING_TO_COMMAND_NAME: { [key: string]: string } = {
     "CTRL_W": "closeFileCommand",
     "CTRL_S": "saveCommand",
     "CTRL_SHIFT_S": "saveAllCommand",
-    "F11": "runCommand",
+    "F11": "runCodeCommand",
     "CTRL_X": "cutCommand",
     "CTRL_C": "copyCommand",
     "CTRL_V": "pasteCommand",
@@ -127,24 +130,24 @@ const KEYBINDING_TO_COMMAND_NAME: { [key: string]: string } = {
 }
 
 export class KeybindingHandler {
-    static handleKeybinding(keybinding: string, textEditor: TextEditor, args?: any[]): boolean {
-        console.log(keybinding)
+    static handleKeybinding(keybinding: string, textEditor: TextEditor, backendService: BackendService, args?: any[]): boolean {
         if (!args) {
             args = []
         }
         if (keybinding in KEYBINDING_TO_COMMAND_NAME) {
             console.assert(KEYBINDING_TO_COMMAND_NAME[keybinding] in COMMAND_NAME_TO_COMMAND, "Keybinding not in command")
-            COMMAND_NAME_TO_COMMAND[KEYBINDING_TO_COMMAND_NAME[keybinding]](textEditor, ...args)
+            COMMAND_NAME_TO_COMMAND[KEYBINDING_TO_COMMAND_NAME[keybinding]](textEditor, backendService, ...args)
             return true
         }
         return false
     }
 
-    static runCommand(commandName: string, textEditor: TextEditor, ...args: any[]): void {
+    static runCommand(commandName: string, textEditor: TextEditor, backendService: BackendService, ...args: any[]): void {
+        console.log(commandName)
         if (commandName in COMMAND_NAME_TO_COMMAND) {
-            COMMAND_NAME_TO_COMMAND[commandName](textEditor, ...args)
+            COMMAND_NAME_TO_COMMAND[commandName](textEditor, backendService, ...args)
         } else {
-            throw("Command does not exist")
+            throw ("Command does not exist")
         }
     }
 }
