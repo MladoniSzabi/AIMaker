@@ -4,12 +4,12 @@ import json
 
 def enumerate_files(path):
     files = os.listdir(path)
-    retval = {}
+    retval = []
     for f in files:
         if os.path.isdir(path + f):
-            retval[f] = enumerate_files(path + f + "/")
+            retval.append({"name": f, "children": enumerate_files(path + f + "/")})
         else:
-            retval[f] = None
+            retval.append({"name": f})
     
     return retval
 

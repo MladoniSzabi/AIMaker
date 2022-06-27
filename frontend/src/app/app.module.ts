@@ -10,7 +10,9 @@ import { CodeeditorComponent } from './codeeditor/codeeditor.component';
 import { TopmenusComponent } from './topmenus/topmenus.component'
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTreeModule } from '@angular/material/tree';
 import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.component';
+import { FileListComponent } from './file-list/file-list.component';
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.compone
     CodeareaComponent,
     CodeeditorComponent,
     TopmenusComponent,
-    CodeoutputareaComponent
+    CodeoutputareaComponent,
+    FileListComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +30,7 @@ import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.compone
     BrowserAnimationsModule,
     MatSidenavModule,
     MatMenuModule,
+    MatTreeModule,
     HttpClientModule
   ],
   providers: [],
