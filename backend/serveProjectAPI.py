@@ -2,6 +2,17 @@ from flask import request, make_response
 import os
 import json
 
+def enumerate_files(path):
+    files = os.listdir(path)
+    retval = {}
+    for f in files:
+        if os.path.isdir(path + f):
+            retval[f] = enumerate_files(path + f + "/")
+        else:
+            retval[f] = None
+    
+    return retval
+
 def setUpRoutes(app):
     @app.route("/api/project/<project>/new", methods=["PUT"])
     def createProject(project):
@@ -13,7 +24,8 @@ def setUpRoutes(app):
 
     @app.route("/api/project/<project>/file/list", methods=["GET"])
     def listFiles(project):
-        return json.dumps(os.listdir("projects/" + project + "/files/"))
+        path = "projects/" + project + "/files/"
+        return json.dumps(enumerate_files(path))
     
     @app.route("/api/project/<project>/file/<filename>", methods=["GET"])
     def loadFile(project, filename):
