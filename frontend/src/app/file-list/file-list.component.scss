@@ -1,15 +1,15 @@
-::ng-deep .tree_node {
+::ng-deep .tree-node {
     min-height: unset;
 }
 
-.tree_node {
+.tree-node {
     width:100%;
 }
 
-.tree_node a {
+.tree-node a {
     width: 100%;
 }
 
-.tree_node:hover {
+.tree-node:hover {
     background-color: #ccc;
 }

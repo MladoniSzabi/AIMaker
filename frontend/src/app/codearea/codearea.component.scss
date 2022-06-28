@@ -4,7 +4,7 @@
     height: 100%;
 }
 
-#codearea {
+#code-area {
     width: 100%;
     height: 100%;
 
@@ -12,26 +12,26 @@
     grid-template-columns: minmax(max-content, 3ch) auto;
 }
 
-#codearea p,
-#codearea pre {
+#code-area p,
+#code-area pre {
     line-height: 1.1em;
     margin: 0;
     height: 1em;
     font-family: "Source Code Pro", monospace;
 }
 
-#linenumbers {
+#line-numbers {
     color: grey;
     border-right: 1px solid grey;
     margin-right: 0.5em;
     text-align: right;
 }
 
-#linenumbers p.current {
+#line-numbers p.current {
     color: black;
 }
 
-#codeinputarea #cursor {
+#code-input-area #cursor {
     transform: translateX(-0.5ch);
     width: 0;
     position: relative;

@@ -1,7 +1,7 @@
-$codeeditor_percent: 80%;
+$code-editor_percent: 80%;
 
 :host,
-#codeeditor {
+#code-editor {
     display: block;
     width: 100%;
     height: 100%;
@@ -17,21 +17,21 @@ mat-sidenav-container {
     height: calc(100% - 1.5em)
 }
 
-#codeeditor mat-sidenav {
+#code-editor mat-sidenav {
     min-width: 10%;
     width: max-content;
 }
 
-#codeeditor mat-sidenav-content {
+#code-editor mat-sidenav-content {
     width: 90%;
 }
 
 app-codeoutputarea {
     width: 100%;
-    height: calc( 100% - #{$codeeditor_percent} );
+    height: calc( 100% - #{$code-editor_percent} );
     display: block;
 }
 
 app-codearea {
-    height: $codeeditor_percent;
+    height: $code-editor_percent;
 }

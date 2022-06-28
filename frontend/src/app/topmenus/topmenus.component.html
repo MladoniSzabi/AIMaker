@@ -2,7 +2,7 @@
     <ul>
         <li>
             <p mat-button [matMenuTriggerFor]="fileMenu">File</p>
-            <mat-menu class="menuPanel" #fileMenu="matMenu">
+            <mat-menu class="menu-panel" #fileMenu="matMenu">
                 <button class="menu-item" (click)="runCommand.emit('openFileCommand')">
                     Open
                     <span class="kb-shortcut">CTRL-O</span>
@@ -23,7 +23,7 @@
         </li>
         <li>
             <p mat-button [matMenuTriggerFor]="editMenu">Edit</p>
-            <mat-menu class="menuPanel" #editMenu="matMenu">
+            <mat-menu class="menu-panel" #editMenu="matMenu">
                 <button class="menu-item" (click)="runCommand.emit('undoCommand')">
                     Undo
                     <span class="kb-shortcut">CTRL-Z</span>
@@ -58,7 +58,7 @@
         </li>
         <li>
             <p mat-button [matMenuTriggerFor]="viewMenu">View</p>
-            <mat-menu class="menuPanel" #viewMenu="matMenu">
+            <mat-menu class="menu-panel" #viewMenu="matMenu">
                 <button class="menu-item" (click)="runCommand.emit('toggleOutputCommand')">
                     Toggle Output
                 </button>
@@ -66,7 +66,7 @@
         </li>
         <li>
             <p mat-button [matMenuTriggerFor]="runMenu">Run</p>
-            <mat-menu class="menuPanel" #runMenu="matMenu">
+            <mat-menu class="menu-panel" #runMenu="matMenu">
                 <button class="menu-item" (click)="runCommand.emit('runCodeCommand')">
                     Run Code
                     <span class="kb-shortcut">F11</span>
