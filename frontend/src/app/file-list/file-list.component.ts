@@ -18,7 +18,7 @@ type FlattenedFileTree = {
 export class FileListComponent implements OnInit {
 
   private transformer = (node: FileTree, level: number) => ({
-    expandable: node.children != null && node.children.length > 0,
+    expandable: node.children != null,
     name: node.name,
     level: level,
   })
