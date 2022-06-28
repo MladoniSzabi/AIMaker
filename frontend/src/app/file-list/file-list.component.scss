@@ -2,6 +2,14 @@
     min-height: unset;
 }
 
-.tree_node_button {
-    width: 16px;
+.tree_node {
+    width:100%;
+}
+
+.tree_node a {
+    width: 100%;
+}
+
+.tree_node:hover {
+    background-color: #ccc;
 }
