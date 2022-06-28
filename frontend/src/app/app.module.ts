@@ -11,6 +11,7 @@ import { TopmenusComponent } from './topmenus/topmenus.component'
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatIconModule } from '@angular/material/icon';
 import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.component';
 import { FileListComponent } from './file-list/file-list.component';
 
@@ -31,6 +32,7 @@ import { FileListComponent } from './file-list/file-list.component';
     MatSidenavModule,
     MatMenuModule,
     MatTreeModule,
+    MatIconModule,
     HttpClientModule
   ],
   providers: [],
