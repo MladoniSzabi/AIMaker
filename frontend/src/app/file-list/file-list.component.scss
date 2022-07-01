@@ -3,10 +3,12 @@
 }
 
 .tree-node {
-    width:100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0.5em;
 }
 
-.tree-node a {
+.tree-node a:first-child {
     width: 100%;
 }
 
@@ -16,4 +18,8 @@
 
 mat-icon.mat-icon {
     width: auto;
+}
+
+.save-button:hover {
+    color: #3c3cec;
 }

@@ -6,15 +6,20 @@
             <mat-icon [inline]="true" class="mat-icon-rtl-mirror">text_snippet</mat-icon>
             {{node.name}}
         </a>
+        <a mat-icon-button class="save-button">
+            <mat-icon [inline]="true" class="mat-icon-rtl-mirror">save</mat-icon>
+        </a>
     </mat-tree-node>
 
     <!-- This is the tree node template for expandable nodes -->
     <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="15" class="tree-node expandable" >
     <a matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name" class="tree-node-button">
-        <mat-icon [inline]="true" class="mat-icon-rtl-mirror md-18">
-            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-          </mat-icon>
-        {{node.name}}
+        <span>
+            <mat-icon [inline]="true" class="mat-icon-rtl-mirror md-18">
+                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+            {{node.name}}
+        </span>
     </a>
     </mat-tree-node>
 </mat-tree>
