@@ -5,7 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { CodeeditorComponent } from "./codeeditor/codeeditor.component"
 
 const routes: Routes = [
-  {path: ":projectName/:fileName", component: CodeeditorComponent},
+  {path: ":projectName",  children: [
+    {path:"**", component: CodeeditorComponent}
+  ]},
   {path: "debug", component: CodeeditorComponent},
 ];
 

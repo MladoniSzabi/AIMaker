@@ -29,15 +29,15 @@ def setUpRoutes(app):
         path = "projects/" + project + "/files/"
         return json.dumps(enumerate_files(path))
     
-    @app.route("/api/project/<project>/file/<filename>", methods=["GET"])
-    def loadFile(project, filename):
-        with open("projects/" + project + "/files/" + filename) as f:
+    @app.route("/api/project/<project>/file/<path:filepath>", methods=["GET"])
+    def loadFile(project, filepath):
+        with open("projects/" + project + "/files/" + filepath) as f:
             response = make_response(f.read(), 200)
             response.mimetype = "text/plain"
             return response
     
-    @app.route("/api/project/<project>/file/<filename>", methods=["POST"])
-    def saveFile(project, filename):
-        with open("projects/" + project + "/files/" + filename, "w") as f:
+    @app.route("/api/project/<project>/file/<path:filepath>", methods=["POST"])
+    def saveFile(project, filepath):
+        with open("projects/" + project + "/files/" + filepath, "w") as f:
             f.write(request.get_data(as_text=True))
             return ""

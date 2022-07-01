@@ -3,6 +3,7 @@ import { KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings'
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../backend.service'
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-codearea',
@@ -26,27 +27,32 @@ export class CodeareaComponent implements OnInit, TextEditor {
     private titleService: Title,
     private backendService: BackendService
   ) {
-    this.activatedRoute.paramMap.subscribe(params => {
-      if(params.get("fileName") && params.get("projectName")) {
+    combineLatest([this.activatedRoute.url, this.activatedRoute.paramMap]).subscribe(forkResult => {
+      let [urlsegment, params] = forkResult
+      this.fileName = urlsegment.join("/")
+      if(this.fileName && params.get("projectName")) {
         this.projectName = params.get("projectName") || ""
-        this.fileName = params.get("fileName") || "New File"
-        this.titleService.setTitle(params.get("projectName") + " - " + params.get("fileName"))
-        this.backendService.loadfile(this.projectName, params.get("fileName") || "").subscribe((retval) => {
+        this.titleService.setTitle(params.get("projectName") + " - " + urlsegment[urlsegment.length-1])
+        this.backendService.loadfile(this.projectName, this.fileName).subscribe((retval) => {
           this.code = retval.split("\n")
           this.cursorChar = 0
           this.cursorLine = 0
         })
       } else {
+        this.fileName = "New File"
         this.titleService.setTitle("New File")
       }
     })
   }
+
   getProjectName(): string {
     return this.projectName
   }
+
   getFileName(): string {
     return this.fileName
   }
+
   addLine(text: string, lineNumber: number): string[] {
     this.code.splice(lineNumber, 0, ...[text])
     return this.code
@@ -151,7 +157,6 @@ export class CodeareaComponent implements OnInit, TextEditor {
 
   handleArrowKeys(kbEvent: KeyboardEvent): boolean {
     if (kbEvent.key == "ArrowLeft") {
-      console.log(this.previousCharPos)
       this.cursorChar--
       if (this.cursorChar < 0) {
         if (this.cursorLine > 0) {

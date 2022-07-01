@@ -45,7 +45,6 @@ export class FileListComponent implements OnInit {
       if(params.get("projectName")) {
         let projectName = params.get("projectName") || ""
         this.backendService.getFileList(projectName).subscribe(fileList => {
-          console.log(fileList)
           this.dataSource.data = fileList
         })
       }
