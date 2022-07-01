@@ -11,7 +11,9 @@ def enumerate_files(path):
         else:
             retval.append({"name": f})
     
-    return retval
+    
+    #Sort files and folders alphabetically such that folders are first
+    return sorted(retval, key = lambda x: '0'+x["name"] if os.path.isdir(path + x["name"]) else '1'+x["name"])
 
 def setUpRoutes(app):
     @app.route("/api/project/<project>/new", methods=["PUT"])
