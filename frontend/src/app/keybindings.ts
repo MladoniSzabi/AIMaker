@@ -144,7 +144,6 @@ export class KeybindingHandler {
     }
 
     static runCommand(commandName: string, textEditor: TextEditor, backendService: BackendService, ...args: any[]): void {
-        console.log(commandName)
         if (commandName in COMMAND_NAME_TO_COMMAND) {
             COMMAND_NAME_TO_COMMAND[commandName](textEditor, backendService, ...args)
         } else {
