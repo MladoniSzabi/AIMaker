@@ -316,7 +316,6 @@ export class CodeareaComponent implements OnInit, TextEditor {
     else if (this.handleBackspace(kbEvent)) { }
     else if (this.handleArrowKeys(kbEvent)) { }
     else {
-      console.log(kbEvent.key)
       return true
     }
 
