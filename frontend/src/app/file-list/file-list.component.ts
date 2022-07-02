@@ -7,7 +7,8 @@ import {FlatTreeControl} from '@angular/cdk/tree';
 type FlattenedFileTree = {
   expandable: boolean,
   name: string,
-  level: number
+  level: number,
+  parents: string
 }
 
 @Component({
@@ -17,10 +18,29 @@ type FlattenedFileTree = {
 })
 export class FileListComponent implements OnInit {
 
+  collectParents(lookIn: FileTree[], node: FileTree, level: number): string[] {
+    console.log("AAA", lookIn, node, level);
+    for(let n of lookIn) {
+      if(n == node) {
+        console.log("BBB")
+        return [node.name]
+      } else if(n.children) {
+        let res = this.collectParents(n.children, node, level-1)
+        console.log("CCC", res)
+        if(res.length != 0) {
+          console.log("DDD", [n.name, ...res])
+          return [n.name, ...res]
+        }
+      }
+    }
+    return []
+  }
+
   private transformer = (node: FileTree, level: number) => ({
     expandable: node.children != null,
     name: node.name,
     level: level,
+    parents: "/" + this.project + "/" + this.collectParents(this.dataSource.data, node, level).join("/"),
   })
 
   treeControl = new FlatTreeControl<FlattenedFileTree>(
@@ -36,6 +56,7 @@ export class FileListComponent implements OnInit {
   )
 
   dataSource : MatTreeFlatDataSource<FileTree, FlattenedFileTree> = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener)
+  project: string = ""
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -44,6 +65,7 @@ export class FileListComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       if(params.get("projectName")) {
         let projectName = params.get("projectName") || ""
+        this.project = projectName
         this.backendService.getFileList(projectName).subscribe(fileList => {
           this.dataSource.data = fileList
         })
