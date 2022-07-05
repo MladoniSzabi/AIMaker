@@ -12,8 +12,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.component';
 import { FileListComponent } from './file-list/file-list.component';
+import { BottomPannelComponent } from './bottom-pannel/bottom-pannel.component';
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import { FileListComponent } from './file-list/file-list.component';
     CodeeditorComponent,
     TopmenusComponent,
     CodeoutputareaComponent,
-    FileListComponent
+    FileListComponent,
+    BottomPannelComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,7 @@ import { FileListComponent } from './file-list/file-list.component';
     MatMenuModule,
     MatTreeModule,
     MatIconModule,
+    MatTabsModule,
     HttpClientModule
   ],
   providers: [],
