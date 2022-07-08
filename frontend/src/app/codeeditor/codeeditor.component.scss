@@ -26,7 +26,7 @@ mat-sidenav-container {
     width: 90%;
 }
 
-app-codeoutputarea {
+app-bottom-pannel {
     width: 100%;
     height: calc( 100% - #{$code-editor_percent} );
     display: block;
