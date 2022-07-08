@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.component';
 import { FileListComponent } from './file-list/file-list.component';
 import { BottomPannelComponent } from './bottom-pannel/bottom-pannel.component';
+import { MacroPanelComponent } from './macro-panel/macro-panel.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { BottomPannelComponent } from './bottom-pannel/bottom-pannel.component';
     TopmenusComponent,
     CodeoutputareaComponent,
     FileListComponent,
-    BottomPannelComponent
+    BottomPannelComponent,
+    MacroPanelComponent
   ],
   imports: [
     BrowserModule,

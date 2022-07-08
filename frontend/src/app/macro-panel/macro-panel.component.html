@@ -1,0 +1,30 @@
+<table>
+    <tr>
+        <th class="keybinding">Keybinding</th>
+        <th class="path">Path</th>
+        <th class="buttons"></th>
+    </tr>
+    <tr *ngFor="let macro of macros">
+        <td class="keybinding">{{macro.keybinding}}</td>
+        <td class="path">{{macro.path}}</td>
+    </tr>
+
+    <tr *ngIf="!isCreatingNewMacro">
+        <td rowspan="2">
+            <button class="add-button" (click)="showCreateMacro()">+</button>
+        </td>
+    </tr>
+
+    <tr *ngIf="isCreatingNewMacro">
+        <td class="keybinding">
+            <input type="text" #keybinding />
+        </td>
+        <td class="path">
+            <input type="text" #functionpath />
+        </td>
+        <td class="buttons">
+            <button class="cancel-button" (click)="hideCreateMacro()">X</button>
+            <button class="cancel-button" (click)="submitMacro()">✓</button>
+        </td>
+    </tr>
+</table>

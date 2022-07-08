@@ -1,0 +1,32 @@
+$kebinding-percent: 33%;
+
+table {
+    width: 100%;
+    max-width: 100ch;
+}
+
+.keybinding {
+    width: $kebinding-percent;
+}
+
+.path {
+    width: calc( 100% - #{$kebinding-percent} - 6em);
+}
+
+.close {
+    width: 6em;
+}
+
+th {
+    border-bottom: 1px solid black;
+}
+
+.add-button {
+    border-radius: 100%;
+    font-size: 2em;
+}
+
+.cancel-button {
+    border-radius: 100%;
+    font-size: 2em;
+}
