@@ -4,12 +4,12 @@ from flask import request, make_response
 import os
 import json
 
-def enumerate_files(path):
+def enumerateFiles(path):
     files = os.listdir(path)
     retval = []
     for f in files:
         if os.path.isdir(path + f):
-            retval.append({"name": f, "children": enumerate_files(path + f + "/")})
+            retval.append({"name": f, "children": enumerateFiles(path + f + "/")})
         else:
             retval.append({"name": f})
     
@@ -29,7 +29,7 @@ def setUpRoutes(app):
     @app.route("/api/project/<project>/file/list", methods=["GET"])
     def listFiles(project):
         path = "projects/" + project + "/files/"
-        return json.dumps(enumerate_files(path))
+        return json.dumps(enumerateFiles(path))
     
     @app.route("/api/project/<project>/file/<path:filepath>", methods=["GET"])
     def loadFile(project, filepath):
