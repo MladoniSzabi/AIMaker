@@ -16,13 +16,30 @@ functions = {
     "wait": time.sleep
 }
 
-def interpret(text):
+def interpret_function(fileName, functionName):
+    with open(fileName) as f:
+        code = interpret(f.read())
+        stream = InputStream(code)
+        lexer = LanguageLexer(stream)
+        tokens = CommonTokenStream(lexer)
+        parser = LanguageParser(tokens)
+        tree = parser.entry_point()
+        visitor = LanguageVisitor(False)
+        visitor.functions = functions
+        visitor.visit(tree)
+        return visitor.visit(visitor.custom_functions[functionName])
+
+def interpret_file(fileName):
+    with open(fileName) as f:
+        return interpret(f.read())
+
+def interpret(text, executeExpressions = True):
     stream = InputStream(text)
     lexer = LanguageLexer(stream)
     tokens = CommonTokenStream(lexer)
     parser = LanguageParser(tokens)
     tree = parser.entry_point()
-    visitor = LanguageVisitor()
+    visitor = LanguageVisitor(executeExpressions)
     visitor.functions = functions
     output = visitor.visit(tree)
     return output

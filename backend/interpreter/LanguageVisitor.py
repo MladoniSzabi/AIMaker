@@ -9,11 +9,12 @@ else:
 
 class LanguageVisitor(ParseTreeVisitor):
 
-    def __init__(self):
+    def __init__(self, evaluateExpression = True):
         super().__init__()
         self.custom_functions = {}
         self.context = [{}]
         self.functions = {}
+        self.evaluateExpression = evaluateExpression
 
     # Visit a parse tree produced by LanguageParser#Entry.
     def visitEntry(self, ctx:LanguageParser.EntryContext):
@@ -91,65 +92,73 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#Simple_Expression.
     def visitSimple_Expression(self, ctx:LanguageParser.Simple_ExpressionContext):
-        return self.visit(ctx.exp)
+        if self.evaluateExpression:
+            return self.visit(ctx.exp)
 
 
     # Visit a parse tree produced by LanguageParser#Division.
     def visitDivision(self, ctx:LanguageParser.DivisionContext):
-        return self.visit(ctx.lhs) / self.visit(ctx.rhs)
+        if self.evaluateExpression:
+            return self.visit(ctx.lhs) / self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Multiplication.
     def visitMultiplication(self, ctx:LanguageParser.MultiplicationContext):
-        return self.visit(ctx.lhs) * self.visit(ctx.rhs)
+        if self.evaluateExpression:
+         return self.visit(ctx.lhs) * self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Addition.
     def visitAddition(self, ctx:LanguageParser.AdditionContext):
-        return self.visit(ctx.lhs) + self.visit(ctx.rhs)
+        if self.evaluateExpression:
+            return self.visit(ctx.lhs) + self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Subtraction.
     def visitSubtraction(self, ctx:LanguageParser.SubtractionContext):
-        return self.visit(ctx.lhs) - self.visit(ctx.rhs)
+        if self.evaluateExpression:
+            return self.visit(ctx.lhs) - self.visit(ctx.rhs)
     
 
     # Visit a parse tree produced by LanguageParser#Expression_Assignment.
     def visitExpression_Assignment(self, ctx:LanguageParser.Expression_AssignmentContext):
-        variableName = ctx.lhs.text
-        self.context[-1][variableName] = self.visit(ctx.rhs)
-        return self.context[-1][variableName]
+        if self.evaluateExpression:
+            variableName = ctx.lhs.text
+            self.context[-1][variableName] = self.visit(ctx.rhs)
+            return self.context[-1][variableName]
 
 
     # Visit a parse tree produced by LanguageParser#Function_Call.
     def visitFunction_Call(self, ctx:LanguageParser.Function_CallContext):
-        functionName = ctx.function.text
-        if functionName in self.functions:
-            return self.functions[functionName]()
-        elif functionName in self.custom_functions:
-            return self.visit(self.custom_functions[functionName]["body"])
-        else:
-            raise Exception("Function " + functionName + " is not defined")
+        if self.evaluateExpression:
+            functionName = ctx.function.text
+            if functionName in self.functions:
+                return self.functions[functionName]()
+            elif functionName in self.custom_functions:
+                return self.visit(self.custom_functions[functionName]["body"])
+            else:
+                raise Exception("Function " + functionName + " is not defined")
 
 
     # Visit a parse tree produced by LanguageParser#Function_Call_With_Args.
     def visitFunction_Call_With_Args(self, ctx:LanguageParser.Function_Call_With_ArgsContext):
-        args = self.visit(ctx.args)
-        functionName = ctx.function.text
-        if functionName in self.functions:
-            args = list(map(lambda x: self.visit(x), args))
-            return self.functions[functionName](*args)
-        elif functionName in self.custom_functions:
-            newContext = {}
+        if self.evaluateExpression:
             args = self.visit(ctx.args)
-            for i in range(len(args)):
-                newContext[self.custom_functions[functionName]["arguments"][i]] = self.visit(args[i])
-            self.context.append(newContext)
-            retval = self.visit(self.custom_functions[functionName]["body"])
-            self.context.pop()
-            return retval
-        else:
-            raise Exception("Function " + functionName + " is not defined")
+            functionName = ctx.function.text
+            if functionName in self.functions:
+                args = list(map(lambda x: self.visit(x), args))
+                return self.functions[functionName](*args)
+            elif functionName in self.custom_functions:
+                newContext = {}
+                args = self.visit(ctx.args)
+                for i in range(len(args)):
+                    newContext[self.custom_functions[functionName]["arguments"][i]] = self.visit(args[i])
+                self.context.append(newContext)
+                retval = self.visit(self.custom_functions[functionName]["body"])
+                self.context.pop()
+                return retval
+            else:
+                raise Exception("Function " + functionName + " is not defined")
 
 
     # Visit a parse tree produced by LanguageParser#Arg_List.

@@ -40,6 +40,9 @@ def serialiseEvent(event):
             "timestamp": event.time,
         }
 
+def registerKeybinding(keybinding, executable):
+    keyboard.add_hotkey(keybinding, executable)
+
 def mouseListener(event):
     global isRecording
     global lastEvent
