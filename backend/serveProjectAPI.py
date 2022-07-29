@@ -3,6 +3,10 @@ from crypt import methods
 from flask import request, make_response
 import os
 import json
+from interpreter import interpreter
+from interpreter import builtin_funcs
+
+loadedProjects = []
 
 def enumerateFiles(path):
     files = os.listdir(path)
@@ -33,6 +37,8 @@ def setUpRoutes(app):
     
     @app.route("/api/project/<project>/file/<path:filepath>", methods=["GET"])
     def loadFile(project, filepath):
+        #Whenver a file from a project is loaded, load the projects macros as well
+        loadKeybindings(project)
         with open("projects/" + project + "/files/" + filepath) as f:
             response = make_response(f.read(), 200)
             response.mimetype = "text/plain"
@@ -69,7 +75,7 @@ def setUpRoutes(app):
             f.write(json.dumps(existingMacros))
         return ""
     
-    @app.route("/api/project/<project>/keybindings", methods=["PUT"])
+    @app.route("/api/project/<project>/keybindings", methods=["POST"])
     def editKeybindings(project):
         pathToMacros = "projects/" + project + "/keybindings.json"
         data = request.json() or request.form
@@ -95,4 +101,25 @@ def setUpRoutes(app):
             f.write(json.dumps(existingMacros))
 
         return ""
+    
+    def loadKeybindings(project):
+        if not project in loadedProjects:
+            loadedProjects.append(project)
+            pathToMacros = "projects/" + project + "/keybindings.json"
+            with open(pathToMacros) as f:
+                macros = json.loads(f.read())
+                for macroEntry in macros:
+                    if ":" in macroEntry["path"]:
+                        colonPos = macroEntry["path"].find(":")
+                        functionName = macroEntry["path"][(colonPos+1):]
+                        fileName = macroEntry["path"][:colonPos]
+                        print(fileName, functionName)
+                        def macroCallback():
+                            interpreter.interpret_function("projects/" + project + "/files/" + fileName, functionName)
+                        builtin_funcs.registerKeybinding(macroEntry["keybinding"], macroCallback)
+                    else:
+                        def macroCallback():
+                            interpreter.interpret_file("projects/" + project + "/files/" + fileName)
+                        builtin_funcs.registerKeybinding(macroEntry["keybinding"], macroCallback)
+
     

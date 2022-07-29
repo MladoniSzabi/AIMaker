@@ -1,5 +1,5 @@
 function asd() {
-   print(1)
+   moveMouse(2000,500)
 }
 
 moveMouse(100,100)

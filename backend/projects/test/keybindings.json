@@ -1,0 +1,11 @@
+[
+    {
+        "keybinding":"CTRL+4",
+        "path": "test:asd"
+    },
+    
+    {
+        "keybinding": "CTRL+5",
+        "path": "test"
+    }
+]

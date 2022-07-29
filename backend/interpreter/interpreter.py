@@ -18,7 +18,7 @@ functions = {
 
 def interpret_function(fileName, functionName):
     with open(fileName) as f:
-        code = interpret(f.read())
+        code = f.read()
         stream = InputStream(code)
         lexer = LanguageLexer(stream)
         tokens = CommonTokenStream(lexer)
@@ -27,7 +27,10 @@ def interpret_function(fileName, functionName):
         visitor = LanguageVisitor(False)
         visitor.functions = functions
         visitor.visit(tree)
-        return visitor.visit(visitor.custom_functions[functionName])
+        print(visitor.custom_functions)
+        print(visitor.custom_functions[functionName])
+        visitor.evaluateExpression = True
+        return visitor.visit(visitor.custom_functions[functionName]["body"])
 
 def interpret_file(fileName):
     with open(fileName) as f:
