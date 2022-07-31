@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { BackendService, MacroList } from '../backend.service';
 
 @Component({
   selector: 'app-macro-panel',
@@ -7,13 +9,23 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class MacroPanelComponent implements OnInit {
 
-  macros: { keybinding: string, path: string }[] = []
+  macros: MacroList = []
   isCreatingNewMacro: boolean = false;
 
   @ViewChild('keybinding') keybindingInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
   @ViewChild('functionpath') functionpathInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
 
-  constructor() { }
+  constructor(private backendService: BackendService, private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.paramMap.subscribe((params) => {
+      let projectName = params.get("projectName")
+      if(!projectName) {
+        return
+      }
+      this.backendService.getMacroList(projectName).subscribe((macros) => {
+        this.macros = macros
+      })
+    })
+  }
 
   ngOnInit(): void {
   }

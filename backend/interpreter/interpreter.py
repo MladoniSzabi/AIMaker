@@ -27,8 +27,6 @@ def interpret_function(fileName, functionName):
         visitor = LanguageVisitor(False)
         visitor.functions = functions
         visitor.visit(tree)
-        print(visitor.custom_functions)
-        print(visitor.custom_functions[functionName])
         visitor.evaluateExpression = True
         return visitor.visit(visitor.custom_functions[functionName]["body"])
 
