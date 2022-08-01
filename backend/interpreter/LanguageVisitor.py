@@ -31,6 +31,12 @@ class LanguageVisitor(ParseTreeVisitor):
         return self.visit(ctx.exp)
     
 
+    # Visit a parse tree produced by LanguageParser#More_Function.
+    def visitMore_Function(self, ctx:LanguageParser.More_FunctionContext):
+        self.visit(ctx.rest)
+        return self.visit(ctx.declaration)
+    
+
     # Visit a parse tree produced by LanguageParser#Function_Declaration_Block.
     def visitFunction_Declaration_Block(self, ctx:LanguageParser.Function_Declaration_BlockContext):
         return self.visit(ctx.declaration)
