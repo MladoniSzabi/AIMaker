@@ -30,4 +30,11 @@ export class BackendService {
   stopRecording(): Observable<string[]> { return this.http.post<string[]>("/api/record/stop", "") }
 
   getMacroList(project: string): Observable<MacroList> { return this.http.get<MacroList>("/api/project/" + project + "/keybindings") }
+  makeNewMacro(project: string, path: string, keybinding: string) {
+    let form = new FormData()
+    form.append("path", path)
+    form.append("keybinding", keybinding)
+
+    this.http.put("/api/project/" + project + "/keybindings", form).subscribe()
+  }
 }
