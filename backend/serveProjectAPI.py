@@ -81,20 +81,26 @@ def setUpRoutes(app):
     @app.route("/api/project/<project>/keybindings", methods=["POST"])
     def editKeybindings(project):
         pathToMacros = "projects/" + project + "/keybindings.json"
-        data = request.json() or request.form
+        data = request.form
+        existingMacros = None
 
         if not os.path.exists(pathToMacros):
             response = make_response({"error": "Keybinding does not exist"})
             response.status_code = 404
             return response
         
-        with open(pathToMacros, "rw") as f:
+        with open(pathToMacros, "r") as f:
             existingMacros = json.loads(f.read())
+        
+        with open(pathToMacros, "w") as f:
             
-            if data["index"] >= len(existingMacros) or data["index"] < 0:
+            if int(data["index"]) >= len(existingMacros) or int(data["index"]) < 0:
                 response = make_response({"error": "Keybinding does not exist"})
                 response.status_code = 404
                 return response
+
+            builtin_funcs.unregisterKeybinding(existingMacros[int(data["index"])]["keybinding"])
+            loadKeybinding(data["path"], data["keybinding"], project)
 
             existingMacros[int(data["index"])] = {
                 "keybinding": data["keybinding"],
@@ -104,7 +110,7 @@ def setUpRoutes(app):
             f.write(json.dumps(existingMacros))
 
         return ""
-    
+
     def loadKeybinding(path, keybinding, project):
         if ":" in path:
             colonPos = path.find(":")

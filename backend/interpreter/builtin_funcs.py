@@ -43,6 +43,9 @@ def serialiseEvent(event):
 def registerKeybinding(keybinding, executable):
     keyboard.add_hotkey(keybinding, executable)
 
+def unregisterKeybinding(keybinding):
+    keyboard.remove_hotkey(keybinding)
+
 def mouseListener(event):
     global isRecording
     global lastEvent
