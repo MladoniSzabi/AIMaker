@@ -4,9 +4,26 @@
         <th class="path">Path</th>
         <th class="buttons"></th>
     </tr>
-    <tr *ngFor="let macro of macros">
-        <td class="keybinding">{{macro.keybinding}}</td>
-        <td class="path">{{macro.path}}</td>
+    <tr *ngFor="let macro of macros; let index=index">
+        <ng-container *ngIf="index==editMacroIndex; else noEditBlock">
+            <td class="keybinding">
+                <input type="text" value="{{macro.keybinding}}" #editKeybinding />
+            </td>
+            <td class="path">
+                <input type="text" value="{{macro.path}}" #editFunctionPath />
+            </td>
+            <td class="buttons">
+                <button class="cancel-button" (click)="hideEditMacro()">X</button>
+                <button class="cancel-button" (click)="editMacro(index)">✓</button>
+            </td>
+        </ng-container>
+        <ng-template #noEditBlock>
+            <td class="keybinding">{{macro.keybinding}}</td>
+            <td class="path">{{macro.path}}</td>
+            <td class="edit">
+                <button (click)="showEditMacro(index)">Edit</button>
+            </td>
+        </ng-template>
     </tr>
 
     <tr *ngIf="!isCreatingNewMacro">
@@ -20,7 +37,7 @@
             <input type="text" #keybinding />
         </td>
         <td class="path">
-            <input type="text" #functionpath />
+            <input type="text" #functionPath />
         </td>
         <td class="buttons">
             <button class="cancel-button" (click)="hideCreateMacro()">X</button>

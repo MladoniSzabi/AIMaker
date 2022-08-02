@@ -37,4 +37,12 @@ export class BackendService {
 
     this.http.put("/api/project/" + project + "/keybindings", form).subscribe()
   }
+  editMacro(project: string, index: number, path: string, keybinding: string) {
+    let form = new FormData()
+    form.append("path", path)
+    form.append("keybinding", keybinding)
+    form.append("index", String(index))
+
+    this.http.post("/api/project/" + project + "/keybindings", form).subscribe()
+  }
 }

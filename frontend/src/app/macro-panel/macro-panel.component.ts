@@ -12,9 +12,12 @@ export class MacroPanelComponent implements OnInit {
   macros: MacroList = []
   isCreatingNewMacro: boolean = false;
   projectName: string = ""
+  editMacroIndex: number = -1
 
   @ViewChild('keybinding') keybindingInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
-  @ViewChild('functionpath') functionpathInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
+  @ViewChild('functionPath') functionPathInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
+  @ViewChild('editKeybinding') editKeybindingInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
+  @ViewChild('editFunctionPath') editFunctionPathInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
 
   constructor(private backendService: BackendService, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.paramMap.subscribe((params) => {
@@ -36,17 +39,35 @@ export class MacroPanelComponent implements OnInit {
     this.isCreatingNewMacro = true
   }
 
+  showEditMacro(index: number) {
+    this.editMacroIndex = index
+    console.log("ASD", index)
+  }
+
   hideCreateMacro() {
     this.isCreatingNewMacro = false
+  }
+
+  hideEditMacro() {
+    this.editMacroIndex = -1
   }
 
   submitMacro() {
     this.macros.push({
       keybinding: this.keybindingInput.nativeElement.value,
-      path: this.functionpathInput.nativeElement.value,
+      path: this.functionPathInput.nativeElement.value,
     })
     this.isCreatingNewMacro = false;
-    this.backendService.makeNewMacro(this.projectName, this.functionpathInput.nativeElement.value, this.keybindingInput.nativeElement.value)
+    this.backendService.makeNewMacro(this.projectName, this.functionPathInput.nativeElement.value, this.keybindingInput.nativeElement.value)
+  }
+
+  editMacro(index: number) {
+    this.macros[index] = {
+      keybinding: this.editKeybindingInput.nativeElement.value,
+      path: this.editFunctionPathInput.nativeElement.value,
+    }
+    this.editMacroIndex = -1
+    this.backendService.editMacro(this.projectName, index, this.editFunctionPathInput.nativeElement.value, this.editKeybindingInput.nativeElement.value)
   }
 
 }
