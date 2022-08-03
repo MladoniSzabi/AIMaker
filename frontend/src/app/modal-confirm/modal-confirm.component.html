@@ -1,0 +1,7 @@
+<div id="confirm-modal-root" [hidden]="!isShowing">
+    <div class="modal-body">
+        <h3>{{message}}</h3>
+        <button (click)="confirm()">Yes</button>
+        <button (click)="cancel()">No</button>
+    </div>
+</div>

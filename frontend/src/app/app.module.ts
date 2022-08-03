@@ -17,6 +17,7 @@ import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.compone
 import { FileListComponent } from './file-list/file-list.component';
 import { BottomPannelComponent } from './bottom-pannel/bottom-pannel.component';
 import { MacroPanelComponent } from './macro-panel/macro-panel.component';
+import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { MacroPanelComponent } from './macro-panel/macro-panel.component';
     CodeoutputareaComponent,
     FileListComponent,
     BottomPannelComponent,
-    MacroPanelComponent
+    MacroPanelComponent,
+    ModalConfirmComponent
   ],
   imports: [
     BrowserModule,
