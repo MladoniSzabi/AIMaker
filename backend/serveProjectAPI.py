@@ -111,8 +111,8 @@ def setUpRoutes(app):
 
         return ""
 
-    @app.route("/api/project/<project>/keybindings", methods=["DELETE"])
-    def deleteKeybinding(project):
+    @app.route("/api/project/<project>/keybindings/<int:macroIndex>", methods=["DELETE"])
+    def deleteKeybinding(project, macroIndex):
         pathToMacros = "projects/" + project + "/keybindings.json"
         data = request.form
         existingMacros = None
@@ -127,13 +127,13 @@ def setUpRoutes(app):
         
         with open(pathToMacros, "w") as f:
             
-            if int(data["index"]) >= len(existingMacros) or int(data["index"]) < 0:
+            if macroIndex >= len(existingMacros) or macroIndex < 0:
                 response = make_response({"error": "Keybinding does not exist"})
                 response.status_code = 404
                 return response
 
-            builtin_funcs.unregisterKeybinding(existingMacros[int(data["index"])]["keybinding"])
-            del existingMacros[int(data["index"])]
+            builtin_funcs.unregisterKeybinding(existingMacros[macroIndex]["keybinding"])
+            del existingMacros[macroIndex]
             f.write(json.dumps(existingMacros))
         
         return ""
