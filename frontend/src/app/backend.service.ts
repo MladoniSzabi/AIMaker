@@ -45,4 +45,7 @@ export class BackendService {
 
     this.http.post("/api/project/" + project + "/keybindings", form).subscribe()
   }
+  deleteMacro(project: string, index: number) {
+    this.http.delete("/api/project/" + project + "/keybindings/" + index.toString()).subscribe()
+  }
 }

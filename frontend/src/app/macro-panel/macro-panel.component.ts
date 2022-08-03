@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService, MacroList } from '../backend.service';
+import { ModalService } from '../modal.service'
 
 @Component({
   selector: 'app-macro-panel',
@@ -19,7 +20,7 @@ export class MacroPanelComponent implements OnInit {
   @ViewChild('editKeybinding') editKeybindingInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
   @ViewChild('editFunctionPath') editFunctionPathInput: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>;
 
-  constructor(private backendService: BackendService, private activatedRoute: ActivatedRoute) {
+  constructor(private backendService: BackendService, private activatedRoute: ActivatedRoute, private modalService: ModalService) {
     this.activatedRoute.paramMap.subscribe((params) => {
       let projectName = params.get("projectName")
       if (!projectName) {
@@ -41,7 +42,6 @@ export class MacroPanelComponent implements OnInit {
 
   showEditMacro(index: number) {
     this.editMacroIndex = index
-    console.log("ASD", index)
   }
 
   hideCreateMacro() {
@@ -68,6 +68,17 @@ export class MacroPanelComponent implements OnInit {
     }
     this.editMacroIndex = -1
     this.backendService.editMacro(this.projectName, index, this.editFunctionPathInput.nativeElement.value, this.editKeybindingInput.nativeElement.value)
+  }
+
+  showConfirmDelete(index: number) {
+    this.modalService.createConfirmModal(
+      "Are you sure you want to delete this macro?",
+      () => {
+        this.backendService.deleteMacro(this.projectName, index)
+        this.macros.splice(index, 1)
+      },
+      () => {}
+    )
   }
 
 }
