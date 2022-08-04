@@ -107,3 +107,6 @@ def setStopRecordingButton(hotkey):
     keyboard.clear_all_hotkeys()
     keyboard.add_hotkey(hotkey, stopRecording)
     return ""
+
+def getRecording():
+    return listOfEvents
