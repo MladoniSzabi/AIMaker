@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs';
 
+//TODO:Move types to a separate file and fill this in
+export type Recording = any[]
 export type FileTree = { name: string, children: [FileTree] }
 export type MacroList = { path: string, keybinding: string }[]
 
@@ -28,6 +30,15 @@ export class BackendService {
 
   startRecording() { this.http.post("/api/record/start", "").subscribe() }
   stopRecording(): Observable<string[]> { return this.http.post<string[]>("/api/record/stop", "") }
+  setStopRecordingButton(projectName: string, button: string) {
+    let form = new FormData()
+    form.append("projectName", projectName)
+    this.http.post("/api/record/stop/hotkey/" + button, form)
+  }
+
+  getStopRecordingButton(projectName: string): Observable<string> { return this.http.get("/api/record/stop/hotkey", { responseType: "text" }) }
+  isRecordingOver(): Observable<string> { return this.http.get("/api/recording/status", { responseType: "text" }) }
+  getRecording(): Observable<Recording> { return this.http.get<Recording>("api/recording") }
 
   getMacroList(project: string): Observable<MacroList> { return this.http.get<MacroList>("/api/project/" + project + "/keybindings") }
   makeNewMacro(project: string, path: string, keybinding: string) {

@@ -18,6 +18,7 @@ import { FileListComponent } from './file-list/file-list.component';
 import { BottomPannelComponent } from './bottom-pannel/bottom-pannel.component';
 import { MacroPanelComponent } from './macro-panel/macro-panel.component';
 import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
+import { RecordTabComponent } from './record-tab/record-tab.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
     FileListComponent,
     BottomPannelComponent,
     MacroPanelComponent,
-    ModalConfirmComponent
+    ModalConfirmComponent,
+    RecordTabComponent
   ],
   imports: [
     BrowserModule,

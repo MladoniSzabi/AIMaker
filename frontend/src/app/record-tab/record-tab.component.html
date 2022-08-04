@@ -1,0 +1,11 @@
+<div>
+    <p>
+        Stop recording button:
+        <input #stopRecordingButtonInput (change)="onStopRecordingChanged($event)" type="text" />
+    </p>
+    <p>
+        Function name:
+        <input #functionNameInput type="text" />
+    </p>
+    <button (click)="startRecording()">Record</button>
+</div>
