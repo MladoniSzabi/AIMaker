@@ -77,7 +77,7 @@ export class MacroPanelComponent implements OnInit {
         this.backendService.deleteMacro(this.projectName, index)
         this.macros.splice(index, 1)
       },
-      () => {}
+      () => { }
     )
   }
 

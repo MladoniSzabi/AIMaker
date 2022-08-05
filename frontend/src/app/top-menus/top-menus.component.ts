@@ -1,11 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-topmenus',
-  templateUrl: './topmenus.component.html',
-  styleUrls: ['./topmenus.component.scss']
+  selector: 'app-top-menus',
+  templateUrl: './top-menus.component.html',
+  styleUrls: ['./top-menus.component.scss']
 })
-export class TopmenusComponent implements OnInit {
+export class TopMenusComponent implements OnInit {
 
   @Output() runCommand = new EventEmitter()
 

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService, FileTree } from '../backend.service';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {FlatTreeControl} from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { FlatTreeControl } from '@angular/cdk/tree';
 
 type FlattenedFileTree = {
   expandable: boolean,
@@ -19,12 +19,12 @@ type FlattenedFileTree = {
 export class FileListComponent implements OnInit {
 
   collectParents(lookIn: FileTree[], node: FileTree, level: number): string[] {
-    for(let n of lookIn) {
-      if(n == node) {
+    for (let n of lookIn) {
+      if (n == node) {
         return [node.name]
-      } else if(n.children) {
-        let res = this.collectParents(n.children, node, level-1)
-        if(res.length != 0) {
+      } else if (n.children) {
+        let res = this.collectParents(n.children, node, level - 1)
+        if (res.length != 0) {
           return [n.name, ...res]
         }
       }
@@ -51,7 +51,7 @@ export class FileListComponent implements OnInit {
     node => node.children,
   )
 
-  dataSource : MatTreeFlatDataSource<FileTree, FlattenedFileTree> = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener)
+  dataSource: MatTreeFlatDataSource<FileTree, FlattenedFileTree> = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener)
   project: string = ""
 
   constructor(
@@ -59,7 +59,7 @@ export class FileListComponent implements OnInit {
     private backendService: BackendService
   ) {
     this.activatedRoute.paramMap.subscribe(params => {
-      if(params.get("projectName")) {
+      if (params.get("projectName")) {
         let projectName = params.get("projectName") || ""
         this.project = projectName
         this.backendService.getFileList(projectName).subscribe(fileList => {

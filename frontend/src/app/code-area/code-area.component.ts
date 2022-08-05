@@ -6,11 +6,11 @@ import { BackendService } from '../backend.service'
 import { combineLatest } from 'rxjs';
 
 @Component({
-  selector: 'app-codearea',
-  templateUrl: './codearea.component.html',
-  styleUrls: ['./codearea.component.scss']
+  selector: 'app-code-area',
+  templateUrl: './code-area.component.html',
+  styleUrls: ['./code-area.component.scss']
 })
-export class CodeareaComponent implements OnInit, TextEditor {
+export class CodeAreaComponent implements OnInit, TextEditor {
 
   fileName: string = ""
   projectName: string = ""
@@ -30,9 +30,9 @@ export class CodeareaComponent implements OnInit, TextEditor {
     combineLatest([this.activatedRoute.url, this.activatedRoute.paramMap]).subscribe(forkResult => {
       let [urlsegment, params] = forkResult
       this.fileName = urlsegment.join("/")
-      if(this.fileName && params.get("projectName")) {
+      if (this.fileName && params.get("projectName")) {
         this.projectName = params.get("projectName") || ""
-        this.titleService.setTitle(params.get("projectName") + " - " + urlsegment[urlsegment.length-1])
+        this.titleService.setTitle(params.get("projectName") + " - " + urlsegment[urlsegment.length - 1])
         this.backendService.loadfile(this.projectName, this.fileName).subscribe((retval) => {
           this.code = retval.split("\n")
           this.cursorChar = 0

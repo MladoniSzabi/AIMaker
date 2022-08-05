@@ -4,16 +4,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CodeareaComponent } from './codearea/codearea.component';
+import { CodeAreaComponent } from './code-area/code-area.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CodeeditorComponent } from './codeeditor/codeeditor.component';
-import { TopmenusComponent } from './topmenus/topmenus.component'
+import { CodeEditorComponent } from './code-editor/code-editor.component';
+import { TopMenusComponent } from './top-menus/top-menus.component'
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CodeoutputareaComponent } from './codeoutputarea/codeoutputarea.component';
+import { CodeOutputAreaComponent } from './code-output-area/code-output-area.component';
 import { FileListComponent } from './file-list/file-list.component';
 import { BottomPannelComponent } from './bottom-pannel/bottom-pannel.component';
 import { MacroPanelComponent } from './macro-panel/macro-panel.component';
@@ -24,10 +24,10 @@ import { RecordTabComponent } from './record-tab/record-tab.component';
 @NgModule({
   declarations: [
     AppComponent,
-    CodeareaComponent,
-    CodeeditorComponent,
-    TopmenusComponent,
-    CodeoutputareaComponent,
+    CodeAreaComponent,
+    CodeEditorComponent,
+    TopMenusComponent,
+    CodeOutputAreaComponent,
     FileListComponent,
     BottomPannelComponent,
     MacroPanelComponent,

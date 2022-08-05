@@ -1,11 +1,11 @@
 <div id="code-editor">
-    <app-topmenus (runCommand)="runCommand($event)"></app-topmenus>
+    <app-top-menus (runCommand)="runCommand($event)"></app-top-menus>
     <mat-sidenav-container hasBackdrop="false">
         <mat-sidenav mode="push" #sidenav>
             <app-file-list></app-file-list>
         </mat-sidenav>
         <mat-sidenav-content>
-            <app-codearea #codearea></app-codearea>
+            <app-code-area #codearea></app-code-area>
             <app-bottom-pannel></app-bottom-pannel>
         </mat-sidenav-content>
     </mat-sidenav-container>

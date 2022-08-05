@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CodeoutputareaComponent } from './codeoutputarea.component';
+import { CodeOutputAreaComponent } from './code-output-area.component';
 
 describe('CodeoutputareaComponent', () => {
-  let component: CodeoutputareaComponent;
-  let fixture: ComponentFixture<CodeoutputareaComponent>;
+  let component: CodeOutputAreaComponent;
+  let fixture: ComponentFixture<CodeOutputAreaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CodeoutputareaComponent ]
+      declarations: [ CodeOutputAreaComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CodeoutputareaComponent);
+    fixture = TestBed.createComponent(CodeOutputAreaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

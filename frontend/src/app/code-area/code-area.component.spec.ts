@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TopmenusComponent } from './topmenus.component';
+import { CodeAreaComponent } from './code-area.component';
 
-describe('TopmenusComponent', () => {
-  let component: TopmenusComponent;
-  let fixture: ComponentFixture<TopmenusComponent>;
+describe('CodeareaComponent', () => {
+  let component: CodeAreaComponent;
+  let fixture: ComponentFixture<CodeAreaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopmenusComponent ]
+      declarations: [ CodeAreaComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TopmenusComponent);
+    fixture = TestBed.createComponent(CodeAreaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

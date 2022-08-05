@@ -14,14 +14,16 @@ export class ModalConfirmComponent implements OnInit {
   cancelCallback: () => void = () => { }
 
   constructor(private modalService: ModalService) {
-    this.modalService.getModalRequests().subscribe({next: ({type, onSuccess, onCancel, other}) => {
-      if(type == "confirm") {
-        this.message = other.message
-        this.confirmCallback = onSuccess
-        this.cancelCallback = onCancel
-        this.isShowing = true
+    this.modalService.getModalRequests().subscribe({
+      next: ({ type, onSuccess, onCancel, other }) => {
+        if (type == "confirm") {
+          this.message = other.message
+          this.confirmCallback = onSuccess
+          this.cancelCallback = onCancel
+          this.isShowing = true
+        }
       }
-    }})
+    })
   }
 
   ngOnInit(): void {

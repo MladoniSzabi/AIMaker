@@ -29,7 +29,7 @@ export class RecordTabComponent implements OnInit {
   }
 
   onStopRecordingChanged(event: Event) {
-    if(this.stopRecordInput) {
+    if (this.stopRecordInput) {
       this.backend.setStopRecordingButton(this.projectName, this.stopRecordInput.nativeElement.value)
     }
   }
@@ -38,7 +38,7 @@ export class RecordTabComponent implements OnInit {
     this.backend.startRecording()
     this.checkRecordingLoop = setInterval(() => {
       this.backend.isRecordingOver().subscribe((isOver) => {
-        if(isOver == "true") {
+        if (isOver == "true") {
           clearInterval(this.checkRecordingLoop)
           this.backend.getRecording().subscribe((recording) => {
             console.log(recording)
