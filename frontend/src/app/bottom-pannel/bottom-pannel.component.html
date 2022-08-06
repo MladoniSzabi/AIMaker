@@ -6,6 +6,6 @@
         <app-macro-panel></app-macro-panel>
     </mat-tab>
     <mat-tab label="Record">
-        <app-record-tab></app-record-tab>
+        <app-record-tab (recorded)="onRecorded($event)"></app-record-tab>
     </mat-tab>
 </mat-tab-group>

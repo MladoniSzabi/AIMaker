@@ -6,7 +6,7 @@
         </mat-sidenav>
         <mat-sidenav-content>
             <app-code-area #codearea></app-code-area>
-            <app-bottom-pannel></app-bottom-pannel>
+            <app-bottom-pannel (recorded)="onRecorded($event)"></app-bottom-pannel>
         </mat-sidenav-content>
     </mat-sidenav-container>
 </div>

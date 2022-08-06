@@ -23,5 +23,11 @@ export class CodeEditorComponent implements AfterViewInit {
   runCommand(event: string): void {
     KeybindingHandler.runCommand(event, this.codearea, this.backendService)
   }
+  
+  onRecorded(event: string) {
+    for(let line of event.split("\n").reverse()) {
+      this.codearea.addLine(line, 0)
+    }
+  }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-bottom-pannel',
@@ -9,7 +9,13 @@ export class BottomPannelComponent implements OnInit {
 
   constructor() { }
 
+  @Output() recorded: EventEmitter<string> = new EventEmitter()
+
   ngOnInit(): void {
+  }
+
+  onRecorded(event: string) {
+    this.recorded.emit(event)
   }
 
 }

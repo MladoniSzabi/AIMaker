@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BackendService } from '../backend.service';
+import { BackendService, Recording } from '../backend.service';
 
 @Component({
   selector: 'app-record-tab',
@@ -14,6 +14,8 @@ export class RecordTabComponent implements OnInit {
 
   projectName: string = ""
   checkRecordingLoop!: ReturnType<typeof setInterval>
+
+  @Output() recorded: EventEmitter<string> = new EventEmitter()
 
   constructor(private backend: BackendService, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.paramMap.subscribe((params) => {
@@ -37,6 +39,28 @@ export class RecordTabComponent implements OnInit {
     }
   }
 
+  writeFunction(recording: Recording) {
+    let functionName = this.functionNameInput.nativeElement.value || "new_recording"
+    let functionText = "function " + functionName + "() {\n\t"
+    for(let record of recording) {
+      if(record.device == "mouse") {
+        if(record.type == "move") {
+          functionText += "moveMouse(" + record.x + ", " + record.y + ")\n\t"
+        } else if(record.type == "down") {
+          functionText += "pressMouse(" + record.button + ")\n\t"
+        }
+      } else if(record.device == "keyboard") {
+        if(record.type == "down") {
+          functionText += "pressKey( '" + record.name + "' )\n\t"
+        }
+      }
+    }
+
+    functionText += "\n}\n\n"
+
+    this.recorded.emit(functionText)
+  }
+
   startRecording() {
     this.backend.startRecording()
     this.checkRecordingLoop = setInterval(() => {
@@ -44,7 +68,7 @@ export class RecordTabComponent implements OnInit {
         if (isRecording.toLocaleLowerCase() == "false") {
           clearInterval(this.checkRecordingLoop)
           this.backend.getRecording().subscribe((recording) => {
-            console.log(recording)
+            this.writeFunction(recording)
           })
         }
       })
