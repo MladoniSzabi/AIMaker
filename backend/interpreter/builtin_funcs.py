@@ -90,6 +90,19 @@ def tapKey(c):
     keyboard.release(c)
     return ""
 
+def pressMouse(button):
+    mouse.press(button)
+    return ""
+
+def releaseMouse(button):
+    mouse.release(button)
+    return ""
+
+def tapMouse(button):
+    mouse.press(button)
+    mouse.release(button)
+    return ""
+
 def startRecording():
     global isRecording
     global listOfEvents

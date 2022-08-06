@@ -47,11 +47,11 @@ export class RecordTabComponent implements OnInit {
         if(record.type == "move") {
           functionText += "moveMouse(" + record.x + ", " + record.y + ")\n\t"
         } else if(record.type == "down") {
-          functionText += "pressMouse(" + record.button + ")\n\t"
+          functionText += "tapMouse(" + record.button + ")\n\t"
         }
       } else if(record.device == "keyboard") {
         if(record.type == "down") {
-          functionText += "pressKey( '" + record.name + "' )\n\t"
+          functionText += "tapKey( '" + record.name + "' )\n\t"
         }
       }
     }
