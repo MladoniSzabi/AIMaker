@@ -33,12 +33,12 @@ export class BackendService {
   setStopRecordingButton(projectName: string, button: string) {
     let form = new FormData()
     form.append("projectName", projectName)
-    this.http.post("/api/record/stop/hotkey/" + button, form)
+    this.http.post("/api/record/stop/hotkey/" + button, form).subscribe()
   }
 
-  getStopRecordingButton(projectName: string): Observable<string> { return this.http.get("/api/record/stop/hotkey", { responseType: "text" }) }
-  isRecordingOver(): Observable<string> { return this.http.get("/api/recording/status", { responseType: "text" }) }
-  getRecording(): Observable<Recording> { return this.http.get<Recording>("api/recording") }
+  getStopRecordingButton(projectName: string): Observable<string> { return this.http.get("/api/record/stop/hotkey?projectName=" + projectName, { responseType: "text" }) }
+  isRecordingOver(): Observable<string> { return this.http.get("/api/record/status", { responseType: "text" }) }
+  getRecording(): Observable<Recording> { return this.http.get<Recording>("api/record") }
 
   getMacroList(project: string): Observable<MacroList> { return this.http.get<MacroList>("/api/project/" + project + "/keybindings") }
   makeNewMacro(project: string, path: string, keybinding: string) {

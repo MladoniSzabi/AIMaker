@@ -26,6 +26,9 @@ export class RecordTabComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.backend.getStopRecordingButton(this.projectName).subscribe((buttonName) => {
+      this.stopRecordInput.nativeElement.value = buttonName
+    })
   }
 
   onStopRecordingChanged(event: Event) {
@@ -37,8 +40,8 @@ export class RecordTabComponent implements OnInit {
   startRecording() {
     this.backend.startRecording()
     this.checkRecordingLoop = setInterval(() => {
-      this.backend.isRecordingOver().subscribe((isOver) => {
-        if (isOver == "true") {
+      this.backend.isRecordingOver().subscribe((isRecording) => {
+        if (isRecording.toLocaleLowerCase() == "false") {
           clearInterval(this.checkRecordingLoop)
           this.backend.getRecording().subscribe((recording) => {
             console.log(recording)

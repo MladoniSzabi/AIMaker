@@ -161,4 +161,9 @@ def setUpRoutes(app):
                 for macroEntry in macros:
                     loadKeybinding(macroEntry["path"], macroEntry["keybinding"], project)
 
+            pathToSettings = "projects/" + project + "/settings.json"
+            with open(pathToSettings) as f:
+                settings = json.loads(f.read())
+                builtin_funcs.setStopRecordingButton(settings["stopRecording"])
+
     

@@ -5,6 +5,7 @@ import keyboard
 isRecording = False
 lastEvent = None
 listOfEvents = []
+stopRecordingHotkey = None
 
 def serialiseEvent(event):
     if isinstance(event, keyboard.KeyboardEvent):
@@ -104,9 +105,12 @@ def stopRecording():
     return json.dumps(listOfEvents)
 
 def setStopRecordingButton(hotkey):
-    keyboard.clear_all_hotkeys()
+    global stopRecordingHotkey
+    if stopRecordingHotkey:
+        keyboard.remove_hotkey(stopRecordingHotkey)
     keyboard.add_hotkey(hotkey, stopRecording)
+    stopRecordingHotkey = hotkey
     return ""
 
 def getRecording():
-    return listOfEvents
+    return json.dumps(listOfEvents)
