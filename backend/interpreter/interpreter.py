@@ -16,7 +16,8 @@ functions = {
     "tapKey": builtin_funcs.tapKey,
     "startRecording": builtin_funcs.startRecording,
     "stopRecording": builtin_funcs.stopRecording,
-    "wait": time.sleep
+    "wait": time.sleep,
+    "print": builtin_funcs.languagePrint
 }
 
 def interpret_function(fileName, functionName):

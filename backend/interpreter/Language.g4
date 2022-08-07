@@ -37,6 +37,7 @@ argument_list: arg=simple_expression                            #Last_Arg
 
 NEW_LINE: '\n'[ \t\r\n]*;
 END_OF_FILE: [ \t\r\n]* EOF;
+STRING: '"' [a-zA-Z0-9_ \t\-,./@!$%^&*)(]+ '"';
 WHITESPACE: [ \t\r]+ -> skip;
 COMMENT : '//' .*? '\n' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
@@ -44,4 +45,3 @@ BOOL: 'true' | 'false';
 INT: [0-9]+ ;
 FLOAT: [0-9]+'.'[0-9]+;
 VAR: [a-zA-Z][a-zA-Z0-9_]*;
-STRING: '"' [a-zA-Z0-9_]+ '"';

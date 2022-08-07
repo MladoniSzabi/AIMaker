@@ -7,6 +7,18 @@ lastEvent = None
 listOfEvents = []
 stopRecordingHotkey = None
 
+consoleOutput = []
+
+def languagePrint(message):
+    global consoleOutput
+    consoleOutput.append(str(message))
+
+def getOutput():
+    global consoleOutput
+    message = '\n'.join(consoleOutput)
+    consoleOutput = []
+    return message
+
 def serialiseEvent(event):
     if isinstance(event, keyboard.KeyboardEvent):
         return {

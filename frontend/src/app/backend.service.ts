@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Observable, Subject } from 'rxjs';
 
 //TODO:Move types to a separate file and fill this in
 export type Recording = any[]
@@ -14,16 +14,27 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
 
+  consoleOutput: Subject<string|null> = new Subject()
+
   saveFile(project: string, filepath: string, content: string) { this.http.post("/api/project/" + project + "/file/" + filepath, content).subscribe() }
   loadfile(project: string, filepath: string): Observable<string> { return this.http.get("/api/project/" + project + "/file/" + filepath, { responseType: "text" }) }
 
-  runFile(project: string, filepath: string, content: string): Observable<string[]> {
+  runFile(project: string, filepath: string, content: string) {
     if (filepath) {
       this.http.post("/api/project/" + project + "/file/" + filepath, content).subscribe()
     }
     let form = new FormData()
     form.append("code", content)
-    return this.http.post<string[]>("/api/code/run", form)
+    this.consoleOutput.next(null)
+    this.http.post("/api/code/run", form, { responseType: "text" }).subscribe((consoleOutput) => {
+      for(let line of consoleOutput.split("\n")) {
+        this.consoleOutput.next(line)
+      }
+    })
+  }
+
+  getConsoleOutputPipe(): Subject<string|null> {
+    return this.consoleOutput
   }
 
   getFileList(project: string): Observable<[FileTree]> { return this.http.get<[FileTree]>("/api/project/" + project + "/file/list") }

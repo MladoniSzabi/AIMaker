@@ -9,6 +9,8 @@ def setUpRoutes(app):
     @app.route("/api/code/run", methods=["POST"])
     def runCode():
         code = request.form["code"]
-        response = make_response(str(interpreter.interpret(code)), 200)
+        codeOutput = str(interpreter.interpret(code))
+        codeOutput = builtin_funcs.getOutput() + "\n" + codeOutput
+        response = make_response(codeOutput, 200)
         response.mimetype = "text/plain"
         return response
