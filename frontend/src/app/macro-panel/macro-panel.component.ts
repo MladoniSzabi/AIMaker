@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BackendService, MacroList } from '../backend.service';
+import { BackendService } from '../backend.service';
 import { ModalService } from '../modal.service'
+import { MacroList } from '../types';
 
 @Component({
   selector: 'app-macro-panel',

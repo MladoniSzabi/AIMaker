@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BackendService, Recording } from '../backend.service';
+import { BackendService } from '../backend.service';
+import { Recording } from '../types';
 
 @Component({
   selector: 'app-record-tab',

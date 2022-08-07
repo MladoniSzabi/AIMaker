@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, Subject } from 'rxjs';
-
-//TODO:Move types to a separate file and fill this in
-export type Recording = any[]
-export type FileTree = { name: string, children: [FileTree] }
-export type MacroList = { path: string, keybinding: string }[]
+import * as BackendTypes from './types'
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +33,7 @@ export class BackendService {
     return this.consoleOutput
   }
 
-  getFileList(project: string): Observable<[FileTree]> { return this.http.get<[FileTree]>("/api/project/" + project + "/file/list") }
+  getFileList(project: string): Observable<[BackendTypes.FileTree]> { return this.http.get<[BackendTypes.FileTree]>("/api/project/" + project + "/file/list") }
 
   startRecording() { this.http.post("/api/record/start", "").subscribe() }
   stopRecording(): Observable<string[]> { return this.http.post<string[]>("/api/record/stop", "") }
@@ -49,9 +45,9 @@ export class BackendService {
 
   getStopRecordingButton(projectName: string): Observable<string> { return this.http.get("/api/record/stop/hotkey?projectName=" + projectName, { responseType: "text" }) }
   isRecordingOver(): Observable<string> { return this.http.get("/api/record/status", { responseType: "text" }) }
-  getRecording(): Observable<Recording> { return this.http.get<Recording>("api/record") }
+  getRecording(): Observable<BackendTypes.Recording> { return this.http.get<BackendTypes.Recording>("api/record") }
 
-  getMacroList(project: string): Observable<MacroList> { return this.http.get<MacroList>("/api/project/" + project + "/keybindings") }
+  getMacroList(project: string): Observable<BackendTypes.MacroList> { return this.http.get<BackendTypes.MacroList>("/api/project/" + project + "/keybindings") }
   makeNewMacro(project: string, path: string, keybinding: string) {
     let form = new FormData()
     form.append("path", path)

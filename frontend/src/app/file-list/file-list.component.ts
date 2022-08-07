@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BackendService, FileTree } from '../backend.service';
+import { BackendService } from '../backend.service';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
+import { FileTree } from '../types'
 
 type FlattenedFileTree = {
   expandable: boolean,
