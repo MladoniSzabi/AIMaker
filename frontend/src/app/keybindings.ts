@@ -98,6 +98,26 @@ function toggleOutputCommand(textEditor: TextEditor, backendService: BackendServ
 
 }
 
+function moveToStartLine(textEditor: TextEditor, backendService: BackendService): void {
+    let cursorPos = textEditor.getCursorPosition()
+    textEditor.setCursorPosition({line: cursorPos.line, char: 0})
+}
+
+function moveToEndLine(textEditor: TextEditor, backendService: BackendService): void {
+    let cursorPos = textEditor.getCursorPosition()
+    textEditor.setCursorPosition({line: cursorPos.line, char: textEditor.getText()[cursorPos.line].length})
+}
+
+function moveToStartFile(textEditor: TextEditor, backendService: BackendService): void {
+    textEditor.setCursorPosition({line:0, char:0})
+}
+
+function moveToEndFile(textEditor: TextEditor, backendService: BackendService): void {
+    let lastLine = textEditor.getText().length-1
+    let lastChar = textEditor.getText()[lastLine].length
+    textEditor.setCursorPosition({line: lastLine, char: lastChar})
+}
+
 const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, backendService: BackendService, ...others: any[]) => void } = {
     "openFileCommand": openFileCommand,
     "closeFileCommand": closeFileCommand,
@@ -111,6 +131,10 @@ const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, backend
     "redoCommand": redoCommand,
     "findCommand": findCommand,
     "replaceCommand": replaceCommand,
+    "moveToStartLineCommand": moveToStartLine,
+    "moveToEndLineCommand": moveToEndLine,
+    "moveToStartFileCommand": moveToStartFile,
+    "moveToEndFileCommand": moveToEndFile,
 
     "toggleOutputCommand": toggleOutputCommand,
 }
@@ -128,6 +152,10 @@ const KEYBINDING_TO_COMMAND_NAME: { [key: string]: string } = {
     "CTRL_SHIFT_Z": "redoCommand",
     "CTRL_F": "findCommand",
     "CTRL_H": "replaceCommand",
+    "END": "moveToEndLineCommand",
+    "HOME": "moveToStartLineCommand",
+    "CTRL_END": "moveToEndFileCommand",
+    "CTRL_HOME": "moveToStartFileCommand",
 }
 
 export class KeybindingHandler {
