@@ -20,6 +20,10 @@
     font-family: "Source Code Pro", monospace;
 }
 
+#code-area pre {
+    width: max-content;
+}
+
 #line-numbers {
     color: grey;
     border-right: 1px solid grey;

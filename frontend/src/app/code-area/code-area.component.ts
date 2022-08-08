@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +11,8 @@ import { combineLatest } from 'rxjs';
   styleUrls: ['./code-area.component.scss']
 })
 export class CodeAreaComponent implements OnInit, TextEditor {
+
+  @ViewChild("lineContainer") lineContainer: ElementRef<HTMLElement> = {} as ElementRef<HTMLElement>
 
   fileName: string = ""
   projectName: string = ""
@@ -320,6 +322,29 @@ export class CodeAreaComponent implements OnInit, TextEditor {
     }
 
     return false;
+  }
+
+  onClick(event: any) {
+    let mEvent: MouseEvent = (event as MouseEvent)
+    let lineElements = this.lineContainer.nativeElement.getElementsByTagName("pre")
+    let clickedLineRect: DOMRect|null = null
+    let clickedLineIndex: number = -1
+
+    for (let index = 0; index < lineElements.length; index++) {
+      let clientRect = lineElements[index].getClientRects()[0]
+      if(clientRect.y < mEvent.clientY && clientRect.y + clientRect.height > mEvent.clientY) {
+        clickedLineRect = clientRect
+        clickedLineIndex = index
+      }
+    }
+
+    if(clickedLineRect !== null) {
+      let charSize = clickedLineRect.width / this.code[clickedLineIndex].length
+      this.cursorLine = clickedLineIndex
+      this.cursorChar = Math.round((mEvent.clientX - clickedLineRect.x)/charSize)
+      this.cursorChar = Math.min(this.cursorChar, this.code[clickedLineIndex].length)
+      this.cursorChar = Math.max(this.cursorChar, 0)
+    }
   }
 
 }
