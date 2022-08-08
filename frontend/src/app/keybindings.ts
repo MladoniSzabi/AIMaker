@@ -118,6 +118,14 @@ function moveToEndFile(textEditor: TextEditor, backendService: BackendService): 
     textEditor.setCursorPosition({line: lastLine, char: lastChar})
 }
 
+function insertTab(textEditor: TextEditor, backendService: BackendService): void {
+    let cursor = textEditor.getCursorPosition()
+    let line = textEditor.getText()[cursor.line]
+    textEditor.getText()[cursor.line] = line.substring(0, cursor.char) + "   " + line.substring(cursor.char)
+    cursor.char += 3
+    textEditor.setCursorPosition(cursor)
+}
+
 const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, backendService: BackendService, ...others: any[]) => void } = {
     "openFileCommand": openFileCommand,
     "closeFileCommand": closeFileCommand,
@@ -135,6 +143,7 @@ const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, backend
     "moveToEndLineCommand": moveToEndLine,
     "moveToStartFileCommand": moveToStartFile,
     "moveToEndFileCommand": moveToEndFile,
+    "insertTabCommand": insertTab,
 
     "toggleOutputCommand": toggleOutputCommand,
 }
@@ -156,6 +165,7 @@ const KEYBINDING_TO_COMMAND_NAME: { [key: string]: string } = {
     "HOME": "moveToStartLineCommand",
     "CTRL_END": "moveToEndFileCommand",
     "CTRL_HOME": "moveToStartFileCommand",
+    "TAB": "insertTabCommand",
 }
 
 export class KeybindingHandler {
