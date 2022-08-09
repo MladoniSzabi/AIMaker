@@ -22,12 +22,21 @@ def enumerateFiles(path):
     return sorted(retval, key = lambda x: '0'+x["name"] if os.path.isdir(path + x["name"]) else '1'+x["name"])
 
 def setUpRoutes(app):
+
+    @app.route("/api/project/list", methods=["GET"])
+    def getProjectList():
+        return json.dumps(os.listdir("projects"))
+
     @app.route("/api/project/<project>/new", methods=["PUT"])
     def createProject(project):
         os.mkdir("projects/" + project)
         os.mkdir("projects/" + project + "/files/")
-        with open("projects/" + project + "/bindings.json", "w") as f:
-            f.write("{bindings: []}")
+        with open("projects/" + project + "/keybindings.json", "w") as f:
+            f.write("[]")
+        with open("projects/" + project + "/settings.json", "w") as f:
+            f.write("{\"stopRecording\":\"F4\"}")
+        with open("projects/" + project + "/files/main", "w") as f:
+            f.write("")
         return ""
 
     @app.route("/api/project/<project>/file/list", methods=["GET"])

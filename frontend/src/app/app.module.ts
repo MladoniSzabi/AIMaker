@@ -19,6 +19,8 @@ import { BottomPannelComponent } from './bottom-pannel/bottom-pannel.component';
 import { MacroPanelComponent } from './macro-panel/macro-panel.component';
 import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
 import { RecordTabComponent } from './record-tab/record-tab.component';
+import { BlankPageComponent } from './blank-page/blank-page.component';
+import { ModalInputComponent } from './modal-input/modal-input.component';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { RecordTabComponent } from './record-tab/record-tab.component';
     BottomPannelComponent,
     MacroPanelComponent,
     ModalConfirmComponent,
-    RecordTabComponent
+    RecordTabComponent,
+    BlankPageComponent,
+    ModalInputComponent
   ],
   imports: [
     BrowserModule,

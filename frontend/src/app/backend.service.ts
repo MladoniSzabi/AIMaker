@@ -10,7 +10,7 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
 
-  consoleOutput: Subject<string|null> = new Subject()
+  consoleOutput: Subject<string | null> = new Subject()
 
   saveFile(project: string, filepath: string, content: string) { this.http.post("/api/project/" + project + "/file/" + filepath, content).subscribe() }
   loadfile(project: string, filepath: string): Observable<string> { return this.http.get("/api/project/" + project + "/file/" + filepath, { responseType: "text" }) }
@@ -23,17 +23,19 @@ export class BackendService {
     form.append("code", content)
     this.consoleOutput.next(null)
     this.http.post("/api/code/run", form, { responseType: "text" }).subscribe((consoleOutput) => {
-      for(let line of consoleOutput.split("\n")) {
+      for (let line of consoleOutput.split("\n")) {
         this.consoleOutput.next(line)
       }
     })
   }
 
-  getConsoleOutputPipe(): Subject<string|null> {
+  getConsoleOutputPipe(): Subject<string | null> {
     return this.consoleOutput
   }
 
   getFileList(project: string): Observable<[BackendTypes.FileTree]> { return this.http.get<[BackendTypes.FileTree]>("/api/project/" + project + "/file/list") }
+  getProjectList(): Observable<string[]> { return this.http.get<string[]>("/api/project/list") }
+  createNewProject(projectName: string) { this.http.put("/api/project/" + projectName + "/new", new FormData()).subscribe() }
 
   startRecording() { this.http.post("/api/record/start", "").subscribe() }
   stopRecording(): Observable<string[]> { return this.http.post<string[]>("/api/record/stop", "") }

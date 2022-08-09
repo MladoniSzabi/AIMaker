@@ -1,0 +1,11 @@
+<div id="blankPage">
+    <div class="centered">
+        <p>This is an empty page.</p>
+        <p><a (click)="createNewProject()" href="#">Click here</a> to create a new project</p>
+        <p>Or click on one of the projects below to open it</p>
+
+        <ul>
+            <li *ngFor="let project of projectList"><a [routerLink]="[project, 'main']">{{project}}</a></li>
+        </ul>
+    </div>
+</div>

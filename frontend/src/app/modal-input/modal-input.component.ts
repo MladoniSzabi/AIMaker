@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalService } from '../modal.service'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ModalService } from '../modal.service';
 
 @Component({
-  selector: 'app-modal-confirm',
-  templateUrl: './modal-confirm.component.html',
-  styleUrls: ['./modal-confirm.component.scss']
+  selector: 'app-modal-input',
+  templateUrl: './modal-input.component.html',
+  styleUrls: ['./modal-input.component.scss']
 })
-export class ModalConfirmComponent implements OnInit {
+export class ModalInputComponent implements OnInit {
 
   isShowing: boolean = false;
   message: string = ""
-  confirmCallback: () => void = () => { }
+  confirmCallback: (text: string) => void = (text:string) => { }
   cancelCallback: () => void = () => { }
+
+  @ViewChild("input") modalInputField: ElementRef<HTMLInputElement> = {} as ElementRef<HTMLInputElement>
 
   constructor(private modalService: ModalService) {
     this.modalService.getModalRequests().subscribe({
       next: ({ message, type, onSuccess, onCancel, other }) => {
-        if (type == "confirm") {
+        if (type == "input") {
           this.message = message
           this.confirmCallback = onSuccess
           this.cancelCallback = onCancel
@@ -30,9 +32,9 @@ export class ModalConfirmComponent implements OnInit {
   }
 
   confirm() {
-    this.confirmCallback()
+    this.confirmCallback(this.modalInputField.nativeElement.value)
     this.message = ""
-    this.confirmCallback = () => { }
+    this.confirmCallback = (text:string) => { }
     this.cancelCallback = () => { }
     this.isShowing = false
   }
@@ -40,9 +42,8 @@ export class ModalConfirmComponent implements OnInit {
   cancel() {
     this.cancelCallback()
     this.message = ""
-    this.confirmCallback = () => { }
+    this.confirmCallback = (text:string) => { }
     this.cancelCallback = () => { }
     this.isShowing = false
   }
-
 }
