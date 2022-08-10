@@ -39,6 +39,23 @@ def setUpRoutes(app):
             f.write("")
         return ""
 
+    @app.route("/api/project/<project>/close", methods=["DELETE"])
+    def closeProject(project):
+        if project in loadedProjects:
+            pathToMacros = "projects/" + project + "/keybindings.json"
+            loadedProjects.remove(project)
+
+            with open("projects/" + project + "/keybindings.json") as f:
+                macros = json.loads(f.read())
+                for macro in macros:
+                    builtin_funcs.unregisterKeybinding(macro["keybinding"])
+            
+            builtin_funcs.isRecording = False
+            with open("projects/" + project + "/settings.json") as f:
+                settings = json.loads(f.read())
+                builtin_funcs.unregisterKeybinding(settings["stopRecording"])
+                    
+
     @app.route("/api/project/<project>/file/list", methods=["GET"])
     def listFiles(project):
         path = "projects/" + project + "/files/"
