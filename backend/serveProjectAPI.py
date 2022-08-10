@@ -54,6 +54,8 @@ def setUpRoutes(app):
             with open("projects/" + project + "/settings.json") as f:
                 settings = json.loads(f.read())
                 builtin_funcs.unregisterKeybinding(settings["stopRecording"])
+            
+            return ""
                     
 
     @app.route("/api/project/<project>/file/list", methods=["GET"])

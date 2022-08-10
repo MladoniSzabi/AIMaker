@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BackendService } from '../backend.service'
 import { combineLatest } from 'rxjs';
 
@@ -25,6 +25,7 @@ export class CodeAreaComponent implements OnInit, TextEditor {
   previousCharPos: number = 0
 
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private backendService: BackendService
@@ -45,6 +46,10 @@ export class CodeAreaComponent implements OnInit, TextEditor {
         this.titleService.setTitle("New File")
       }
     })
+  }
+
+  navigate(path: string[]): void {
+    this.router.navigate(path)
   }
 
   getProjectName(): string {

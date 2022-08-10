@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { BackendService } from "./backend.service";
 
 export type selectedTextDict = {
@@ -15,6 +16,7 @@ export interface TextEditor {
     addLine(text: string, lineNumber: number): string[]
     getFileName(): string
     getProjectName(): string
+    navigate(path: string[]): void
 }
 
 function copyCommand(textEditor: TextEditor, backendService: BackendService): void {
@@ -63,7 +65,8 @@ function openFileCommand(textEditor: TextEditor, backendService: BackendService)
 }
 
 function closeFileCommand(textEditor: TextEditor, backendService: BackendService): void {
-    throw ("Function not implemented")
+    backendService.closeProject(textEditor.getProjectName())
+    textEditor.navigate([""])
 }
 
 function saveCommand(textEditor: TextEditor, backendService: BackendService): void {

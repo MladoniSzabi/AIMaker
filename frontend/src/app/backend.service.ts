@@ -36,6 +36,7 @@ export class BackendService {
   getFileList(project: string): Observable<[BackendTypes.FileTree]> { return this.http.get<[BackendTypes.FileTree]>("/api/project/" + project + "/file/list") }
   getProjectList(): Observable<string[]> { return this.http.get<string[]>("/api/project/list") }
   createNewProject(projectName: string) { this.http.put("/api/project/" + projectName + "/new", new FormData()).subscribe() }
+  closeProject(projectName: string) { this.http.delete("/api/project/" + projectName + "/close").subscribe() }
 
   startRecording() { this.http.post("/api/record/start", "").subscribe() }
   stopRecording(): Observable<string[]> { return this.http.post<string[]>("/api/record/stop", "") }
