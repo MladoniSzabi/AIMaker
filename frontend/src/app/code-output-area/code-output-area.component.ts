@@ -11,13 +11,9 @@ export class CodeOutputAreaComponent implements OnInit {
   lines: string[] = []
 
   constructor(private backend: BackendService) {
-    this.backend.getConsoleOutputPipe().subscribe((line) => {
-      if(line == null) {
-        this.lines.push("")
-        this.lines.push("---------")
-        this.lines.push("")
-      } else {
-        this.lines.push(line)
+    this.backend.getConsoleOutputPipe().subscribe((message) => {
+      if(message.type == "string") {
+        this.lines = this.lines.concat(message.message.split("\n"))
       }
     })
   }

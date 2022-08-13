@@ -8,9 +8,13 @@ listOfEvents = []
 stopRecordingHotkey = None
 
 consoleOutput = []
+onPrint = None
 
 def languagePrint(message):
     global consoleOutput
+    global onPrint
+    if onPrint:
+        onPrint({"type": "string", "message": message})
     consoleOutput.append(str(message))
 
 def getOutput():

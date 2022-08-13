@@ -21,7 +21,10 @@ import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
 import { RecordTabComponent } from './record-tab/record-tab.component';
 import { BlankPageComponent } from './blank-page/blank-page.component';
 import { ModalInputComponent } from './modal-input/modal-input.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+
+const socketIOConfig: SocketIoConfig = {url: "http://localhost:5000", options: {}}
 
 @NgModule({
   declarations: [
@@ -47,7 +50,8 @@ import { ModalInputComponent } from './modal-input/modal-input.component';
     MatTreeModule,
     MatIconModule,
     MatTabsModule,
-    HttpClientModule
+    HttpClientModule,
+    SocketIoModule.forRoot(socketIOConfig),
   ],
   providers: [],
   bootstrap: [AppComponent]

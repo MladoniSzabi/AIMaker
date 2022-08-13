@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, Subject } from 'rxjs';
 import * as BackendTypes from './types'
+import { Socket } from 'ngx-socket-io';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BackendService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private socket: Socket) { }
 
-  consoleOutput: Subject<string | null> = new Subject()
+  consoleOutput = this.socket.fromEvent<BackendTypes.ConsoleOutput>('console output')
 
   saveFile(project: string, filepath: string, content: string) { this.http.post("/api/project/" + project + "/file/" + filepath, content).subscribe() }
   loadfile(project: string, filepath: string): Observable<string> { return this.http.get("/api/project/" + project + "/file/" + filepath, { responseType: "text" }) }
@@ -21,15 +22,15 @@ export class BackendService {
     }
     let form = new FormData()
     form.append("code", content)
-    this.consoleOutput.next(null)
+    //this.consoleOutput.next(null)
     this.http.post("/api/code/run", form, { responseType: "text" }).subscribe((consoleOutput) => {
-      for (let line of consoleOutput.split("\n")) {
-        this.consoleOutput.next(line)
-      }
+      // for (let line of consoleOutput.split("\n")) {
+      //   this.consoleOutput.next(line)
+      // }
     })
   }
 
-  getConsoleOutputPipe(): Subject<string | null> {
+  getConsoleOutputPipe(): Observable<BackendTypes.ConsoleOutput> {
     return this.consoleOutput
   }
 
