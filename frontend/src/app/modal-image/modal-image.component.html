@@ -1,0 +1,6 @@
+<div id="input-modal-root" [hidden]="!isShowing" (click)="cancel()">
+    <div class="modal-body">
+        <img src="{{image}}" (mousemove)="onMouseMove($event)" (click)="onMouseClick()" />
+        <p #coords>Coordinates: {{coord.x}}x{{coord.y}} (Click to copy)</p>
+    </div>
+</div>

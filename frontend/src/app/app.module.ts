@@ -22,6 +22,7 @@ import { RecordTabComponent } from './record-tab/record-tab.component';
 import { BlankPageComponent } from './blank-page/blank-page.component';
 import { ModalInputComponent } from './modal-input/modal-input.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { ModalImageComponent } from './modal-image/modal-image.component';
 
 
 const socketIOConfig: SocketIoConfig = {url: "http://localhost:5000", options: {}}
@@ -39,7 +40,8 @@ const socketIOConfig: SocketIoConfig = {url: "http://localhost:5000", options: {
     ModalConfirmComponent,
     RecordTabComponent,
     BlankPageComponent,
-    ModalInputComponent
+    ModalInputComponent,
+    ModalImageComponent
   ],
   imports: [
     BrowserModule,

@@ -16,6 +16,11 @@ export class ModalService {
     this.modalRequestSubject.next({ type: "input", onSuccess: onConfirm, onCancel, message })
   }
 
+  createImageModal(imageName: string) {
+    console.log("creating modal")
+    this.modalRequestSubject.next({message: imageName, type: "image", onSuccess: ()=> {}, onCancel: ()=>{}})
+  }
+
   getModalRequests() {
     return this.modalRequestSubject
   }

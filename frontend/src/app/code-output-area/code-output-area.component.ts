@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BackendService } from '../backend.service';
+import { ModalService } from '../modal.service';
 import { ConsoleOutput } from '../types';
 
 @Component({
@@ -11,7 +12,7 @@ export class CodeOutputAreaComponent implements OnInit {
 
   console: ConsoleOutput[] = []
 
-  constructor(private backend: BackendService) {
+  constructor(private backend: BackendService, private modalService: ModalService) {
     this.backend.getConsoleOutputPipe().subscribe((message) => {
       if(message.type == "string") {
         for(let line in message.message.split("\n")) {
@@ -28,6 +29,10 @@ export class CodeOutputAreaComponent implements OnInit {
 
   clearConsole() {
     this.console = []
+  }
+
+  openImage(imageName: string) {
+    this.modalService.createImageModal(imageName)
   }
 
 }

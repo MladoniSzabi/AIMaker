@@ -1,7 +1,7 @@
 <div id="console-output">
     <ng-container *ngFor="let output of console">
         <span *ngIf="output.type=='string'">{{output.message}}</span>
-        <img *ngIf="output.type=='image'" src="{{output.message}}" />
+        <a (click)="openImage(output.message)"><img *ngIf="output.type=='image'" src="{{output.message}}" /></a>
         <br />
     </ng-container>
 </div>
