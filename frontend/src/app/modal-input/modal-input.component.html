@@ -1,8 +1,6 @@
-<div id="input-modal-root" [hidden]="!isShowing">
-    <div class="modal-body">
-        <h3>{{message}}</h3>
-        <input type="text" #input />
-        <button (click)="confirm()">Yes</button>
-        <button (click)="cancel()">No</button>
-    </div>
-</div>
+<app-modal-root [isShowing]="isShowing" (cancel)="cancel()">
+    <h3>{{message}}</h3>
+    <input type="text" #input />
+    <button (click)="confirm()">Yes</button>
+    <button (click)="cancel()">No</button>
+</app-modal-root>

@@ -1,6 +1,4 @@
-<div id="input-modal-root" [hidden]="!isShowing" (click)="cancel()">
-    <div class="modal-body">
+<app-modal-root [isShowing]="isShowing" (cancel)="cancel()">
         <img src="{{image}}" (mousemove)="onMouseMove($event)" (click)="onMouseClick()" />
         <p #coords>Coordinates: {{coord.x}}x{{coord.y}} (Click to copy)</p>
-    </div>
-</div>
+</app-modal-root>

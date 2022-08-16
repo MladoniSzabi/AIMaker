@@ -20,9 +20,7 @@ export class ModalImageComponent implements OnInit {
     console.log("called")
     this.modalService.getModalRequests().subscribe({
       next: ({ message, type, onSuccess, onCancel, other }) => {
-        console.log(1)
         if (type == "image") {
-          console.log(2)
           this.image = message
           this.confirmCallback = onSuccess
           this.cancelCallback = onCancel

@@ -1,7 +1,5 @@
-<div id="confirm-modal-root" [hidden]="!isShowing">
-    <div class="modal-body">
+<app-modal-root [isShowing]="isShowing" (cancel)="cancel()">
         <h3>{{message}}</h3>
         <button (click)="confirm()">Yes</button>
         <button (click)="cancel()">No</button>
-    </div>
-</div>
+</app-modal-root>

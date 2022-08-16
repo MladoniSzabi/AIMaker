@@ -1,0 +1,5 @@
+<div id="input-modal-root" [hidden]="!isShowing" (click)="onCancel()">
+    <div class="modal-body" (click)="noCancel($event)">
+        <ng-content></ng-content>
+    </div>
+</div>
