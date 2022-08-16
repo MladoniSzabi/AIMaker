@@ -2,9 +2,22 @@ import pyautogui
 import cv2
 import numpy as np
 import pytesseract
+import os
+from . import  builtin_funcs
 
-def takeScreenshot():
-    scrshot = pyautogui.screenshot()
+def printImage(image):
+    imageid = os.listdir("printedimages")
+    imageName = "printedimages/" + str(len(imageid)) + ".png"
+    cv2.imwrite(imageName, image)
+    builtin_funcs.onPrint({"type": "image", "message": imageName})
+    return imageName
+
+def takeScreenshot(region=None):
+    scrshot = None
+    if region != None:
+        scrshot = pyautogui.screenshot(region=region)
+    else:
+        scrshot = pyautogui.screenshot()
     return cv2.cvtColor(np.array(scrshot),
                      cv2.COLOR_RGB2BGR)
 

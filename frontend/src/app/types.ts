@@ -6,4 +6,7 @@ type MouseWheelEvent = { device: "mouse", type: "wheel", delta: number, timestam
 export type FileTree = { name: string, children: [FileTree] }
 export type MacroList = { path: string, keybinding: string }[]
 export type Recording = (KeyboardEvent|MousePressEvent|MouseMoveEvent|MouseWheelEvent)[]
-export type ConsoleOutput = {type: "string", message: string}
+export type ConsoleOutput = (
+    {type: "string", message: string}|
+    {type: "image", message: string}
+)

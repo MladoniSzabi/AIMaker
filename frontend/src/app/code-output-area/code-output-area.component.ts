@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BackendService } from '../backend.service';
+import { ConsoleOutput } from '../types';
 
 @Component({
   selector: 'app-code-output-area',
@@ -8,12 +9,16 @@ import { BackendService } from '../backend.service';
 })
 export class CodeOutputAreaComponent implements OnInit {
 
-  lines: string[] = []
+  console: ConsoleOutput[] = []
 
   constructor(private backend: BackendService) {
     this.backend.getConsoleOutputPipe().subscribe((message) => {
       if(message.type == "string") {
-        this.lines = this.lines.concat(message.message.split("\n"))
+        for(let line in message.message.split("\n")) {
+          this.console.push({type: "string", message: line})
+        }
+      } else if(message.type == "image") {
+        this.console.push(message)
       }
     })
   }
@@ -22,7 +27,7 @@ export class CodeOutputAreaComponent implements OnInit {
   }
 
   clearConsole() {
-    this.lines = []
+    this.console = []
   }
 
 }

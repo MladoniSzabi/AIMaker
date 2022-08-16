@@ -1,6 +1,6 @@
 from cgitb import reset
 from crypt import methods
-from flask import request, make_response
+from flask import request, make_response, send_file
 import os
 import json
 from interpreter import interpreter
@@ -165,6 +165,10 @@ def setUpRoutes(app):
             f.write(json.dumps(existingMacros))
         
         return ""
+    
+    @app.route("/printedimages/<imagename>")
+    def serveImage(imagename):
+        return send_file("printedimages/" + imagename, mimetype="image/png")
 
     def loadKeybinding(path, keybinding, project):
         if ":" in path:

@@ -1,3 +1,7 @@
 <div id="console-output">
-    <p *ngFor="let line of lines">{{line}}</p>
+    <ng-container *ngFor="let output of console">
+        <span *ngIf="output.type=='string'">{{output.message}}</span>
+        <img *ngIf="output.type=='image'" src="{{output.message}}" />
+        <br />
+    </ng-container>
 </div>
