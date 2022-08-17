@@ -16,6 +16,7 @@ def languagePrint(message):
     if onPrint:
         onPrint({"type": "string", "message": message})
     consoleOutput.append(str(message))
+    print(message)
 
 def getOutput():
     global consoleOutput

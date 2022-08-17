@@ -1,0 +1,7 @@
+function printScreenshot() {
+   print(1)
+   img = takeScreenshot()
+   printImage(img)
+}
+
+printScreenshot()

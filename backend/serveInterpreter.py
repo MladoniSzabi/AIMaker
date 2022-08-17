@@ -6,10 +6,10 @@ from interpreter import builtin_funcs
 def init():
     builtin_funcs.init()
 
-def onPrint(message):
-    emit("console output", message, broadcast=True, namespace="/")
-
 def setUpRoutes(app, socketio):
+
+    def onPrint(message):
+        socketio.emit("console output", message, broadcast=True, namespace="/")
 
     builtin_funcs.onPrint = onPrint
 
