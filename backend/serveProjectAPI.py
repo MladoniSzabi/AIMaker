@@ -56,6 +56,7 @@ def setUpRoutes(app):
                 builtin_funcs.unregisterKeybinding(settings["stopRecording"])
             
             return ""
+        return ""
                     
 
     @app.route("/api/project/<project>/file/list", methods=["GET"])
@@ -177,11 +178,11 @@ def setUpRoutes(app):
             fileName = path[:colonPos]
             print(fileName, functionName)
             def macroCallback():
-                interpreter.interpret_function("projects/" + project + "/files/" + fileName, functionName)
+                interpreter.interpret_function("projects/" + project + "/files/" + fileName, functionName, projectName=project)
             builtin_funcs.registerKeybinding(keybinding, macroCallback)
         else:
             def macroCallback():
-                interpreter.interpret_file("projects/" + project + "/files/" + path)
+                interpreter.interpret_file("projects/" + project + "/files/" + path, projectName=project)
             builtin_funcs.registerKeybinding(keybinding, macroCallback)
 
     def loadAllKeybindings(project):

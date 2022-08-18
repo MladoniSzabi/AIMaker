@@ -13,4 +13,3 @@ function sda() {
 }
 
 print("Hello, World!")
-v=123

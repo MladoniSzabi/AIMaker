@@ -1,7 +1,6 @@
 function printScreenshot() {
-   print(1)
    img = takeScreenshot()
-   printImage(img)
+   saveImage("asd.png", img)
 }
 
 printScreenshot()

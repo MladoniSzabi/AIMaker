@@ -5,14 +5,14 @@ import pytesseract
 import os
 from . import  builtin_funcs
 
-def printImage(image):
+def printImage(image, context=None):
     imageid = os.listdir("printedimages")
     imageName = "printedimages/" + str(len(imageid)) + ".png"
     cv2.imwrite(imageName, image)
     builtin_funcs.onPrint({"type": "image", "message": imageName})
     return imageName
 
-def takeScreenshot(region=None):
+def takeScreenshot(region=None, context=None):
     scrshot = None
     if region != None:
         scrshot = pyautogui.screenshot(region=region)
@@ -21,32 +21,47 @@ def takeScreenshot(region=None):
     return cv2.cvtColor(np.array(scrshot),
                      cv2.COLOR_RGB2BGR)
 
-def saveImage(filename, img):
-    cv2.imwrite(filename, img)
+def saveImage(filename, img, context):
+    pathToImageFolder=None
+    if context["projectName"]:
+        pathToImageFolder = os.path.join("projects", context["projectName"], "images")
+    else:
+        pathToImageFolder = "images/"
+    pathToImage = os.path.join(pathToImageFolder, filename)
+    relpath = os.path.relpath(pathToImage, pathToImageFolder)
+    if relpath[:3] == "../":
+        if os.path.split(filename)[1] == "" or os.path.split(filename)[1] == "..":
+            pathToImage = os.path.join(pathToImageFolder, "image.png")
+        else:
+            pathToImage = os.path.join(pathToImageFolder, os.path.split(filename)[1])
+        
+    
+    print(pathToImage)
+    cv2.imwrite(pathToImage, img)
 
-def loadImage(filename):
+def loadImage(filename, context):
     return cv2.imread(filename, cv2.IMREAD_COLOR)
 
-def imageToText(img):
+def imageToText(img, context=None):
     return pytesseract.image_to_string(img)
 
-def imageToBlackAndWhite(img):
+def imageToBlackAndWhite(img, context=None):
     gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     return cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
 
-def blurImage(img, blurSize=3):
+def blurImage(img, blurSize=3, context=None):
     return cv2.GaussianBlur(img,(blurSize,blurSize),cv2.BORDER_DEFAULT)
 
-def getAveragePixel(img):
+def getAveragePixel(img, context=None):
     return cv2.meanStdDev(img)[0]
 
-def getImageWidth(img):
+def getImageWidth(img, context=None):
     return img.shape[1]
 
-def getImageHeight(img):
+def getImageHeight(img, context=None):
     return img.shape[0]
 
-def compareImages(img1, img2):
+def compareImages(img1, img2, context=None):
     if(img1.shape != img2.shape):
         return False
     

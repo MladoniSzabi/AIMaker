@@ -22,6 +22,7 @@ export class BackendService {
     }
     let form = new FormData()
     form.append("code", content)
+    form.append("projectName", project)
     //this.consoleOutput.next(null)
     this.http.post("/api/code/run", form, { responseType: "text" }).subscribe((consoleOutput) => {
       // for (let line of consoleOutput.split("\n")) {

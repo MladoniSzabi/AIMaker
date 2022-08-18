@@ -15,7 +15,7 @@ export class CodeOutputAreaComponent implements OnInit {
   constructor(private backend: BackendService, private modalService: ModalService) {
     this.backend.getConsoleOutputPipe().subscribe((message) => {
       if(message.type == "string") {
-        for(let line in message.message.split("\n")) {
+        for(let line of message.message.split("\n")) {
           this.console.push({type: "string", message: line})
         }
       } else if(message.type == "image") {

@@ -14,6 +14,9 @@ class LanguageVisitor(ParseTreeVisitor):
         self.custom_functions = {}
         self.context = [{}]
         self.functions = {}
+        self.functionContext = {
+            "projectName": None
+        }
         self.evaluateExpression = evaluateExpression
 
     # Visit a parse tree produced by LanguageParser#Entry.
@@ -139,7 +142,7 @@ class LanguageVisitor(ParseTreeVisitor):
         if self.evaluateExpression:
             functionName = ctx.function.text
             if functionName in self.functions:
-                return self.functions[functionName]()
+                return self.functions[functionName](context=self.functionContext)
             elif functionName in self.custom_functions:
                 return self.visit(self.custom_functions[functionName]["body"])
             else:
@@ -153,7 +156,7 @@ class LanguageVisitor(ParseTreeVisitor):
             functionName = ctx.function.text
             if functionName in self.functions:
                 args = list(map(lambda x: self.visit(x), args))
-                return self.functions[functionName](*args)
+                return self.functions[functionName](*args, context=self.functionContext)
             elif functionName in self.custom_functions:
                 newContext = {}
                 args = self.visit(ctx.args)

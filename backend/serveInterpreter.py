@@ -16,7 +16,7 @@ def setUpRoutes(app, socketio):
     @app.route("/api/code/run", methods=["POST"])
     def runCode():
         code = request.form["code"]
-        codeOutput = str(interpreter.interpret(code))
+        codeOutput = str(interpreter.interpret(code, projectName=request.form.get("projectName")))
         codeOutput = builtin_funcs.getOutput() + "\n" + codeOutput
         response = make_response(codeOutput, 200)
         response.mimetype = "text/plain"

@@ -10,7 +10,7 @@ stopRecordingHotkey = None
 consoleOutput = []
 onPrint = None
 
-def languagePrint(message):
+def languagePrint(message, context=None):
     global consoleOutput
     global onPrint
     if onPrint:
@@ -90,37 +90,37 @@ def init():
     mouse.hook(mouseListener)
     keyboard.hook(keyboardListener)
 
-def moveMouse(x, y):
+def moveMouse(x, y, context=None):
     mouse.move(x, y, True)
     return ""
 
-def pressKey(c):
+def pressKey(c, context=None):
     keyboard.press(c)
     return ""
 
-def releaseKey(c):
+def releaseKey(c, context=None):
     keyboard.release(c)
     return ""
 
-def tapKey(c):
+def tapKey(c, context=None):
     keyboard.press(c)
     keyboard.release(c)
     return ""
 
-def pressMouse(button):
+def pressMouse(button, context=None):
     mouse.press(button)
     return ""
 
-def releaseMouse(button):
+def releaseMouse(button, context=None):
     mouse.release(button)
     return ""
 
-def tapMouse(button):
+def tapMouse(button, context=None):
     mouse.press(button)
     mouse.release(button)
     return ""
 
-def startRecording():
+def startRecording(context=None):
     global isRecording
     global listOfEvents
     global lastEvent
@@ -129,12 +129,12 @@ def startRecording():
     lastEvent = None
     return ""
 
-def stopRecording():
+def stopRecording(context=None):
     global isRecording
     isRecording = False
     return json.dumps(listOfEvents)
 
-def setStopRecordingButton(hotkey):
+def setStopRecordingButton(hotkey, context=None):
     global stopRecordingHotkey
     if stopRecordingHotkey:
         keyboard.remove_hotkey(stopRecordingHotkey)
@@ -142,5 +142,5 @@ def setStopRecordingButton(hotkey):
     stopRecordingHotkey = hotkey
     return ""
 
-def getRecording():
+def getRecording(context=None):
     return json.dumps(listOfEvents)

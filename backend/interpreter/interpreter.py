@@ -32,7 +32,8 @@ functions = {
     "compareImages": image_processing.compareImages
 }
 
-def interpret_function(fileName, functionName):
+def interpret_function(fileName, functionName, projectName=None):
+    print(projectName)
     with open(fileName) as f:
         code = f.read()
         stream = InputStream(code)
@@ -42,15 +43,18 @@ def interpret_function(fileName, functionName):
         tree = parser.entry_point()
         visitor = LanguageVisitor(False)
         visitor.functions = functions
+        visitor.functionContext = {
+            "projectName": projectName
+        }
         visitor.visit(tree)
         visitor.evaluateExpression = True
         return visitor.visit(visitor.custom_functions[functionName]["body"])
 
-def interpret_file(fileName):
+def interpret_file(fileName, projectName=None):
     with open(fileName) as f:
-        return interpret(f.read())
+        return interpret(f.read(), projectName=projectName)
 
-def interpret(text, executeExpressions = True):
+def interpret(text, executeExpressions = True, projectName=None):
     stream = InputStream(text)
     lexer = LanguageLexer(stream)
     tokens = CommonTokenStream(lexer)
@@ -58,5 +62,8 @@ def interpret(text, executeExpressions = True):
     tree = parser.entry_point()
     visitor = LanguageVisitor(executeExpressions)
     visitor.functions = functions
+    visitor.functionContext = {
+        "projectName": projectName
+    }
     output = visitor.visit(tree)
     return output
