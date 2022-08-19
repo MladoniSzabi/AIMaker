@@ -1,1 +1,1 @@
-[{"keybinding": "CTRL+d", "path": "main:printScreenshot"}]
+[{"keybinding": "CTRL+d", "path": "main:printScreenshot"}, {"keybinding": "CTRL+a", "path": "main:startDay"}]

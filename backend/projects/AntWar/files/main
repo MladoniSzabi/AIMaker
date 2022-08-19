@@ -3,4 +3,15 @@ function printScreenshot() {
    saveImage("asd.png", img)
 }
 
+function startDay() {
+   x = locateCenterOnScreenX("go.png", 0.5)
+   y = locateCenterOnScreenY("go.png", 0.5)
+   moveMouse(x, y)
+   wait(1)
+   pressMouse("left")
+   wait(1)
+   releaseMouse("left")
+   wait(1)
+}
+
 printScreenshot()

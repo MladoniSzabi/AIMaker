@@ -1,6 +1,7 @@
 import json
 import mouse
 import keyboard
+import pyautogui
 
 isRecording = False
 lastEvent = None
@@ -108,16 +109,16 @@ def tapKey(c, context=None):
     return ""
 
 def pressMouse(button, context=None):
-    mouse.press(button)
+    pyautogui.mouseDown(button=button)
     return ""
 
 def releaseMouse(button, context=None):
-    mouse.release(button)
+    pyautogui.mouseUp(button=button)
     return ""
 
 def tapMouse(button, context=None):
-    mouse.press(button)
-    mouse.release(button)
+    pyautogui.mouseDown(button=button)
+    pyautogui.mouseUp(button=button)
     return ""
 
 def startRecording(context=None):

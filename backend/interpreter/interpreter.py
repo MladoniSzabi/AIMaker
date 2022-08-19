@@ -17,7 +17,7 @@ functions = {
     "tapKey": builtin_funcs.tapKey,
     "startRecording": builtin_funcs.startRecording,
     "stopRecording": builtin_funcs.stopRecording,
-    "wait": time.sleep,
+    "wait": lambda dur, context:time.sleep(dur),
     "print": builtin_funcs.languagePrint,
     "printImage": image_processing.printImage,
     "takeScreenshot": image_processing.takeScreenshot,
@@ -29,7 +29,9 @@ functions = {
     "getAveragePixel": image_processing.getAveragePixel,
     "getImageWidth": image_processing.getImageWidth,
     "getImageHeight": image_processing.getImageHeight,
-    "compareImages": image_processing.compareImages
+    "compareImages": image_processing.compareImages,
+    "locateCenterOnScreenX": image_processing.locateCenterOnScreenX,
+    "locateCenterOnScreenY": image_processing.locateCenterOnScreenY
 }
 
 def interpret_function(fileName, functionName, projectName=None):

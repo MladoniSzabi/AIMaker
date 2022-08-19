@@ -178,11 +178,17 @@ def setUpRoutes(app):
             fileName = path[:colonPos]
             print(fileName, functionName)
             def macroCallback():
-                interpreter.interpret_function("projects/" + project + "/files/" + fileName, functionName, projectName=project)
+                try:
+                    interpreter.interpret_function("projects/" + project + "/files/" + fileName, functionName, projectName=project)
+                except Exception as e:
+                    print(e)
             builtin_funcs.registerKeybinding(keybinding, macroCallback)
         else:
             def macroCallback():
-                interpreter.interpret_file("projects/" + project + "/files/" + path, projectName=project)
+                try:
+                    interpreter.interpret_file("projects/" + project + "/files/" + path, projectName=project)
+                except Exception as e:
+                    print(e)
             builtin_funcs.registerKeybinding(keybinding, macroCallback)
 
     def loadAllKeybindings(project):
