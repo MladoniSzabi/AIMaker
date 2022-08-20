@@ -27,6 +27,17 @@ class LanguageVisitor(ParseTreeVisitor):
     def visitLast_Expression(self, ctx:LanguageParser.Last_ExpressionContext):
         return self.visit(ctx.exp)
 
+    
+    # Visit a parse tree produced by LanguageParser#Control_Flow.
+    def visitControl_Flow(self, ctx:LanguageParser.Control_FlowContext):
+        return self.visit(ctx.flow)
+
+
+    # Visit a parse tree produced by LanguageParser#More_Control_Flow.
+    def visitMore_Control_Flow(self, ctx:LanguageParser.More_Control_FlowContext):
+        self.visit(ctx.rest)
+        return self.visit(ctx.flow)
+
 
     # Visit a parse tree produced by LanguageParser#More_Expressions.
     def visitMore_Expressions(self, ctx:LanguageParser.More_ExpressionsContext):
@@ -63,6 +74,20 @@ class LanguageVisitor(ParseTreeVisitor):
             "arguments": []
         }
         return ctx.exprs
+
+
+    # Visit a parse tree produced by LanguageParser#If_Statement.
+    def visitIf_Statement(self, ctx:LanguageParser.If_StatementContext):
+        if self.visit(ctx.expr):
+            return self.visit(ctx.body)
+        return None
+
+
+    # Visit a parse tree produced by LanguageParser#While_Loop.
+    def visitWhile_Loop(self, ctx:LanguageParser.While_LoopContext):
+        while self.visit(ctx.expr):
+            self.visit(ctx.body)
+        return None
 
 
     # Visit a parse tree produced by LanguageParser#String_Literal.

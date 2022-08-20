@@ -42,13 +42,17 @@ def saveImage(filename, img, context):
 def locateCenterOnScreenX(imageName, confidence=0.9, context=None):
     pathToImage = os.path.join("projects", context["projectName"], "images", imageName)
     print(pathToImage)
-    x, _ = pyautogui.locateCenterOnScreen(pathToImage, confidence=confidence)
-    return x
+    retval = pyautogui.locateCenterOnScreen(pathToImage, confidence=confidence)
+    if retval:
+        return retval.x
+    return None
 
 def locateCenterOnScreenY(imageName, confidence=0.9, context=None):
     pathToImage = os.path.join("projects", context["projectName"], "images", imageName)
-    _, y = pyautogui.locateCenterOnScreen(pathToImage, confidence=confidence)
-    return y
+    retval = pyautogui.locateCenterOnScreen(pathToImage, confidence=confidence)
+    if retval:
+        return retval.y
+    return None
 
 def loadImage(filename, context):
     return cv2.imread(filename, cv2.IMREAD_COLOR)
