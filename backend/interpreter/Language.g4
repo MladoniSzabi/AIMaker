@@ -27,6 +27,12 @@ simple_expression: STRING                                       #String_Literal
         ;
 
 expression: exp=simple_expression                               #Simple_Expression
+        | lhs=expression '==' rhs=expression                    #Is_Equal
+        | lhs=expression '!=' rhs=expression                    #Is_Different
+        | lhs=expression '>' rhs=expression                     #Is_Greater
+        | lhs=expression '>=' rhs=expression                    #Is_Greter_Equal
+        | lhs=expression '<' rhs=expression                     #Is_Less
+        | lhs=expression '<=' rhs=expression                    #Is_Less_Equal
         | lhs=expression '*' rhs=expression                     #Multiplication
         | lhs=expression '/' rhs=expression                     #Division
         | lhs=expression '+' rhs=expression                     #Addition

@@ -130,6 +130,36 @@ class LanguageVisitor(ParseTreeVisitor):
             return self.visit(ctx.exp)
 
 
+    # Visit a parse tree produced by LanguageParser#Is_Equal.
+    def visitIs_Equal(self, ctx:LanguageParser.Is_EqualContext):
+        return self.rhs == self.lhs
+
+
+    # Visit a parse tree produced by LanguageParser#Is_Different.
+    def visitIs_Different(self, ctx:LanguageParser.Is_DifferentContext):
+        return self.lhs != self.rhs
+
+
+    # Visit a parse tree produced by LanguageParser#Is_Less_Equal.
+    def visitIs_Less_Equal(self, ctx:LanguageParser.Is_Less_EqualContext):
+        return self.lhs <= self.rhs
+
+
+    # Visit a parse tree produced by LanguageParser#Is_Less.
+    def visitIs_Less(self, ctx:LanguageParser.Is_LessContext):
+        return self.lhs < self.rhs
+
+
+    # Visit a parse tree produced by LanguageParser#Is_Greter_Equal.
+    def visitIs_Greter_Equal(self, ctx:LanguageParser.Is_Greter_EqualContext):
+        return self.lhs >= self.rhs
+
+
+    # Visit a parse tree produced by LanguageParser#Is_Greater.
+    def visitIs_Greater(self, ctx:LanguageParser.Is_GreaterContext):
+        return self.lhs > self.rhs
+
+
     # Visit a parse tree produced by LanguageParser#Division.
     def visitDivision(self, ctx:LanguageParser.DivisionContext):
         if self.evaluateExpression:
