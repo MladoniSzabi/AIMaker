@@ -24,6 +24,7 @@ simple_expression: STRING                                       #String_Literal
         | INT                                                   #Int_Literal
         | FLOAT                                                 #Float_Literal
         | VAR                                                   #Variable
+        | NULL                                                  #Null_Literal
         ;
 
 expression: exp=simple_expression                               #Simple_Expression
@@ -54,6 +55,7 @@ WHITESPACE: [ \t\r]+ -> skip;
 COMMENT : '//' .*? '\n' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 BOOL: 'true' | 'false';
+NULL: 'null';
 INT: [0-9]+ ;
 FLOAT: [0-9]+'.'[0-9]+;
 VAR: [a-zA-Z][a-zA-Z0-9_]*;

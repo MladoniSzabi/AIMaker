@@ -93,6 +93,11 @@ class LanguageVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by LanguageParser#String_Literal.
     def visitString_Literal(self, ctx:LanguageParser.String_LiteralContext):
         return ctx.getText()[1:-1]
+    
+
+    # Visit a parse tree produced by LanguageParser#Null_Literal.
+    def visitNull_Literal(self, ctx:LanguageParser.Null_LiteralContext):
+        return None
 
 
     # Visit a parse tree produced by LanguageParser#Bool_Literal.
