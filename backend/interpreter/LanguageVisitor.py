@@ -86,7 +86,8 @@ class LanguageVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by LanguageParser#While_Loop.
     def visitWhile_Loop(self, ctx:LanguageParser.While_LoopContext):
         while self.visit(ctx.expr):
-            self.visit(ctx.body)
+            if ctx.body:
+                self.visit(ctx.body)
         return None
 
 
@@ -137,32 +138,34 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#Is_Equal.
     def visitIs_Equal(self, ctx:LanguageParser.Is_EqualContext):
-        return self.rhs == self.lhs
+        #print(dir(ctx.rhs))
+        print(self.visit(ctx.rhs) == self.visit(ctx.lhs))
+        return self.visit(ctx.rhs) == self.visit(ctx.lhs)
 
 
     # Visit a parse tree produced by LanguageParser#Is_Different.
     def visitIs_Different(self, ctx:LanguageParser.Is_DifferentContext):
-        return self.lhs != self.rhs
+        return self.visit(ctx.lhs) != self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Is_Less_Equal.
     def visitIs_Less_Equal(self, ctx:LanguageParser.Is_Less_EqualContext):
-        return self.lhs <= self.rhs
+        return self.visit(ctx.lhs) <= self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Is_Less.
     def visitIs_Less(self, ctx:LanguageParser.Is_LessContext):
-        return self.lhs < self.rhs
+        return self.visit(ctx.lhs) < self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Is_Greter_Equal.
     def visitIs_Greter_Equal(self, ctx:LanguageParser.Is_Greter_EqualContext):
-        return self.lhs >= self.rhs
+        return self.visit(ctx.lhs) >= self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Is_Greater.
     def visitIs_Greater(self, ctx:LanguageParser.Is_GreaterContext):
-        return self.lhs > self.rhs
+        return self.visit(ctx.lhs) > self.visit(ctx.rhs)
 
 
     # Visit a parse tree produced by LanguageParser#Division.

@@ -16,7 +16,7 @@ function_declaration: 'function' functionname=VAR NEW_LINE? ('()'|'(' NEW_LINE? 
         ;
 
 control_flow: 'if' NEW_LINE? '(' NEW_LINE? expr=expression NEW_LINE? ')' NEW_LINE? '{' NEW_LINE? body=block NEW_LINE? '}'  #If_Statement
-        | 'while' NEW_LINE? '(' NEW_LINE? expr=expression NEW_LINE? ')' NEW_LINE? '{' NEW_LINE? body=block NEW_LINE? '}'   #While_Loop
+        | 'while' NEW_LINE? '(' NEW_LINE? expr=expression NEW_LINE? ')' NEW_LINE? '{' NEW_LINE? body=block? NEW_LINE? '}'   #While_Loop
         ;
 
 simple_expression: STRING                                       #String_Literal

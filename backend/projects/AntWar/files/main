@@ -9,9 +9,32 @@ function startDay() {
    moveMouse(x, y)
    wait(1)
    pressMouse("left")
-   wait(1)
+   wait(0.1)
    releaseMouse("left")
+   wait(0.1)
+}
+
+function endDay() {
+   while(locateCenterOnScreenX("goBack2.png", 0.4) == null) {}
+   
+   x = locateCenterOnScreenX("goBack2.png", 0.4)
+   y = locateCenterOnScreenY("goBack2.png", 0.4)
+   
+   print(x)
+   print(y)
+   
+   moveMouse(x, y)
    wait(1)
+   pressMouse("left")
+   wait(0.1)
+   releaseMouse("left")
+   wait(0.1)
+}
+
+function playOneDay() {
+   startDay()
+   moveMouse(10,10)
+   endDay()
 }
 
 function testFunction() {
