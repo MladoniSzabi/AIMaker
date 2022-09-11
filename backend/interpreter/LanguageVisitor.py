@@ -89,7 +89,9 @@ class LanguageVisitor(ParseTreeVisitor):
     def visitWhile_Loop(self, ctx:LanguageParser.While_LoopContext):
         while self.visit(ctx.expr):
             if ctx.body:
-                self.visit(ctx.body)
+                retval = self.visit(ctx.body)
+                if type(retval) == tuple and retval[0] == "return":
+                    return retval[1]
         return None
 
 
@@ -134,7 +136,6 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#Return_Expression.
     def visitReturn_Expression(self, ctx:LanguageParser.Return_ExpressionContext):
-
         return ("return", self.visit(ctx.retval))
 
 
