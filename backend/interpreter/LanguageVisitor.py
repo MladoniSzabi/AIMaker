@@ -35,21 +35,25 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#More_Control_Flow.
     def visitMore_Control_Flow(self, ctx:LanguageParser.More_Control_FlowContext):
-        self.visit(ctx.rest)
+        retval = self.visit(ctx.rest)
+        if type(retval) == tuple and retval[0] in ["return", "break", "continue"]:
+            return retval
         return self.visit(ctx.flow)
 
 
     # Visit a parse tree produced by LanguageParser#More_Expressions.
     def visitMore_Expressions(self, ctx:LanguageParser.More_ExpressionsContext):
         retval = self.visit(ctx.rest)
-        if type(retval) == tuple and retval[0] == "return":
+        if type(retval) == tuple and retval[0] in ["return", "break", "continue"]:
             return retval
         return self.visit(ctx.exp)
     
 
     # Visit a parse tree produced by LanguageParser#More_Function.
     def visitMore_Function(self, ctx:LanguageParser.More_FunctionContext):
-        self.visit(ctx.rest)
+        retval = self.visit(ctx.rest)
+        if type(retval) == tuple and retval[0] in ["return", "break", "continue"]:
+            return retval
         return self.visit(ctx.declaration)
     
 
@@ -92,6 +96,10 @@ class LanguageVisitor(ParseTreeVisitor):
                 retval = self.visit(ctx.body)
                 if type(retval) == tuple and retval[0] == "return":
                     return retval[1]
+                if type(retval) == tuple and retval[0] == "break":
+                    break
+                if type(retval) == tuple and retval[0] == "continue":
+                    continue
         return None
 
 
@@ -134,9 +142,19 @@ class LanguageVisitor(ParseTreeVisitor):
             return self.context[contextNum][varName]
 
 
-    # Visit a parse tree produced by LanguageParser#Return_Expression.
-    def visitReturn_Expression(self, ctx:LanguageParser.Return_ExpressionContext):
+    # Visit a parse tree produced by LanguageParser#Return.
+    def visitReturn(self, ctx:LanguageParser.ReturnContext):
         return ("return", self.visit(ctx.retval))
+
+
+    # Visit a parse tree produced by LanguageParser#Break.
+    def visitBreak(self, ctx:LanguageParser.BreakContext):
+        return ("break")
+
+
+    # Visit a parse tree produced by LanguageParser#Continue.
+    def visitContinue(self, ctx:LanguageParser.ContinueContext):
+        return ("continue")
 
 
     # Visit a parse tree produced by LanguageParser#Simple_Expression.

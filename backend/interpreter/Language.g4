@@ -41,7 +41,9 @@ expression: exp=simple_expression                               #Simple_Expressi
         | function=VAR'(' args=argument_list ')'                #Function_Call_With_Args
         | function=VAR'()'                                      #Function_Call
         | <assoc=right> lhs=VAR '=' rhs=expression              #Expression_Assignment
-        | 'return' retval=expression                            #Return_Expression
+        | 'return' retval=expression                            #Return
+        | 'continue'                                            #Continue
+        | 'break'                                               #Break
         ;
 
 argument_list: arg=simple_expression                            #Last_Arg
