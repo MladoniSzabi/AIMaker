@@ -1,2 +1,12 @@
-img = takeScreenshot()
-printImage(img)
+function dsa() {
+   return 3
+}
+
+function asd() {
+   a = dsa()
+   a = a + 2
+   return a
+}
+
+a = asd()
+print(a)

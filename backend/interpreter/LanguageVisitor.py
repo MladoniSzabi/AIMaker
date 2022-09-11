@@ -41,7 +41,9 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#More_Expressions.
     def visitMore_Expressions(self, ctx:LanguageParser.More_ExpressionsContext):
-        self.visit(ctx.rest)
+        retval = self.visit(ctx.rest)
+        if type(retval) == tuple and retval[0] == "return":
+            return retval
         return self.visit(ctx.exp)
     
 
@@ -130,6 +132,12 @@ class LanguageVisitor(ParseTreeVisitor):
             return self.context[contextNum][varName]
 
 
+    # Visit a parse tree produced by LanguageParser#Return_Expression.
+    def visitReturn_Expression(self, ctx:LanguageParser.Return_ExpressionContext):
+
+        return ("return", self.visit(ctx.retval))
+
+
     # Visit a parse tree produced by LanguageParser#Simple_Expression.
     def visitSimple_Expression(self, ctx:LanguageParser.Simple_ExpressionContext):
         if self.evaluateExpression:
@@ -207,7 +215,10 @@ class LanguageVisitor(ParseTreeVisitor):
             if functionName in self.functions:
                 return self.functions[functionName](context=self.functionContext)
             elif functionName in self.custom_functions:
-                return self.visit(self.custom_functions[functionName]["body"])
+                retval = self.visit(self.custom_functions[functionName]["body"])
+                if type(retval) == tuple and retval[0] == "return":
+                    return retval[1]
+                return None
             else:
                 raise Exception("Function " + functionName + " is not defined")
 
@@ -228,7 +239,9 @@ class LanguageVisitor(ParseTreeVisitor):
                 self.context.append(newContext)
                 retval = self.visit(self.custom_functions[functionName]["body"])
                 self.context.pop()
-                return retval
+                if type(retval) == tuple and retval[0] == "return":
+                    return retval[1]
+                return None
             else:
                 raise Exception("Function " + functionName + " is not defined")
 
