@@ -6,9 +6,9 @@ entry_point: exps=block END_OF_FILE                             #Entry
 block: exp=expression                                           #Last_Expression
         | declaration=function_declaration                      #Function_Declaration_Block
         | flow=control_flow                                     #Control_Flow
-        | rest=block NEW_LINE exp=expression                    #More_Expressions
-        | rest=block NEW_LINE declaration=function_declaration  #More_Function
-        | rest=block NEW_LINE flow=control_flow                 #More_Control_Flow
+        | rest=block NEW_LINE current=expression                    #More_Expressions
+        | rest=block NEW_LINE current=function_declaration  #More_Function
+        | rest=block NEW_LINE current=control_flow                 #More_Control_Flow
         ;
 
 function_declaration: 'function' functionname=VAR NEW_LINE? ('()'|'(' NEW_LINE? ')') '{' NEW_LINE? exprs=block NEW_LINE? '}'             #Function_Declaration_Without_Args

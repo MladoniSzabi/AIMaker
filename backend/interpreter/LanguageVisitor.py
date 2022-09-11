@@ -33,28 +33,26 @@ class LanguageVisitor(ParseTreeVisitor):
         return self.visit(ctx.flow)
 
 
-    # Visit a parse tree produced by LanguageParser#More_Control_Flow.
-    def visitMore_Control_Flow(self, ctx:LanguageParser.More_Control_FlowContext):
+    def visitMore(self, ctx):
         retval = self.visit(ctx.rest)
         if type(retval) == tuple and retval[0] in ["return", "break", "continue"]:
             return retval
-        return self.visit(ctx.flow)
+        return self.visit(ctx.current)
+
+
+    # Visit a parse tree produced by LanguageParser#More_Control_Flow.
+    def visitMore_Control_Flow(self, ctx:LanguageParser.More_Control_FlowContext):
+        return self.visitMore(ctx)
 
 
     # Visit a parse tree produced by LanguageParser#More_Expressions.
     def visitMore_Expressions(self, ctx:LanguageParser.More_ExpressionsContext):
-        retval = self.visit(ctx.rest)
-        if type(retval) == tuple and retval[0] in ["return", "break", "continue"]:
-            return retval
-        return self.visit(ctx.exp)
+        return self.visitMore(ctx)
     
 
     # Visit a parse tree produced by LanguageParser#More_Function.
     def visitMore_Function(self, ctx:LanguageParser.More_FunctionContext):
-        retval = self.visit(ctx.rest)
-        if type(retval) == tuple and retval[0] in ["return", "break", "continue"]:
-            return retval
-        return self.visit(ctx.declaration)
+        return self.visitMore(ctx)
     
 
     # Visit a parse tree produced by LanguageParser#Function_Declaration_Block.
