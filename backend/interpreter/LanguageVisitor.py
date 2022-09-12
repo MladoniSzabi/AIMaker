@@ -19,6 +19,17 @@ class LanguageVisitor(ParseTreeVisitor):
         }
         self.evaluateExpression = evaluateExpression
 
+    def findVariable(self, variableName):
+        contextNum = None
+        for i, context in reversed(list(enumerate(self.context))):
+            if variableName in context:
+                contextNum = i
+                break;
+        if contextNum is None:
+            raise Exception("Variable " + variableName + " is not defined")
+        else:
+            return self.context[contextNum][variableName]
+
     # Visit a parse tree produced by LanguageParser#Entry.
     def visitEntry(self, ctx:LanguageParser.EntryContext):
         return self.visit(ctx.exps)
@@ -129,15 +140,36 @@ class LanguageVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by LanguageParser#Variable.
     def visitVariable(self, ctx:LanguageParser.VariableContext):
         varName = ctx.getText()
-        contextNum = None
-        for i, context in reversed(list(enumerate(self.context))):
-            if varName in context:
-                contextNum = i
-                break;
-        if contextNum is None:
-            raise Exception("Variable " + varName + " is not defined")
-        else:
-            return self.context[contextNum][varName]
+        return self.findVariable(varName)
+
+
+    def visitArray_Other_Elements(self, ctx:LanguageParser.Array_Other_ElementsContext):
+        return self.visit(ctx.exp)
+
+
+    # Visit a parse tree produced by LanguageParser#Many_Element_Array.
+    def visitMany_Element_Array(self, ctx:LanguageParser.Many_Element_ArrayContext):
+        arr = []
+        arr.append(self.visit(ctx.first))
+        for el in ctx.more_array_element():
+            arr.append(self.visit(el))
+        return arr
+        
+
+    # # Visit a parse tree produced by LanguageParser#Many_Element_Array.
+    # def visitArray_Expression(self, ctx:LanguageParser.Array_ExpressionContext):
+    #     return self.visit(ctx.arr)
+    
+
+    # Visit a parse tree produced by LanguageParser#Dereferencing.
+    def visitDereferencing(self, ctx:LanguageParser.DereferencingContext):
+        arr = self.findVariable(ctx.varname.text)
+        return arr[self.visit(ctx.index)]
+
+
+    # Visit a parse tree produced by LanguageParser#Empty_Array.
+    def visitEmpty_Array(self, ctx:LanguageParser.Empty_ArrayContext):
+        return []
 
 
     # Visit a parse tree produced by LanguageParser#Return.
@@ -163,8 +195,6 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#Is_Equal.
     def visitIs_Equal(self, ctx:LanguageParser.Is_EqualContext):
-        #print(dir(ctx.rhs))
-        print(self.visit(ctx.rhs) == self.visit(ctx.lhs))
         return self.visit(ctx.rhs) == self.visit(ctx.lhs)
 
 

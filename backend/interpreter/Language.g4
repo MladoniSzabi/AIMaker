@@ -27,7 +27,14 @@ simple_expression: STRING                                       #String_Literal
         | NULL                                                  #Null_Literal
         ;
 
+more_array_element:
+        ',' exp=expression                                          #Array_Other_Elements
+        ;
+
 expression: exp=simple_expression                               #Simple_Expression
+        | varname=VAR'['index=expression']'                     #Dereferencing
+        | '[]'                                                  #Empty_Array
+        | '[' first=expression more_array_element* ']'    #Many_Element_Array
         | lhs=expression '==' rhs=expression                    #Is_Equal
         | lhs=expression '!=' rhs=expression                    #Is_Different
         | lhs=expression '>' rhs=expression                     #Is_Greater
@@ -46,8 +53,8 @@ expression: exp=simple_expression                               #Simple_Expressi
         | 'break'                                               #Break
         ;
 
-argument_list: arg=simple_expression                            #Last_Arg
-        | other_args=argument_list ',' arg=simple_expression    #Arg_List
+argument_list: arg=expression                            #Last_Arg
+        | other_args=argument_list ',' arg=expression    #Arg_List
         ;
 
 
