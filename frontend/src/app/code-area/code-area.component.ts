@@ -349,6 +349,7 @@ export class CodeAreaComponent implements OnInit, TextEditor {
       this.cursorChar = Math.round((mEvent.clientX - clickedLineRect.x)/charSize)
       this.cursorChar = Math.min(this.cursorChar, this.code[clickedLineIndex].length)
       this.cursorChar = Math.max(this.cursorChar, 0)
+      this.previousCharPos = this.cursorChar
     }
   }
 
