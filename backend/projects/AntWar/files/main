@@ -4,8 +4,10 @@ function printScreenshot() {
 }
 
 function startDay() {
-   x = locateCenterOnScreenX("go.png", 0.5)
-   y = locateCenterOnScreenY("go.png", 0.5)
+   coords = locateCenterOnScreen("go.png", 0.5)
+
+   x = coords[0]
+   y = coords[1]
    moveMouse(x, y)
    wait(1)
    pressMouse("left")
@@ -15,10 +17,14 @@ function startDay() {
 }
 
 function endDay() {
-   while(locateCenterOnScreenX("goBack2.png", 0.4) == null) {}
+   while(locateCenterOnScreen("goBack2.png", 0.5) != null) {
+      print(1)
+   }
    
-   x = locateCenterOnScreenX("goBack2.png", 0.4)
-   y = locateCenterOnScreenY("goBack2.png", 0.4)
+   
+   coords = locateCenterOnScreen("goBack2.png", 0.4)
+   x = coords[0]
+   y = coords[1]
    
    print(x)
    print(y)
@@ -38,10 +44,10 @@ function playOneDay() {
 }
 
 function testFunction() {
-   while(locateCenterOnScreenX("go.png", 0.4)) {
-      print(1)
-      wait(1)
-   }
+   locateCenterOnScreen("go.png", 0.5)
+   img = loadImage("go.png")
+   print(img)
+   //print(getImageDimensions(img))
 }
 
 printScreenshot()

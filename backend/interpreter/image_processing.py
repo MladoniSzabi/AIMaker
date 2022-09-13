@@ -38,22 +38,16 @@ def saveImage(filename, img, context):
     
     cv2.imwrite(pathToImage, img)
 
-def locateCenterOnScreenX(imageName, confidence=0.9, context=None):
+def locateCenterOnScreen(imageName, confidence=0.9, context=None):
     pathToImage = os.path.join("projects", context["projectName"], "images", imageName)
     retval = pyautogui.locateCenterOnScreen(pathToImage, confidence=confidence)
     if retval:
-        return int(retval.x)
-    return None
-
-def locateCenterOnScreenY(imageName, confidence=0.9, context=None):
-    pathToImage = os.path.join("projects", context["projectName"], "images", imageName)
-    retval = pyautogui.locateCenterOnScreen(pathToImage, confidence=confidence)
-    if retval:
-        return int(retval.y)
+        return [int(retval.x), int(retval.y)]
     return None
 
 def loadImage(filename, context):
-    return cv2.imread(filename, cv2.IMREAD_COLOR)
+    pathToImage = os.path.join("projects", context["projectName"], "images", filename)
+    return cv2.imread(pathToImage, cv2.IMREAD_COLOR)
 
 def imageToText(img, context=None):
     return pytesseract.image_to_string(img)
@@ -68,11 +62,8 @@ def blurImage(img, blurSize=3, context=None):
 def getAveragePixel(img, context=None):
     return cv2.meanStdDev(img)[0]
 
-def getImageWidth(img, context=None):
-    return img.shape[1]
-
-def getImageHeight(img, context=None):
-    return img.shape[0]
+def getImageDimensions(img, context=None):
+    return [img.shape[1], img.shape[0]]
 
 def compareImages(img1, img2, context=None):
     if(img1.shape != img2.shape):

@@ -27,11 +27,9 @@ functions = {
     "imageToBlackAndWhite": image_processing.imageToBlackAndWhite,
     "blurImage": image_processing.blurImage,
     "getAveragePixel": image_processing.getAveragePixel,
-    "getImageWidth": image_processing.getImageWidth,
-    "getImageHeight": image_processing.getImageHeight,
+    "getImageDimensions": image_processing.getImageDimensions,
     "compareImages": image_processing.compareImages,
-    "locateCenterOnScreenX": image_processing.locateCenterOnScreenX,
-    "locateCenterOnScreenY": image_processing.locateCenterOnScreenY
+    "locateCenterOnScreen": image_processing.locateCenterOnScreen,
 }
 
 def interpret_function(fileName, functionName, projectName=None):
