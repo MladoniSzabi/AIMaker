@@ -17,7 +17,7 @@ function startDay() {
 }
 
 function endDay() {
-   while(locateCenterOnScreen("goBack2.png", 0.5) != null) {
+   while(locateCenterOnScreen("goBack2.png", 0.5) == null) {
       print(1)
    }
    
@@ -46,6 +46,7 @@ function playOneDay() {
 function testFunction() {
    locateCenterOnScreen("go.png", 0.5)
    img = loadImage("go.png")
+   
    print(img)
    //print(getImageDimensions(img))
 }
