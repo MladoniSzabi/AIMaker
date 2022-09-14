@@ -64,8 +64,8 @@ def loadImage(filename, context):
     pathToImage = os.path.join("projects", context["projectName"], "images", filename)
     return createNewImage(cv2.imread(pathToImage, cv2.IMREAD_COLOR), context)
 
-def imageToText(img, context=None):
-    return pytesseract.image_to_string(loadedImages[img["projectName"]][img["id"]])
+def imageToText(img, config=None, context=None):
+    return pytesseract.image_to_string(loadedImages[img["projectName"]][img["id"]], config=config)
 
 def imageToBlackAndWhite(img, context=None):
     gray_image = cv2.cvtColor(loadedImages[img["projectName"]][img["id"]], cv2.COLOR_BGR2GRAY)

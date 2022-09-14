@@ -43,11 +43,22 @@ function playOneDay() {
    endDay()
 }
 
-function testFunction() {
+function getFood() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 27, bb[1] + 916, 164, 49])
-   print(imageToText(ss))
+   return imageToText(ss, "--psm 8")
+}
+
+function getNestSize() {
+   bb = getWindowBoundingBox("AntWar")
+   ss = takeScreenshot()
+   cropImage(ss, [bb[0] + 1250, bb[1] + 916, 164, 49])
+   return imageToText(ss, "--psm 8")
+}
+
+function testFunction() {
+   print(getFood())
 }
 
 printScreenshot()
