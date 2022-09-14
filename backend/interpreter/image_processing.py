@@ -14,7 +14,7 @@ def createNewImage(img, context):
     
     imgId = len(loadedImages[context["projectName"]])
     loadedImages[context["projectName"]].append(img)
-    return {"type": "img", "id": imgId, "project": context["projectName"]}
+    return {"type": "img", "id": imgId, "projectName": context["projectName"]}
 
 def printImage(image, context=None):
     imageid = os.listdir("printedimages")
@@ -81,6 +81,10 @@ def getAveragePixel(img, context=None):
 
 def getImageDimensions(img, context=None):
     return [loadedImages[img["projectName"]][img["id"]].shape[1], loadedImages[img["projectName"]][img["id"]].shape[0]]
+
+def cropImage(img, newDimensions, context=None):
+    loadedImages[img["projectName"]][img["id"]] = loadedImages[img["projectName"]][img["id"]][newDimensions[1]:newDimensions[1]+newDimensions[3], newDimensions[0]:newDimensions[0]+newDimensions[2]]
+    return img
 
 def compareImages(img1, img2, context=None):
     if(loadedImages[img1["projectName"]][img1["id"]].shape != loadedImages[img2["projectName"]][img2["id"]].shape):

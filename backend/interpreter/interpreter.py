@@ -6,6 +6,7 @@ from .LanguageVisitor import LanguageVisitor
 from . import builtin_funcs
 import time
 from . import image_processing
+from . import window
 
 functions = {
     "moveMouse": builtin_funcs.moveMouse,
@@ -30,6 +31,8 @@ functions = {
     "getImageDimensions": image_processing.getImageDimensions,
     "compareImages": image_processing.compareImages,
     "locateCenterOnScreen": image_processing.locateCenterOnScreen,
+    "cropImage": image_processing.cropImage,
+    "getWindowBoundingBox": lambda name, context: window.getWindow(name)
 }
 
 def interpret_function(fileName, functionName, projectName=None):

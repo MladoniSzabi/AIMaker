@@ -1,6 +1,6 @@
 function printScreenshot() {
    img = takeScreenshot()
-   saveImage("asd.png", img)
+   printImage(img)
 }
 
 function startDay() {
@@ -44,11 +44,10 @@ function playOneDay() {
 }
 
 function testFunction() {
-   locateCenterOnScreen("go.png", 0.5)
-   img = loadImage("go.png")
-   
-   print(img)
-   //print(getImageDimensions(img))
+   bb = getWindowBoundingBox("AntWar")
+   ss = takeScreenshot()
+   cropImage(ss, [bb[0] + 27, bb[1] + 916, 164, 49])
+   print(imageToText(ss))
 }
 
 printScreenshot()
