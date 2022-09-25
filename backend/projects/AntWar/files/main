@@ -47,18 +47,37 @@ function getFood() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 27, bb[1] + 916, 164, 49])
-   return imageToText(ss, "--psm 8")
+   return imageToText(ss, "--psm 8 --oem 3 -c tessedit_char_whitelist=0123456789")
 }
 
 function getNestSize() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 1250, bb[1] + 916, 164, 49])
-   return imageToText(ss, "--psm 8")
+   return imageToText(ss, "--psm 8 --oem 3 -c tessedit_char_whitelist=0123456789")
+}
+
+function getCurrentAntCount() {
+   bb = getWindowBoundingBox("AntWar")
+   ss = takeScreenshot()
+   cropImage(ss, [bb[0] + 539, bb[1] + 820, 170, 45])
+   imageToBlackAndWhite(ss)
+   printImage(ss)
+   
+   return imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789")
+}
+
+function getTargetAntCount() {
+   bb = getWindowBoundingBox("AntWar")
+   ss = takeScreenshot()
+   cropImage(ss, [bb[0] + 730, bb[1]+820, 210, 45])
+   imageToBlackAndWhite(ss)
+   printImage(ss)
+   return imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789")
 }
 
 function testFunction() {
-   print(getFood())
+   print(getTargetAntCount())
 }
 
 printScreenshot()
