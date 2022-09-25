@@ -60,7 +60,13 @@ argument_list: arg=expression                            #Last_Arg
 
 NEW_LINE: '\n'[ \t\r\n]*;
 END_OF_FILE: [ \t\r\n]* EOF;
-STRING: '"' [a-zA-Z0-9_ \t\-,./@!$%^&*)(]+ '"';
+STRING: '"' STRING_CHAR_SEQUENCE? '"';
+fragment STRING_CHAR_SEQUENCE: STRING_CHAR+;
+fragment STRING_CHAR:   ~["\\\r\n]
+    |   '\\\n'   // Added line
+    |   '\\' ['"?abfnrtv\\]
+    |   '\\\r\n' // Added line
+    ;
 WHITESPACE: [ \t\r]+ -> skip;
 COMMENT : '//' .*? '\n' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;

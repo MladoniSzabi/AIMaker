@@ -5,6 +5,8 @@ if __name__ is not None and "." in __name__:
 else:
     from LanguageParser import LanguageParser
 
+import ast
+
 # This class defines a complete generic visitor for a parse tree produced by LanguageParser.
 
 class LanguageVisitor(ParseTreeVisitor):
@@ -114,7 +116,7 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#String_Literal.
     def visitString_Literal(self, ctx:LanguageParser.String_LiteralContext):
-        return ctx.getText()[1:-1]
+        return ast.literal_eval(ctx.getText())
     
 
     # Visit a parse tree produced by LanguageParser#Null_Literal.

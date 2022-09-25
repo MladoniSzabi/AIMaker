@@ -12,4 +12,4 @@ function sda() {
    moveMouse(1000,1000)
 }
 
-print("Hello, World!")
+print("Hello, World!=\nasd")
