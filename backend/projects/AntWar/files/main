@@ -1,6 +1,7 @@
 function printScreenshot() {
    img = takeScreenshot()
    printImage(img)
+   saveImage("asd.png", img)
 }
 
 function startDay() {
@@ -76,8 +77,27 @@ function getTargetAntCount() {
    return imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789")
 }
 
+function clickLevelUpOK() {
+   bb = getWindowBoundingBox("AntWar")
+   moveMouse(bb[0]+722, bb[1]+907)
+   pressMouse("left")
+   releaseMouse("left")
+}
+
+function levelUp() {
+   bb = getWindowBoundingBox("AntWar")
+   i = 0
+   while(i < 3) {
+      if(locateCenterOnScreen("levelUp.png", 0.5) != null) {
+         clickLevelUpOK()
+      }
+      i=i+1
+   }
+   print("No Level Up")
+}
+
 function testFunction() {
-   print(getTargetAntCount())
+   levelUp()
 }
 
 printScreenshot()
