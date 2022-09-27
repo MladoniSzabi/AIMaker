@@ -64,4 +64,14 @@ export class ModalImageComponent implements OnInit {
     this.isShowing = false
   }
 
+  downloadImage() {
+    let a = document.createElement("a")
+    a.style.visibility = "hidden"
+    a.href = this.image
+    a.download = this.image
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  }
+
 }
