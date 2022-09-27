@@ -2,4 +2,5 @@
         <img src="{{image}}" (mousemove)="onMouseMove($event)" (click)="onMouseClick()" />
         <p #coords>Coordinates: {{coord.x}}x{{coord.y}} (Click to copy)</p>
         <button (click)="downloadImage()">Download Image</button>
+        <button (click)="saveImage()">Save Image</button>
 </app-modal-root>

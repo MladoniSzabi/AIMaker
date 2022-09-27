@@ -1,10 +1,9 @@
-from cgitb import reset
-from crypt import methods
 from flask import request, make_response, send_file
 import os
 import json
 from interpreter import interpreter
 from interpreter import builtin_funcs
+import shutil
 
 loadedProjects = []
 
@@ -170,6 +169,13 @@ def setUpRoutes(app):
     @app.route("/printedimages/<imagename>")
     def serveImage(imagename):
         return send_file("printedimages/" + imagename, mimetype="image/png")
+
+    @app.route("/api/project/<project>/image/save/<printedImage>", methods=["PUT"])
+    def savePrintedImage(project, printedImage):
+        print("printedImages/"+printedImage)
+        print("projects/" + project + "/" + request.form.get("imageName"))
+        shutil.copy("printedimages/"+printedImage, "projects/" + project + "/images/" + request.form.get("imageName"))
+        return ""
 
     def loadKeybinding(path, keybinding, project):
         if ":" in path:

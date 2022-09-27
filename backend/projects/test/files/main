@@ -8,6 +8,11 @@ function asd() {
    return a
 }
 
+function printScreenshot() {
+   img = takeScreenshot()
+   printImage(img)
+}
+
 
 
 a = [1,2,3,4]

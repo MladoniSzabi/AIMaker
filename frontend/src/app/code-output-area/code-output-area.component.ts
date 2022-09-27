@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../backend.service';
 import { ModalService } from '../modal.service';
 import { ConsoleOutput } from '../types';
@@ -11,8 +12,14 @@ import { ConsoleOutput } from '../types';
 export class CodeOutputAreaComponent implements OnInit {
 
   console: ConsoleOutput[] = []
+  project: string = ""
 
-  constructor(private backend: BackendService, private modalService: ModalService) {
+  constructor(private backend: BackendService, private modalService: ModalService, private activatedRoute: ActivatedRoute) {
+    activatedRoute.paramMap.subscribe((params) => {
+      if(params.has("projectName")) {
+        this.project = params.get("projectName")!
+      }
+    })
     this.backend.getConsoleOutputPipe().subscribe((message) => {
       if(message.type == "string") {
         for(let line of String(message.message).split("\n")) {
@@ -32,7 +39,7 @@ export class CodeOutputAreaComponent implements OnInit {
   }
 
   openImage(imageName: string) {
-    this.modalService.createImageModal(imageName)
+    this.modalService.createImageModal(imageName, this.project)
   }
 
 }

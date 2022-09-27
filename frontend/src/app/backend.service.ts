@@ -71,4 +71,10 @@ export class BackendService {
   deleteMacro(project: string, index: number) {
     this.http.delete("/api/project/" + project + "/keybindings/" + index.toString()).subscribe()
   }
+
+  savePrintedImage(project: string, sourceImage: string, newImageName: string) {
+    let form = new FormData()
+    form.append("imageName", newImageName)
+    this.http.put("/api/project/" + project + "/image/save/" + sourceImage, form).subscribe()
+  }
 }

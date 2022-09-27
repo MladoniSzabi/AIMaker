@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BackendService } from '../backend.service';
 import { ModalService } from '../modal.service';
 
 @Component({
@@ -11,12 +12,13 @@ export class ModalImageComponent implements OnInit {
   coord: { x: number, y: number } = { x: 0, y: 0 }
   isShowing: boolean = false;
   image: string = ""
+  project: string = ""
   confirmCallback: (text: string) => void = (text: string) => { }
   cancelCallback: () => void = () => { }
 
   @ViewChild("coords") coordText: ElementRef<HTMLElement> = {} as ElementRef<HTMLElement>
 
-  constructor(private modalService: ModalService) {
+  constructor(private modalService: ModalService, private backend: BackendService) {
     console.log("called")
     this.modalService.getModalRequests().subscribe({
       next: ({ message, type, onSuccess, onCancel, other }) => {
@@ -25,6 +27,7 @@ export class ModalImageComponent implements OnInit {
           this.confirmCallback = onSuccess
           this.cancelCallback = onCancel
           this.isShowing = true
+          this.project = other.project
         }
       }
     })
@@ -72,6 +75,12 @@ export class ModalImageComponent implements OnInit {
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
+  }
+
+  saveImage() {
+    this.modalService.createInputModal("Enter name of new image", (filename) => {
+      this.backend.savePrintedImage(this.project, this.image.split("/")[1], filename)
+    }, () => {})
   }
 
 }
