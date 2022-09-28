@@ -1,22 +1,22 @@
 grammar Language;
 
-entry_point: exps=block END_OF_FILE                             #Entry
+entry_point: NEW_LINE? exps=block END_OF_FILE                             #Entry
         ;
 
 block: exp=expression                                           #Last_Expression
         | declaration=function_declaration                      #Function_Declaration_Block
         | flow=control_flow                                     #Control_Flow
-        | rest=block NEW_LINE current=expression                    #More_Expressions
-        | rest=block NEW_LINE current=function_declaration  #More_Function
-        | rest=block NEW_LINE current=control_flow                 #More_Control_Flow
+        | rest=block NEW_LINE+ current=expression                    #More_Expressions
+        | rest=block NEW_LINE+ current=function_declaration  #More_Function
+        | rest=block NEW_LINE+ current=control_flow                 #More_Control_Flow
         ;
 
-function_declaration: 'function' functionname=VAR NEW_LINE? ('()'|'(' NEW_LINE? ')') '{' NEW_LINE? exprs=block NEW_LINE? '}'             #Function_Declaration_Without_Args
-        |'function' functionname=VAR '(' NEW_LINE? arglist=argument_list NEW_LINE? ')' NEW_LINE? '{' NEW_LINE? exprs=block NEW_LINE? '}' #Function_Declaration_With_Args 
+function_declaration: 'function' functionname=VAR NEW_LINE* ('()'|'(' NEW_LINE* ')') '{' NEW_LINE* exprs=block NEW_LINE* '}'             #Function_Declaration_Without_Args
+        |'function' functionname=VAR '(' NEW_LINE* arglist=argument_list NEW_LINE* ')' NEW_LINE* '{' NEW_LINE* exprs=block NEW_LINE* '}' #Function_Declaration_With_Args 
         ;
 
-control_flow: 'if' NEW_LINE? '(' NEW_LINE? expr=expression NEW_LINE? ')' NEW_LINE? '{' NEW_LINE? body=block NEW_LINE? '}'  #If_Statement
-        | 'while' NEW_LINE? '(' NEW_LINE? expr=expression NEW_LINE? ')' NEW_LINE? '{' NEW_LINE? body=block? NEW_LINE? '}'   #While_Loop
+control_flow: 'if' NEW_LINE* '(' NEW_LINE* expr=expression NEW_LINE* ')' NEW_LINE* '{' NEW_LINE* body=block NEW_LINE* '}'  #If_Statement
+        | 'while' NEW_LINE* '(' NEW_LINE* expr=expression NEW_LINE* ')' NEW_LINE* '{' NEW_LINE* body=block? NEW_LINE* '}'   #While_Loop
         ;
 
 simple_expression: STRING                                       #String_Literal
@@ -68,7 +68,7 @@ fragment STRING_CHAR:   ~["\\\r\n]
     |   '\\\r\n' // Added line
     ;
 WHITESPACE: [ \t\r]+ -> skip;
-COMMENT : '//' .*? '\n' -> skip;
+COMMENT : '//' ~[\r\n]* -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 BOOL: 'true' | 'false';
 NULL: 'null';
