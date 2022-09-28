@@ -77,7 +77,7 @@ def blurImage(img, blurSize=3, context=None):
     return img
 
 def getAveragePixel(img, context=None):
-    return cv2.meanStdDev(loadedImages[img["projectName"]][img["id"]])[0]
+    return [x[0] for x in cv2.meanStdDev(loadedImages[img["projectName"]][img["id"]])[0]]
 
 def getImageDimensions(img, context=None):
     return [loadedImages[img["projectName"]][img["id"]].shape[1], loadedImages[img["projectName"]][img["id"]].shape[0]]

@@ -32,7 +32,9 @@ functions = {
     "compareImages": image_processing.compareImages,
     "locateCenterOnScreen": image_processing.locateCenterOnScreen,
     "cropImage": image_processing.cropImage,
-    "getWindowBoundingBox": lambda name, context: window.getWindow(name)
+    "cloneImage": image_processing.cloneImage,
+    "getWindowBoundingBox": lambda name, context: window.getWindow(name),
+    "int": lambda value, context: int(value) 
 }
 
 def interpret_function(fileName, functionName, projectName=None):

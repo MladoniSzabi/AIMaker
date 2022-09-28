@@ -1,7 +1,6 @@
 function printScreenshot() {
    img = takeScreenshot()
    printImage(img)
-   saveImage("asd.png", img)
 }
 
 function startDay() {
@@ -44,18 +43,78 @@ function playOneDay() {
    endDay()
 }
 
+function getResourceInDemand() {
+   //get game state
+   food = getFood()
+   nest = getNestSize()
+   currentPopulation = getCurrentAntCount()
+   //make sure game state is valid
+   if(food <= nest) {
+      maxNestSize = currentPopulation*2
+      if(nest <= maxNestSize) {
+      
+         //game state is consistent
+         //check if we need food
+         if(food < nest/3) {
+            //we need food
+            return "food"
+         }
+         
+         //check if we need a bigger nest
+         if(nest < currentPopulation) {
+            //we need a bigger nest
+            return "nest"
+         }
+         
+         //otherwise we can just get more ants
+         return "ants"
+      }
+   }
+   
+   //if the game state is not valid, get more food
+   //to make sure we don't loose the game
+   print("invalid game state")
+   return "food"
+}
+
+function reassignJobs() {
+   resource = getResourceInDemand()
+   if(resource == "food") {
+      coords = locateCenterOnScreen("farmer.png")
+      moveMouse(coords[0]+480, coords[1])
+      pressMouse("left")
+      releaseMouse("left")
+   }
+   if(resource == "nest") {
+      coords = locateCenterOnScreen("worker.png")
+      moveMouse(coords[0]+480, coords[1])
+      pressMouse("left")
+      releaseMouse("left")
+   }
+   if(resource == "ants") {
+      coords = locateCenterOnScreen("nurse.png")
+      moveMouse(coords[0]+480, coords[1])
+      pressMouse("left")
+      releaseMouse("left")
+   }
+}
+
 function getFood() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 27, bb[1] + 916, 164, 49])
-   return imageToText(ss, "--psm 8 --oem 3 -c tessedit_char_whitelist=0123456789")
+   imageToBlackAndWhite(ss)
+   printImage(ss)
+   return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
 function getNestSize() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 1250, bb[1] + 916, 164, 49])
-   return imageToText(ss, "--psm 8 --oem 3 -c tessedit_char_whitelist=0123456789")
+   imageToBlackAndWhite(ss)
+   printImage(ss)
+   return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
 function getCurrentAntCount() {
@@ -64,8 +123,7 @@ function getCurrentAntCount() {
    cropImage(ss, [bb[0] + 539, bb[1] + 820, 170, 45])
    imageToBlackAndWhite(ss)
    printImage(ss)
-   
-   return imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789")
+   return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
 function getTargetAntCount() {
@@ -74,7 +132,7 @@ function getTargetAntCount() {
    cropImage(ss, [bb[0] + 730, bb[1]+820, 210, 45])
    imageToBlackAndWhite(ss)
    printImage(ss)
-   return imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789")
+   return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
 function clickLevelUpOK() {
@@ -97,7 +155,7 @@ function levelUp() {
 }
 
 function testFunction() {
-   levelUp()
+   reassignJobs()
 }
 
 printScreenshot()
