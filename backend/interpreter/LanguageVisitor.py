@@ -181,12 +181,12 @@ class LanguageVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LanguageParser#Break.
     def visitBreak(self, ctx:LanguageParser.BreakContext):
-        return ("break")
+        return ("break",)
 
 
     # Visit a parse tree produced by LanguageParser#Continue.
     def visitContinue(self, ctx:LanguageParser.ContinueContext):
-        return ("continue")
+        return ("continue",)
 
 
     # Visit a parse tree produced by LanguageParser#Simple_Expression.

@@ -11,6 +11,12 @@ stopRecordingHotkey = None
 consoleOutput = []
 onPrint = None
 
+def toInt(value, context=None):
+    try:
+        return int(value)
+    except:
+        return 0
+
 def languagePrint(message, context=None):
     global consoleOutput
     global onPrint

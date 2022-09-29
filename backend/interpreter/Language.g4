@@ -15,7 +15,7 @@ function_declaration: 'function' functionname=VAR NEW_LINE* ('()'|'(' NEW_LINE* 
         |'function' functionname=VAR '(' NEW_LINE* arglist=argument_list NEW_LINE* ')' NEW_LINE* '{' NEW_LINE* exprs=block NEW_LINE* '}' #Function_Declaration_With_Args 
         ;
 
-control_flow: 'if' NEW_LINE* '(' NEW_LINE* expr=expression NEW_LINE* ')' NEW_LINE* '{' NEW_LINE* body=block NEW_LINE* '}'  #If_Statement
+control_flow: 'if' NEW_LINE* '(' NEW_LINE* expr=expression NEW_LINE* ')' NEW_LINE* '{' NEW_LINE* body=block? NEW_LINE* '}'  #If_Statement
         | 'while' NEW_LINE* '(' NEW_LINE* expr=expression NEW_LINE* ')' NEW_LINE* '{' NEW_LINE* body=block? NEW_LINE* '}'   #While_Loop
         ;
 

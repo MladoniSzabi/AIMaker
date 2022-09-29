@@ -16,20 +16,43 @@ function startDay() {
    wait(0.1)
 }
 
+function fightCombat() {
+   bb = getWindowBoundingBox("AntWar")
+   moveMouse(bb[0] + 383, bb[1] + 684)
+   pressMouse("left")
+   releaseMouse("left")
+   wait(0.1)
+   moveMouse(bb[0] + 730, bb[1] + 514)
+   pressMouse("left")
+   releaseMouse("left")
+}
+
 function endDay() {
-   while(locateCenterOnScreen("goBack2.png", 0.5) == null) {
-      print(1)
+   bb = getWindowBoundingBox("AntWar")
+   while(1) {
+      ss = takeScreenshot()
+      ss = cropImage(ss, [bb[0] + 566, bb[1] + 60, 301, 121])
+      avgPixel = getAveragePixel(ss)
+      print(avgPixel)
+
+      if(avgPixel[0] < 50) {
+         //smth happened
+         if(avgPixel[1] < 100) {
+            levelUp()
+         }
+         if(avgPixel[0] > 15) {
+            fightCombat()
+         }
+         continue
+         
+      }
+      if(avgPixel[0] < 160) {
+         //the day is over
+         break
+      }
    }
    
-   
-   coords = locateCenterOnScreen("goBack2.png", 0.4)
-   x = coords[0]
-   y = coords[1]
-   
-   print(x)
-   print(y)
-   
-   moveMouse(x, y)
+   moveMouse(bb[0]+566+150, bb[1]+60+60)
    wait(1)
    pressMouse("left")
    wait(0.1)
@@ -40,6 +63,7 @@ function endDay() {
 function playOneDay() {
    startDay()
    moveMouse(10,10)
+   wait(0.5)
    endDay()
 }
 
@@ -104,7 +128,6 @@ function getFood() {
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 27, bb[1] + 916, 164, 49])
    imageToBlackAndWhite(ss)
-   printImage(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
@@ -113,7 +136,6 @@ function getNestSize() {
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 1250, bb[1] + 916, 164, 49])
    imageToBlackAndWhite(ss)
-   printImage(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
@@ -122,7 +144,6 @@ function getCurrentAntCount() {
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 539, bb[1] + 820, 170, 45])
    imageToBlackAndWhite(ss)
-   printImage(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
@@ -131,7 +152,6 @@ function getTargetAntCount() {
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 730, bb[1]+820, 210, 45])
    imageToBlackAndWhite(ss)
-   printImage(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
 
@@ -143,7 +163,6 @@ function clickLevelUpOK() {
 }
 
 function levelUp() {
-   bb = getWindowBoundingBox("AntWar")
    i = 0
    while(i < 3) {
       if(locateCenterOnScreen("levelUp.png", 0.5) != null) {
@@ -154,8 +173,15 @@ function levelUp() {
    print("No Level Up")
 }
 
+function playGame() {
+   while(1) {
+      playOneDay()
+      reassignJobs()
+   }
+}
+
 function testFunction() {
-   reassignJobs()
+   playGame()
 }
 
 printScreenshot()

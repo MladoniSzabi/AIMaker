@@ -34,7 +34,7 @@ functions = {
     "cropImage": image_processing.cropImage,
     "cloneImage": image_processing.cloneImage,
     "getWindowBoundingBox": lambda name, context: window.getWindow(name),
-    "int": lambda value, context: int(value) 
+    "int": builtin_funcs.toInt
 }
 
 def interpret_function(fileName, functionName, projectName=None):
