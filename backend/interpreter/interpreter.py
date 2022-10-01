@@ -38,7 +38,6 @@ functions = {
 }
 
 def interpret_function(fileName, functionName, projectName=None):
-    print(projectName)
     with open(fileName) as f:
         code = f.read()
         stream = InputStream(code)
@@ -53,7 +52,6 @@ def interpret_function(fileName, functionName, projectName=None):
         }
         visitor.visit(tree)
         visitor.evaluateExpression = True
-        print(visitor.custom_functions.keys())
         return visitor.visit(visitor.custom_functions[functionName]["body"])
 
 def interpret_file(fileName, projectName=None):
