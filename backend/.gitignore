@@ -1,6 +1,7 @@
 venv/
 *__pycache__/
 dist/
+distpy/
 .antlr/
 interpreter/Language.interp
 interpreter/Language.tokens
@@ -11,3 +12,4 @@ interpreter/LanguageParser.py
 interpreter/*.java
 interpreter/*.class
 printedimages/*
+build/
