@@ -1,7 +1,7 @@
 from antlr4 import *
 from .LanguageLexer import LanguageLexer
 from .LanguageParser import LanguageParser
-from .LanguageVisitor import LanguageVisitor
+from .LanguageVisitorImplementation import LanguageVisitorImplementation
 
 from . import builtin_funcs
 import time
@@ -46,11 +46,12 @@ def interpret_function(fileName, functionName, projectName=None):
         tokens = CommonTokenStream(lexer)
         parser = LanguageParser(tokens)
         tree = parser.entry_point()
-        visitor = LanguageVisitor(False)
+        visitor = LanguageVisitorImplementation(False)
         visitor.functions = functions
-        visitor.functionContext = {
-            "projectName": projectName
-        }
+        if projectName:
+            visitor.functionContext = {
+                "projectName": projectName
+            }
         visitor.visit(tree)
         visitor.evaluateExpression = True
         return visitor.visit(visitor.custom_functions[functionName]["body"])
@@ -65,10 +66,11 @@ def interpret(text, executeExpressions = True, projectName=None):
     tokens = CommonTokenStream(lexer)
     parser = LanguageParser(tokens)
     tree = parser.entry_point()
-    visitor = LanguageVisitor(executeExpressions)
+    visitor = LanguageVisitorImplementation(executeExpressions)
     visitor.functions = functions
-    visitor.functionContext = {
-        "projectName": projectName
-    }
+    if projectName:
+        visitor.functionContext = {
+            "projectName": projectName
+        }
     output = visitor.visit(tree)
     return output

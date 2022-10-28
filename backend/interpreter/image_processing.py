@@ -8,15 +8,30 @@ from . import  builtin_funcs
 
 loadedImages = {}
 
+def getPathToImages(context):
+    if "projectName" in context:
+        return os.path.join("projects", context["projectName"], "images")
+    else:
+        return "images/"
+
 def createNewImage(img, context):
-    if context["projectName"] not in loadedImages:
-        loadedImages[context["projectName"]] = []
+    if "projectName" in context:
+        if context["projectName"] not in loadedImages:
+            loadedImages[context["projectName"]] = []
     
-    imgId = len(loadedImages[context["projectName"]])
-    loadedImages[context["projectName"]].append(img)
-    return {"type": "img", "id": imgId, "projectName": context["projectName"]}
+        imgId = len(loadedImages[context["projectName"]])
+        loadedImages[context["projectName"]].append(img)
+        return {"type": "img", "id": imgId, "projectName": context["projectName"]}
+    else:
+        if "default" not in loadedImages:
+            loadedImages["default"] = []
+        imgId = len(loadedImages["default"])
+        loadedImages["default"].append(img)
+        return {"type": "img", "id": imgId, "projectName": "default"}
 
 def printImage(image, context=None):
+    if not os.path.exists("printedimages"):
+        os.mkdir("printedimages")
     imageid = os.listdir("printedimages")
     imageName = "printedimages/" + str(len(imageid)) + ".bmp"
     image = loadedImages[image["projectName"]][image["id"]]
@@ -38,10 +53,8 @@ def takeScreenshot(region=None, context=None):
 
 def saveImage(filename, img, context):
     pathToImageFolder=None
-    if context["projectName"]:
-        pathToImageFolder = os.path.join("projects", context["projectName"], "images")
-    else:
-        pathToImageFolder = "images/"
+    pathToImageFolder = getPathToImages(context)
+
     pathToImage = os.path.join(pathToImageFolder, filename)
     relpath = os.path.relpath(pathToImage, pathToImageFolder)
     if relpath[:3] == "../":
@@ -54,14 +67,14 @@ def saveImage(filename, img, context):
     cv2.imwrite(pathToImage, loadedImages[img["projectName"]][img["id"]])
 
 def locateCenterOnScreen(imageName, confidence=0.9, context=None):
-    pathToImage = os.path.join("projects", context["projectName"], "images", imageName)
+    pathToImage = os.path.join(getPathToImages(context), imageName)
     retval = pyautogui.locateCenterOnScreen(pathToImage, confidence=confidence)
     if retval:
         return [int(retval.x), int(retval.y)]
     return None
 
 def loadImage(filename, context):
-    pathToImage = os.path.join("projects", context["projectName"], "images", filename)
+    pathToImage = os.path.join(getPathToImages(context), filename)
     return createNewImage(cv2.imread(pathToImage, cv2.IMREAD_UNCHANGED), context)
 
 def imageToText(img, config=None, context=None):
