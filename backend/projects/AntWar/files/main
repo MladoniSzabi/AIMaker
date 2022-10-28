@@ -1,3 +1,4 @@
+// use 1280x960 resolution and fantastic quality
 function printScreenshot() {
    img = takeScreenshot()
    printImage(img)
@@ -31,24 +32,34 @@ function endDay() {
    bb = getWindowBoundingBox("AntWar")
    while(1) {
       ss = takeScreenshot()
-      ss = cropImage(ss, [bb[0] + 566, bb[1] + 60, 301, 121])
+      ss = cropImage(ss, [bb[0] + 560, bb[1] + 70, 150, 90])
+      mask = loadImage("mask.bmp")
+      imageToBlackAndWhite(mask)
+      maskImage(ss, mask)
+      printImage(ss)
       avgPixel = getAveragePixel(ss)
       print(avgPixel)
 
-      if(avgPixel[0] < 50) {
+      if(avgPixel[0] < 10 ) {
          //smth happened
-         if(avgPixel[1] < 100) {
+         if(avgPixel[1] < 35) {
             levelUp()
          }
-         if(avgPixel[0] > 15) {
+         if(avgPixel[1] > 45) {
             fightCombat()
          }
          continue
          
       }
-      if(avgPixel[0] < 160) {
-         //the day is over
-         break
+      if(avgPixel[1] > 75) {
+         if(avgPixel[1] < 81) {
+            if(avgPixel[2] > 73) {
+               if(avgPixel[2] < 79) {
+                   //the day is over
+                   break
+                }
+            }
+         }
       }
    }
    
@@ -127,6 +138,7 @@ function getFood() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
    cropImage(ss, [bb[0] + 27, bb[1] + 916, 164, 49])
+   printImage(ss)
    imageToBlackAndWhite(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
@@ -134,7 +146,8 @@ function getFood() {
 function getNestSize() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
-   cropImage(ss, [bb[0] + 1250, bb[1] + 916, 164, 49])
+   cropImage(ss, [bb[0] + 1090, bb[1] + 916, 164, 49])
+   printImage(ss)
    imageToBlackAndWhite(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
@@ -142,7 +155,8 @@ function getNestSize() {
 function getCurrentAntCount() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
-   cropImage(ss, [bb[0] + 539, bb[1] + 820, 170, 45])
+   cropImage(ss, [bb[0] + 460, bb[1] + 820, 170, 45])
+   printImage(ss)
    imageToBlackAndWhite(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
@@ -150,7 +164,8 @@ function getCurrentAntCount() {
 function getTargetAntCount() {
    bb = getWindowBoundingBox("AntWar")
    ss = takeScreenshot()
-   cropImage(ss, [bb[0] + 730, bb[1]+820, 210, 45])
+   cropImage(ss, [bb[0] + 655, bb[1]+820, 210, 45])
+   printImage(ss)
    imageToBlackAndWhite(ss)
    return int(imageToText(ss, "--psm 7 -c tessedit_char_whitelist=0123456789"))
 }
@@ -181,7 +196,10 @@ function playGame() {
 }
 
 function testFunction() {
-   playGame()
+   mask = loadImage("mask.bmp")
+   printImage(mask)
+   imageToBlackAndWhite(mask)
+   printImage(mask)
 }
 
 printScreenshot()

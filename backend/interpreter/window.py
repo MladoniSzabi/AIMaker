@@ -33,9 +33,10 @@ def linux(windowName):
     return dimensions
 
 def getWindow(windowName):
-    if sys.platform == 'window':
+    if sys.platform == 'windows' or sys.platform == "win32":
         return windows(windowName)
     elif sys.platform == 'linux':
         return linux(windowName)
     else:
+        print(sys.platform)
         raise "getWindow() not implemented for your platform"

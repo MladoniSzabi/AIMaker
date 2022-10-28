@@ -18,7 +18,7 @@ def createNewImage(img, context):
 
 def printImage(image, context=None):
     imageid = os.listdir("printedimages")
-    imageName = "printedimages/" + str(len(imageid)) + ".png"
+    imageName = "printedimages/" + str(len(imageid)) + ".bmp"
     image = loadedImages[image["projectName"]][image["id"]]
     cv2.imwrite(imageName, image)
     builtin_funcs.onPrint({"type": "image", "message": imageName})
@@ -62,7 +62,7 @@ def locateCenterOnScreen(imageName, confidence=0.9, context=None):
 
 def loadImage(filename, context):
     pathToImage = os.path.join("projects", context["projectName"], "images", filename)
-    return createNewImage(cv2.imread(pathToImage, cv2.IMREAD_COLOR), context)
+    return createNewImage(cv2.imread(pathToImage, cv2.IMREAD_UNCHANGED), context)
 
 def imageToText(img, config=None, context=None):
     return pytesseract.image_to_string(loadedImages[img["projectName"]][img["id"]], config=config)
@@ -84,6 +84,11 @@ def getImageDimensions(img, context=None):
 
 def cropImage(img, newDimensions, context=None):
     loadedImages[img["projectName"]][img["id"]] = loadedImages[img["projectName"]][img["id"]][newDimensions[1]:newDimensions[1]+newDimensions[3], newDimensions[0]:newDimensions[0]+newDimensions[2]]
+    return img
+
+def maskImage(img, mask, context=None):
+    print(getImageDimensions(img), getImageDimensions(mask))
+    loadedImages[img["projectName"]][img["id"]] = cv2.bitwise_and(loadedImages[img["projectName"]][img["id"]], loadedImages[img["projectName"]][img["id"]], mask=loadedImages[mask["projectName"]][mask["id"]])
     return img
 
 def compareImages(img1, img2, context=None):

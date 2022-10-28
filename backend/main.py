@@ -7,14 +7,18 @@ import serveProjectAPI
 import eventlet
 eventlet.monkey_patch(thread=False)
 
-app = Flask(__name__)
-socketio = SocketIO(app, message_queue='redis://', async_mode='eventlet', cors_allowed_origins="*")
+def main():
+    app = Flask(__name__)
+    socketio = SocketIO(app, message_queue='amqp://', async_mode='eventlet', cors_allowed_origins="*")
 
-serveInterpreter.init()
+    serveInterpreter.init()
 
-serveMacroAPI.setUpRoutes(app)
-servePublic.setUpRoutes(app)
-serveInterpreter.setUpRoutes(app, socketio)
-serveProjectAPI.setUpRoutes(app)
+    serveMacroAPI.setUpRoutes(app)
+    servePublic.setUpRoutes(app)
+    serveInterpreter.setUpRoutes(app, socketio)
+    serveProjectAPI.setUpRoutes(app)
 
-socketio.run(app, debug=True, port=5000)
+    socketio.run(app, debug=True, port=5000)
+
+if __name__ == "__main__":
+    main()

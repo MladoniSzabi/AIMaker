@@ -24,6 +24,7 @@ functions = {
     "takeScreenshot": image_processing.takeScreenshot,
     "saveImage": image_processing.saveImage,
     "loadImage": image_processing.loadImage,
+    "maskImage": image_processing.maskImage,
     "imageToText": image_processing.imageToText,
     "imageToBlackAndWhite": image_processing.imageToBlackAndWhite,
     "blurImage": image_processing.blurImage,
