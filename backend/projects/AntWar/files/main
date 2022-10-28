@@ -1,4 +1,4 @@
-// use 1280x960 resolution and fantastic quality
+// use 1280x960 resolution, fantastic quality and windowed mode
 function printScreenshot() {
    img = takeScreenshot()
    printImage(img)
