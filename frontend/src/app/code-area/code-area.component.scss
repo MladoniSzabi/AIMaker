@@ -5,42 +5,7 @@
     overflow: scroll;
 }
 
-#code-area {
+.app-ace-editor {
     width: 100%;
     height: 100%;
-
-    display: grid;
-    grid-template-columns: minmax(max-content, 3ch) auto;
-}
-
-#code-area p,
-#code-area pre {
-    line-height: 1.1em;
-    margin: 0;
-    height: 1em;
-    font-family: "Source Code Pro", monospace;
-}
-
-#code-area pre {
-    width: max-content;
-}
-
-#line-numbers {
-    color: grey;
-    border-right: 1px solid grey;
-    margin-right: 0.5em;
-    text-align: right;
-}
-
-#line-numbers p.current {
-    color: black;
-}
-
-#code-input-area #cursor {
-    transform: translateX(-0.5ch);
-    width: 0;
-    position: relative;
-    display: inline-block;
-    font-family: "Source Code Pro", monospace;
-    user-select: none;
 }

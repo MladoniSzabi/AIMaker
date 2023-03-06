@@ -1,9 +1,1 @@
-<div id="code-area">
-    <div id="line-numbers" >
-        <p *ngFor="let line of code; index as i" [ngClass]="{'current': i==cursorLine}">{{ i+1 }}</p>
-    </div>
-    <div #lineContainer (click)="onClick($event)" (paste)="onPaste($event)" (keydown)="onPress($event)" tabIndex="0" id="code-input-area">
-        <pre *ngFor="let line of code; index as i"><span id="cursor" [ngStyle]="{ 'left': cursorChar + 'ch' }"
-                *ngIf="i==cursorLine">|</span>{{line}}</pre>
-    </div>
-</div>
+<div class="app-ace-editor" #editor></div>

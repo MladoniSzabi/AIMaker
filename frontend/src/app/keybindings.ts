@@ -8,19 +8,20 @@ export type selectedTextDict = {
 }
 
 export interface TextEditor {
-    getText(): string[]
+    getText(): string
     getLine(lineNumber: number): string
-    getSelectedText(): selectedTextDict
+    getSelectedText(): string
     getCursorPosition(): { line: number, char: number }
     setCursorPosition(position: { line: number, char: number }): void
-    addLine(text: string, lineNumber: number): string[]
+    insert(text: string, position?: { line: number, char: number }): string[]
     getFileName(): string
     getProjectName(): string
     navigate(path: string[]): void
 }
 
 function copyCommand(textEditor: TextEditor, backendService: BackendService): void {
-    let selectedText = textEditor.getSelectedText().text.join("\n")
+
+    let selectedText = textEditor.getSelectedText()
     if (selectedText) {
         navigator.clipboard.writeText(selectedText)
     }
@@ -28,35 +29,19 @@ function copyCommand(textEditor: TextEditor, backendService: BackendService): vo
 
 function cutCommand(textEditor: TextEditor, backendService: BackendService): void {
     throw ("Function not implemented")
-    let selectedText = textEditor.getSelectedText()
-    let text = textEditor.getText()
-    text[selectedText.startPosition.line] = text[selectedText.startPosition.line].substring(selectedText.startPosition.char)
+    // let selectedText = textEditor.getSelectedText()
+    // let text = textEditor.getText()
+    // text[selectedText.startPosition.line] = text[selectedText.startPosition.line].substring(selectedText.startPosition.char)
 }
 
 function pasteCommand(textEditor: TextEditor, backendService: BackendService, pasteEvent: ClipboardEvent): void {
-    let text = textEditor.getText()
-    let cursor = textEditor.getCursorPosition()
     if (pasteEvent == null) {
         throw "Paste command must be run with a clipboard event"
     }
 
     if (pasteEvent != null && pasteEvent.clipboardData) {
         let paste = pasteEvent.clipboardData.getData('text');
-        let pasteLines: string[] = paste.split("\n")
-        let line: string = text[cursor.line]
-        if (pasteLines.length == 1) {
-            text[cursor.line] = line.substring(0, cursor.char) + pasteLines[0] + line.substring(cursor.char, text[cursor.line].length)
-            cursor.char += pasteLines[0].length
-        } else {
-            text[cursor.line] = line.substring(0, cursor.char) + pasteLines[0]
-            textEditor.addLine(pasteLines[pasteLines.length - 1] + line.substring(cursor.char, text[cursor.line].length), cursor.line + 1)
-            for (let i = pasteLines.length - 2; i > 0; i--) {
-                textEditor.addLine(pasteLines[i], cursor.line + 1)
-            }
-            cursor.char = pasteLines[pasteLines.length - 1].length
-            cursor.line += pasteLines.length - 1
-        }
-        textEditor.setCursorPosition(cursor)
+        textEditor.insert(paste)
     }
 }
 
@@ -70,7 +55,7 @@ function closeFileCommand(textEditor: TextEditor, backendService: BackendService
 }
 
 function saveCommand(textEditor: TextEditor, backendService: BackendService): void {
-    backendService.saveFile(textEditor.getProjectName(), textEditor.getFileName(), textEditor.getText().join("\n"))
+    backendService.saveFile(textEditor.getProjectName(), textEditor.getFileName(), textEditor.getText())
 }
 
 function saveAllCommand(textEditor: TextEditor, backendService: BackendService): void {
@@ -78,7 +63,9 @@ function saveAllCommand(textEditor: TextEditor, backendService: BackendService):
 }
 
 function runCodeCommand(textEditor: TextEditor, backendService: BackendService): void {
-    backendService.runFile(textEditor.getProjectName(), textEditor.getFileName(), textEditor.getText().join("\n"))
+    console.log("2")
+    backendService.runFile(textEditor.getProjectName(), textEditor.getFileName(), textEditor.getText())
+    console.log("3")
 }
 
 function undoCommand(textEditor: TextEditor, backendService: BackendService): void {
@@ -103,30 +90,22 @@ function toggleOutputCommand(textEditor: TextEditor, backendService: BackendServ
 
 function moveToStartLine(textEditor: TextEditor, backendService: BackendService): void {
     let cursorPos = textEditor.getCursorPosition()
-    textEditor.setCursorPosition({line: cursorPos.line, char: 0})
+    textEditor.setCursorPosition({ line: cursorPos.line, char: 0 })
 }
 
 function moveToEndLine(textEditor: TextEditor, backendService: BackendService): void {
     let cursorPos = textEditor.getCursorPosition()
-    textEditor.setCursorPosition({line: cursorPos.line, char: textEditor.getText()[cursorPos.line].length})
+    textEditor.setCursorPosition({ line: cursorPos.line, char: textEditor.getText()[cursorPos.line].length })
 }
 
 function moveToStartFile(textEditor: TextEditor, backendService: BackendService): void {
-    textEditor.setCursorPosition({line:0, char:0})
+    textEditor.setCursorPosition({ line: 0, char: 0 })
 }
 
 function moveToEndFile(textEditor: TextEditor, backendService: BackendService): void {
-    let lastLine = textEditor.getText().length-1
+    let lastLine = textEditor.getText().length - 1
     let lastChar = textEditor.getText()[lastLine].length
-    textEditor.setCursorPosition({line: lastLine, char: lastChar})
-}
-
-function insertTab(textEditor: TextEditor, backendService: BackendService): void {
-    let cursor = textEditor.getCursorPosition()
-    let line = textEditor.getText()[cursor.line]
-    textEditor.getText()[cursor.line] = line.substring(0, cursor.char) + "   " + line.substring(cursor.char)
-    cursor.char += 3
-    textEditor.setCursorPosition(cursor)
+    textEditor.setCursorPosition({ line: lastLine, char: lastChar })
 }
 
 const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, backendService: BackendService, ...others: any[]) => void } = {
@@ -146,7 +125,6 @@ const COMMAND_NAME_TO_COMMAND: { [key: string]: (textEditor: TextEditor, backend
     "moveToEndLineCommand": moveToEndLine,
     "moveToStartFileCommand": moveToStartFile,
     "moveToEndFileCommand": moveToEndFile,
-    "insertTabCommand": insertTab,
 
     "toggleOutputCommand": toggleOutputCommand,
 }
@@ -168,10 +146,19 @@ const KEYBINDING_TO_COMMAND_NAME: { [key: string]: string } = {
     "HOME": "moveToStartLineCommand",
     "CTRL_END": "moveToEndFileCommand",
     "CTRL_HOME": "moveToStartFileCommand",
-    "TAB": "insertTabCommand",
 }
 
 export class KeybindingHandler {
+
+    static eventToString(kbEvent: KeyboardEvent): string {
+        let retval =
+            (kbEvent.ctrlKey ? "CTRL_" : "") +
+            (kbEvent.altKey ? "ALT_" : "") +
+            (kbEvent.shiftKey ? "SHIFT_" : "") +
+            kbEvent.key.toUpperCase()
+        return retval
+    }
+
     static handleKeybinding(keybinding: string, textEditor: TextEditor, backendService: BackendService, args?: any[]): boolean {
         if (!args) {
             args = []

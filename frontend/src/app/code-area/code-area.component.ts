@@ -1,356 +1,85 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { KeybindingHandler, TextEditor, selectedTextDict } from '../keybindings';
-import { Title } from '@angular/platform-browser';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import * as ace from "ace-builds"
 import { ActivatedRoute, Router } from '@angular/router';
+import { TextEditor } from '../keybindings';
+import { Title } from '@angular/platform-browser';
 import { BackendService } from '../backend.service'
 import { combineLatest } from 'rxjs';
 
 @Component({
-  selector: 'app-code-area',
-  templateUrl: './code-area.component.html',
-  styleUrls: ['./code-area.component.scss']
+    selector: 'app-code-area',
+    templateUrl: './code-area.component.html',
+    styleUrls: ['./code-area.component.scss']
 })
-export class CodeAreaComponent implements OnInit, TextEditor {
+export class CodeAreaComponent implements AfterViewInit, TextEditor {
 
-  @ViewChild("lineContainer") lineContainer: ElementRef<HTMLElement> = {} as ElementRef<HTMLElement>
+    constructor(private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private titleService: Title,
+        private backendService: BackendService) { }
 
-  fileName: string = ""
-  projectName: string = ""
+    getText(): string {
+        return this.aceEditor.getValue()
+    }
+    getLine(lineNumber: number): string {
+        return this.aceEditor.getValue().split("\n")[lineNumber]
+    }
+    getSelectedText(): string {
+        return this.aceEditor.getSelectedText()
+    }
+    getCursorPosition(): { line: number; char: number; } {
+        let pos = this.aceEditor.getCursorPosition()
+        return {
+            line: pos.row,
+            char: pos.column
+        }
+    }
+    setCursorPosition(position: { line: number; char: number; }): void {
+        this.aceEditor.moveCursorTo(position.line, position.char)
+    }
+    insert(text: string, position?: { line: number; char: number; }): string[] {
+        if (position) {
+            this.aceEditor.moveCursorTo(position.line, position.char)
+        }
+        this.aceEditor.insert(text)
+        throw new Error('Method not implemented.');
+    }
+    getFileName(): string {
+        return this.fileName
+    }
+    getProjectName(): string {
+        return this.projectName
+    }
+    navigate(path: string[]): void {
+        this.router.navigate(path)
+    }
 
-  code: string[] = [""]
+    fileName: string = ""
+    projectName: string = ""
 
-  cursorLine: number = 0
-  cursorChar: number = 0
+    @ViewChild("editor")
+    private editorElement!: ElementRef<HTMLElement>;
 
-  previousCharPos: number = 0
+    private aceEditor!: ace.Ace.Editor;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private titleService: Title,
-    private backendService: BackendService
-  ) {
-    combineLatest([this.activatedRoute.url, this.activatedRoute.paramMap]).subscribe(forkResult => {
-      let [urlsegment, params] = forkResult
-      this.fileName = urlsegment.join("/")
-      if (this.fileName && params.get("projectName")) {
-        this.projectName = params.get("projectName") || ""
-        this.titleService.setTitle(params.get("projectName") + " - " + urlsegment[urlsegment.length - 1])
-        this.backendService.loadfile(this.projectName, this.fileName).subscribe((retval) => {
-          this.code = retval.split("\n")
-          this.cursorChar = 0
-          this.cursorLine = 0
+    ngAfterViewInit(): void {
+        this.aceEditor = ace.edit(this.editorElement.nativeElement)
+        this.aceEditor.session.setMode("ace/mode/javascript");
+        this.aceEditor.session.setMode("")
+        combineLatest([this.activatedRoute.url, this.activatedRoute.paramMap]).subscribe(forkResult => {
+            let [urlsegment, params] = forkResult
+            this.fileName = urlsegment.join("/")
+            if (this.fileName && params.get("projectName")) {
+                this.projectName = params.get("projectName") || ""
+                this.titleService.setTitle(params.get("projectName") + " - " + urlsegment[urlsegment.length - 1])
+                this.backendService.loadfile(this.projectName, this.fileName).subscribe((retval) => {
+                    this.aceEditor.setValue(retval)
+                    this.aceEditor.moveCursorTo(0, 0)
+                })
+            } else {
+                this.fileName = "New File"
+                this.titleService.setTitle("New File")
+            }
         })
-      } else {
-        this.fileName = "New File"
-        this.titleService.setTitle("New File")
-      }
-    })
-  }
-
-  navigate(path: string[]): void {
-    this.router.navigate(path)
-  }
-
-  getProjectName(): string {
-    return this.projectName
-  }
-
-  getFileName(): string {
-    return this.fileName
-  }
-
-  addLine(text: string, lineNumber: number): string[] {
-    this.code.splice(lineNumber, 0, ...[text])
-    return this.code
-  }
-
-  getText(): string[] {
-    return this.code
-  }
-
-  getLine(lineNumber: number): string {
-    return this.code[lineNumber]
-  }
-
-  doesElementContain(parentElement: Element, childElement: Node): boolean {
-    if (parentElement == childElement)
-      return true
-
-    for (let i = 0; i < parentElement.childNodes.length; i++)
-      if (parentElement.childNodes[i] == childElement)
-        return true;
-
-    return false
-  }
-
-  getSelectedText(): selectedTextDict {
-    let possiblyNullSelection = window.getSelection()
-    let possiblyNullCodeInputArea = document.getElementById("codeinputarea")
-    let retval: selectedTextDict = {
-      startPosition: { line: 0, char: 0 },
-      endPosition: { line: 0, char: 0 },
-      text: []
     }
-    if (possiblyNullSelection && possiblyNullCodeInputArea) {
-      let selection: Selection = possiblyNullSelection
-      let codearea: HTMLElement = possiblyNullCodeInputArea
-      for (let rangeid = 0; rangeid < selection.rangeCount; rangeid++) {
-
-        let range = selection.getRangeAt(rangeid)
-        let startline: number = 0, endline: number = 0, startoffset: number = 0, endoffset: number = 0
-
-        for (let elementid = 0; elementid < codearea.children.length; elementid++) {
-
-          if (this.doesElementContain(codearea.children[elementid], range.startContainer)) {
-            if (rangeid == 0) {
-              retval.startPosition.line = elementid
-              retval.startPosition.char = range.startOffset
-            }
-            startline = elementid
-            startoffset = range.startOffset
-          }
-
-          if (this.doesElementContain(codearea.children[elementid], range.endContainer)) {
-            if (rangeid == selection.rangeCount - 1) {
-              retval.endPosition.line = elementid
-              retval.endPosition.char = range.endOffset
-            }
-            endline = elementid
-            endoffset = range.endOffset
-          }
-        }
-
-        for (let l = startline; l <= endline; l++) {
-          let textline = ""
-          if (startline == endline && startline == l) {
-            textline = this.code[l].substring(startoffset, endoffset)
-            retval.text.push()
-          } else if (startline == l) {
-            textline = this.code[l].substring(startoffset, this.code[startline].length)
-          } else if (endline == l) {
-            textline = this.code[l].substring(0, endoffset)
-          } else {
-            textline = this.code[l]
-          }
-
-          if (textline)
-            retval.text.push(textline)
-        }
-      }
-
-    }
-
-    return retval
-  }
-
-  getCursorPosition(): { line: number; char: number; } {
-    return {
-      line: this.cursorLine,
-      char: this.cursorChar
-    }
-  }
-
-  setCursorPosition(position: { line: number; char: number; }): void {
-    this.cursorLine = position.line
-    this.cursorChar = position.char
-  }
-
-  ngOnInit(): void {
-    this.cursorLine = this.code.length - 1;
-    this.cursorChar = this.code[this.cursorLine].length
-    this.previousCharPos = this.cursorChar
-  }
-
-  handleArrowKeys(kbEvent: KeyboardEvent): boolean {
-    if (kbEvent.key == "ArrowLeft") {
-      this.cursorChar--
-      if (this.cursorChar < 0) {
-        if (this.cursorLine > 0) {
-          this.cursorLine--;
-          this.cursorChar = this.code[this.cursorLine].length
-        }
-        else {
-          this.cursorChar = 0
-        }
-      }
-      this.previousCharPos = this.cursorChar
-      return true
-    }
-    if (kbEvent.key == "ArrowRight") {
-      this.cursorChar++
-      if (this.cursorChar > this.code[this.cursorLine].length) {
-        if (this.cursorLine < this.code.length - 1) {
-          this.cursorChar = 0;
-          this.cursorLine++;
-        } else {
-          this.cursorChar = this.code[this.cursorLine].length
-        }
-      }
-      this.previousCharPos = this.cursorChar
-      return true
-    }
-    if (kbEvent.key == "ArrowUp") {
-      this.cursorLine--
-      if (this.cursorLine < 0) {
-        this.cursorLine = 0
-        this.cursorChar = 0
-      } else {
-        this.cursorChar = this.previousCharPos
-        if (this.cursorChar > this.code[this.cursorLine].length) {
-          this.cursorChar = this.code[this.cursorLine].length
-        }
-      }
-      return true;
-    }
-    if (kbEvent.key == "ArrowDown") {
-      this.cursorLine++
-      if (this.cursorLine >= this.code.length) {
-        this.cursorLine = this.code.length - 1
-        this.cursorChar = this.code[this.cursorLine].length
-      } else {
-        this.cursorChar = this.previousCharPos
-        if (this.cursorChar > this.code[this.cursorLine].length) {
-          this.cursorChar = this.code[this.cursorLine].length
-        }
-      }
-      return true;
-    }
-    return false;
-  }
-
-  handleHotkey(kbEvent: KeyboardEvent): boolean {
-    if (kbEvent.key == "End") {
-      this.cursorChar = this.code[this.cursorLine].length
-      return true
-    }
-    if (kbEvent.key == "Home") {
-      this.cursorChar = 0
-      return true
-    }
-    return false
-  }
-
-  handleBackspace(kbEvent: KeyboardEvent): boolean {
-    if (kbEvent.key == "Backspace") {
-      if (this.cursorChar > 0) {
-        let line: string = this.code[this.cursorLine]
-        this.code[this.cursorLine] = line.substring(0, this.cursorChar - 1) + line.substring(this.cursorChar)
-        this.cursorChar--;
-      } else {
-        if (this.cursorLine > 0) {
-          let line: string = this.code[this.cursorLine]
-          this.code[this.cursorLine - 1] = this.code[this.cursorLine - 1].concat(line);
-          this.code.splice(this.cursorLine, 1)
-          this.cursorLine -= 1;
-          this.cursorChar = this.code[this.cursorLine].length
-        }
-      }
-      return true;
-    }
-    return false;
-  }
-
-  handleEnter(kbEvent: KeyboardEvent): boolean {
-    if (kbEvent.key == "Enter") {
-      let indent: string = ""
-      let line: string = this.code[this.cursorLine]
-      for (let i = 0; i < line.length; i++) {
-        if (line[i] == ' ') {
-          indent += " ";
-        } else {
-          break
-        }
-      }
-      if (this.cursorChar != 0 && this.code[this.cursorLine][this.cursorChar - 1] == "{") {
-        this.code[this.cursorLine] = indent + line.substring(this.cursorChar)
-        this.code = this.code.slice(0, this.cursorLine).concat([line.substring(0, this.cursorChar), indent + "   "]).concat(this.code.slice(this.cursorLine))
-        this.cursorChar = indent.length + 3
-      } else {
-        this.code[this.cursorLine] = indent + line.substring(this.cursorChar)
-        this.code = this.code.slice(0, this.cursorLine).concat([line.substring(0, this.cursorChar)]).concat(this.code.slice(this.cursorLine))
-        this.cursorChar = indent.length
-      }
-      this.cursorLine++
-      return true
-    }
-    return false
-  }
-
-  handleSingleKey(kbEvent: KeyboardEvent): boolean {
-    if (kbEvent.key.length == 1) {
-      let line: string = this.code[this.cursorLine]
-      if (kbEvent.key == "{") {
-        this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + "}" + line.substring(this.cursorChar)
-      } else {
-        this.code[this.cursorLine] = line.substring(0, this.cursorChar) + kbEvent.key + line.substring(this.cursorChar)
-      }
-      this.cursorChar++
-      return true
-    }
-    return false
-  }
-
-  onPaste(event: any) {
-    KeybindingHandler.runCommand("pasteCommand", this, this.backendService, event)
-  }
-
-  eventToString(kbEvent: KeyboardEvent): string {
-    let retval =
-      (kbEvent.ctrlKey ? "CTRL_" : "") +
-      (kbEvent.altKey ? "ALT_" : "") +
-      (kbEvent.shiftKey ? "SHIFT_" : "") +
-      kbEvent.key.toUpperCase()
-    return retval
-  }
-
-  onPress(event: any) {
-
-    let kbEvent: KeyboardEvent = (event as KeyboardEvent);
-
-    ///there is no API to read the clipboard from javascript
-    ///the only way to read the clipboard is through a clipboard event
-    ///this makes sure that the function returns true so that the event
-    ///is not marked as consumed but instead let the browser handle the
-    ///event and therefore create a clipboard event.
-    if (kbEvent.key == "v" && kbEvent.ctrlKey && !kbEvent.shiftKey && !kbEvent.altKey) {
-      return true
-    }
-
-    if (KeybindingHandler.handleKeybinding(this.eventToString(kbEvent), this, this.backendService)) { }
-    else if (this.handleSingleKey(kbEvent)) { }
-    else if (this.handleEnter(kbEvent)) { }
-    else if (this.handleBackspace(kbEvent)) { }
-    else if (this.handleArrowKeys(kbEvent)) { }
-    else {
-      return true
-    }
-
-    return false;
-  }
-
-  onClick(event: any) {
-    let mEvent: MouseEvent = (event as MouseEvent)
-    let lineElements = this.lineContainer.nativeElement.getElementsByTagName("pre")
-    let clickedLineRect: DOMRect|null = null
-    let clickedLineIndex: number = -1
-
-    for (let index = 0; index < lineElements.length; index++) {
-      let clientRect = lineElements[index].getClientRects()[0]
-      if(clientRect.y < mEvent.clientY && clientRect.y + clientRect.height > mEvent.clientY) {
-        clickedLineRect = clientRect
-        clickedLineIndex = index
-      }
-    }
-
-    if(clickedLineRect !== null) {
-      let charSize = clickedLineRect.width / this.code[clickedLineIndex].length
-      this.cursorLine = clickedLineIndex
-      this.cursorChar = Math.round((mEvent.clientX - clickedLineRect.x)/charSize)
-      this.cursorChar = Math.min(this.cursorChar, this.code[clickedLineIndex].length)
-      this.cursorChar = Math.max(this.cursorChar, 0)
-      this.previousCharPos = this.cursorChar
-    }
-  }
-
 }

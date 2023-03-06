@@ -17,6 +17,7 @@ export class BackendService {
   loadfile(project: string, filepath: string): Observable<string> { return this.http.get("/api/project/" + project + "/file/" + filepath, { responseType: "text" }) }
 
   runFile(project: string, filepath: string, content: string) {
+    console.log("JHAGSDJHASHJGD")
     if (filepath) {
       this.http.post("/api/project/" + project + "/file/" + filepath, content).subscribe()
     }

@@ -26,6 +26,7 @@
     "@angular/platform-browser-dynamic": "^14.1.2",
     "@angular/router": "^14.1.2",
     "@types/socket.io": "^3.0.2",
+    "ace-builds": "^1.15.3",
     "electron-squirrel-startup": "^1.0.0",
     "ngx-socket-io": "^4.3.0",
     "rxjs": "^7.5.6",
